@@ -6,7 +6,7 @@
   <link href="http://www.seis-jun.xyz/atom.xml" rel="self"/>
   
   <link href="http://www.seis-jun.xyz/"/>
-  <updated>2026-03-22T04:03:24.087Z</updated>
+  <updated>2026-04-08T08:59:17.855Z</updated>
   <id>http://www.seis-jun.xyz/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>文献阅读(50)</title>
+    <link href="http://www.seis-jun.xyz/paper-reading-50/"/>
+    <id>http://www.seis-jun.xyz/paper-reading-50/</id>
+    <published>2026-04-08T08:45:42.000Z</published>
+    <updated>2026-04-08T08:59:17.855Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href=&quot;https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2009JB006661&quot;&gt;Chouet et al., 2010, JGR&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="work" scheme="http://www.seis-jun.xyz/categories/work/"/>
+    
+    
+    <category term="paper" scheme="http://www.seis-jun.xyz/tags/paper/"/>
+    
+  </entry>
   
   <entry>
     <title>文献阅读(49)</title>
@@ -367,25 +386,6 @@
     
     
     <summary type="html">&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href=&quot;https://www.frontiersin.org/journals/earth-science/articles/10.3389/feart.2022.907749/full&quot;&gt;Fracture Imaging Using DAS-Recorded Microseismic Events&lt;/a&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="work" scheme="http://www.seis-jun.xyz/categories/work/"/>
-    
-    
-    <category term="paper" scheme="http://www.seis-jun.xyz/tags/paper/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>文献阅读(34)</title>
-    <link href="http://www.seis-jun.xyz/paper-reading-34/"/>
-    <id>http://www.seis-jun.xyz/paper-reading-34/</id>
-    <published>2025-12-09T11:22:52.000Z</published>
-    <updated>2025-12-09T11:27:13.732Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;&amp;emsp;&amp;emsp;&lt;a href=&quot;https://pubs.geoscienceworld.org/seg/tle/article-abstract/42/11/763/628902/Detection-of-a-CO2-plume-by-time-lapse-analysis-of&quot;&gt;Detection of a CO2 plume by time-lapse analysis of Rayleigh-wave amplitudes extracted from downhole DAS recordings of ocean microseisms&lt;/a&gt;&lt;/p&gt;</summary>
     
     
     
