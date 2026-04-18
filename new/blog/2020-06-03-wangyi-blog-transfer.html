@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网易博客迁移 | Jun Xie</title>
+  <meta name="description" content="网易博客迁移">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>网易博客迁移</h1>
+    <div class="post-meta">
+      <time>2020-06-03</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">博客</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">网易</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;今天想到自己在网易上的博客。翻出来一看，乖乖人家网易在2018年就把博客给停了。估计是看我不在上面更新了，伤心欲绝了吧。笑。</p>
+<!-- more -->
+
+<p>&emsp;&emsp;我的那些怪文扔了怪可惜的。于是就想都搬到这里来吧。没法直接搬啊。看看网易怎么说吧。可以下载到xml文件里，或者搬迁到Lofter里面。都试一下。xml里面是个啥。果然有博文，但乱码一大堆。咋行。搬到Lofter里面吧。显示得要７天左右。</p>
+<p>&emsp;&emsp;好吧，趁此机会在网上搜索吧。我疯狂的搜了从xml到wordpress, 网易到hexo，网易到其他博客，等等等等。为此还在csdn建了自己的账号。因为搜到说可以一键从网易搬到那里。结果迟了啊。这都0202年了，人家的网易搬家功能早都扔了。对了hexo博文都是markdown格式。岂不将xml转换到markdown格式就完美了。</p>
+<p>&emsp;&emsp;于是我又疯狂开始搜索xml转移到markdown。倒是搜到了一些有用的。比如<a href="https://zhuanlan.zhihu.com/p/67765274">墨问非名</a>的项目<a href="https://github.com/alicewish/Lofter2Hexo">Lofter2Hexo</a>，<a href="https://himring.top/lofter-expo-repo/">北方之塔</a>的脚本<a href="https://github.com/FromEndWorld/lofter2Jekyll">lofter2Jekyll</a>。两个程序的名字居然一样叫readxml。这本来没啥问题。</p>
+<p>&emsp;&emsp;问题是我的网速慢啊。程序名字一样是我安装好之后才知道的啊。安装其中一个结果安装好久。安装空挡就看了另一个，也来试一下。开了两个terminal同时安装两个程序。有些依赖包啊什么的没安装。于是又另开两个terminal继续安装。搞了半天，真的搞了半天。因为中间吃饭去了。</p>
+<p>&emsp;&emsp;然后我也不记得哪个安装好了。算了先看看网易博客有没有导入到Lofter里面吧。点开看，完成了。太好了，下载了Lofter的xml文件。看起来还不错。然后，试试吧。不知道用的哪个readxml，总之是把某个程序的windows文本结果的\r换成Linux以后就可以用了。然后就试了。果然可以，虽然有几张图没有下载下来。不过没关系了。</p>
+<p>&emsp;&emsp;我迫不及待的打开了LOFTER文件夹中的md文件查看。我的乖乖，全都是乱码。title乱码，标签乱码，日期是今天。简直没办法看。此外我的博文显示有270篇，转换过来只有220篇，估计还有50多篇都被认为不和谐吧。但我写的东西很和谐啊。一点也不愤青。</p>
+<p>&emsp;&emsp;心想，算了。嘴巴也说算了。妻说，别。以后整理出来可以给儿子看看啊。</p>
+<p>&emsp;&emsp;于是晚上娃睡了以后花了一个多小时，才搬了40篇到这里来。下次再继续吧。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

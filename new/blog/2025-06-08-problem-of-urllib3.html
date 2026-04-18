@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>urllib3的问题 | Jun Xie</title>
+  <meta name="description" content="urllib3的问题">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>urllib3的问题</h1>
+    <div class="post-meta">
+      <time>2025-06-08</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;安装了seisman的<a href="https://github.com/seisman/HinetPy">HinetPy</a>，运行脚本数据下载脚本的时候就遇到这个问题：</p>
+<pre class="highlight"><code>from HinetPy import Client, win32
+  File &quot;/home/junxie/work/Snet/HinetPy-main/HinetPy/__init__.py&quot;, line 23, in &lt;module&gt;
+    from .client import Client
+  File &quot;/home/junxie/work/Snet/HinetPy-main/HinetPy/client.py&quot;, line 22, in &lt;module&gt;
+    from urllib3.util import create_urllib3_context
+ImportError: cannot import name 'create_urllib3_context' from 'urllib3.util' (/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/__init__.py)
+</code></pre>
+
+<p>怎么整？</p>
+<!--less-->
+<p>&emsp;&emsp;遇到问题不要歪，凡事都来找AI。
+&emsp;&emsp;于是我把问题贴给了chatGPT，它说：
+   * 方法1 给urllib3降级，降到1.26.x，可我的就是1.26.16，pass
+   * 方法2 更新HinetPy到最新版本，可人家都就是最新版本啊，pass
+   * 方法3 手动patch，具体是将client.py中的</p>
+<pre class="highlight"><code>from urllib3.util import create_urllib3_context
+</code></pre>
+
+<p>&emsp;&emsp;替换为</p>
+<pre class="highlight"><code>from ssl import create_default_context as create_urllib3_context
+</code></pre>
+
+<p>&emsp;&emsp;看起来挺靠谱的。于是出现了这个问题</p>
+<pre class="highlight"><code>  File &quot;/home/junxie/work/Snet/HinetPy-main/HinetPy/client.py&quot;, line 139, in __init__
+    self.login(user, password)
+  File &quot;/home/junxie/work/Snet/HinetPy-main/HinetPy/client.py&quot;, line 188, in login
+    self.session.mount(self._HINET, AddedCipherAdapter())
+  File &quot;/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/requests/adapters.py&quot;, line 155, in __init__
+    self.init_poolmanager(pool_connections, pool_maxsize, block=pool_block)
+  File &quot;/home/junxie/work/Snet/HinetPy-main/HinetPy/client.py&quot;, line 47, in init_poolmanager
+    ctx = create_urllib3_context(ciphers=&quot;:HIGH:!DH:!aNULL&quot;)
+TypeError: create_default_context() got an unexpected keyword argument 'ciphers'
+</code></pre>
+
+<p>&emsp;&emsp;然后，各种折腾一翻，删除，重装还是不行，看看模块create_urllib3_context</p>
+<pre class="highlight"><code>grep create_urllib3_context /home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/*.py
+</code></pre>
+
+<p>&emsp;&emsp;长这样：</p>
+<pre class="highlight"><code>/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/proxy.py:from .ssl_ import create_urllib3_context, resolve_cert_reqs, resolve_ssl_version
+/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/proxy.py:    ssl_context = create_urllib3_context(
+/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/ssl_.py:def create_urllib3_context(
+/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/ssl_.py:        context = ssl_.create_urllib3_context()
+/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/ssl_.py:        be created using :func:create_urllib3_context.
+/home/junxie/.conda/envs/py3/lib/python3.9/site-packages/urllib3/util/ssl_.py:        context = create_urllib3_context(ssl_version, cert_reqs, ciphers=ciphers)
+</code></pre>
+
+<p>&emsp;&emsp;表明urllib3安装是正确的。所以在client.py中，将这一句：</p>
+<pre class="highlight"><code>from urllib3.util import create_urllib3_context
+</code></pre>
+
+<p>&emsp;&emsp;改为：</p>
+<pre class="highlight"><code>from urllib3.util.ssl_ import create_urllib3_context
+</code></pre>
+
+<p>&emsp;&emsp;然后就万事大吉了。总结：不懂就问AI吧，但不好好学习和思考，到头来还是不懂。然而这又有什么关系，只要有AI在，会问AI问题就行了。没AI的话，那就拜拜了。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

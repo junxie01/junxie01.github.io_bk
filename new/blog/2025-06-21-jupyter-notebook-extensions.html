@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>有趣的jupyter-notebook插件 | Jun Xie</title>
+  <meta name="description" content="有趣的jupyter-notebook插件">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>有趣的jupyter-notebook插件</h1>
+    <div class="post-meta">
+      <time>2025-06-21</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;收集了一些有趣的jupyter notebook插件。</p>
+<!--less-->
+
+<table>
+<thead>
+<tr>
+<th><strong>插件名称</strong></th>
+<th><strong>简介</strong></th>
+<th><strong>官方链接</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jupyter Contrib NBe</strong></td>
+<td>核心扩展包，集成50+插件（代码补全、变量监控、执行时间显示等）</td>
+<td><a href="https://github.com/ipython-contrib/jupyter_contrib_nbextensions">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Hinterland</strong></td>
+<td>实时代码补全工具，支持 Python/R/Julia，减少拼写错误</td>
+<td><a href="https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/hinterland/README.html">文档</a></td>
+</tr>
+<tr>
+<td><strong>Table of Contents (2)</strong></td>
+<td>动态生成目录，支持标题跳转，适合长文档导航</td>
+<td><a href="https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/toc2/README.html">配置页</a></td>
+</tr>
+<tr>
+<td><strong>Variable Inspector</strong></td>
+<td>侧边栏实时显示变量类型/大小/值，替代频繁 <code>print(type)</code> 操作</td>
+<td><a href="https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/varInspector/README.html">说明</a></td>
+</tr>
+<tr>
+<td><strong>ExecuteTime</strong></td>
+<td>记录每个 Cell 的执行时间和完成时间，优化性能分析</td>
+<td><a href="https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/execute_time/README.html">详情</a></td>
+</tr>
+<tr>
+<td><strong>Autopep8</strong></td>
+<td>一键格式化代码为 PEP8 标准，提升可读性</td>
+<td><a href="https://pypi.org/project/autopep8/">PyPI</a></td>
+</tr>
+<tr>
+<td><strong>jupyterthemes</strong></td>
+<td>界面主题美化，支持暗黑模式/护眼配色（如 <code>monokai</code>, <code>solarized</code>）</td>
+<td><a href="https://github.com/dunovank/jupyter-themes">GitHub</a></td>
+</tr>
+<tr>
+<td><strong>Notify</strong></td>
+<td>内核空闲时发送浏览器通知，适合长时间任务（如模型训练）</td>
+<td><a href="https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/notify/README.html">文档</a></td>
+</tr>
+<tr>
+<td><strong>jupyter Widgets</strong></td>
+<td>创建交互控件（滑块/下拉菜单），将静态图表转为动态仪表盘</td>
+<td><a href="https://ipywidgets.readthedocs.io/en/latest/">官网</a></td>
+</tr>
+<tr>
+<td><strong>Voilà</strong></td>
+<td>将 Notebook 转为独立 Web 应用，隐藏代码仅保留交互结果</td>
+<td><a href="https://voila.readthedocs.io/en/stable/">文档</a></td>
+</tr>
+<tr>
+<td><strong>RISE</strong></td>
+<td>实时代码幻灯片工具，用 Markdown 标题分页，支持演示中修改参数</td>
+<td><a href="https://github.com/damianavila/RISE">GitHub</a></td>
+</tr>
+</tbody>
+</table>
+<p>安装：</p>
+<pre class="highlight"><code>pip install jupyter_contrib_nbextensions jupyterthemes voila rise
+jupyter contrib nbextension install
+jupyter nbextension enable [插件名]  # 启用具体插件
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

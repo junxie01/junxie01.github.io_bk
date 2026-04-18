@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tag: linux | Jun Xie</title>
+  <meta name="description" content="Posts tagged with \"linux\"">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<h1 class="page-title">Tag: linux</h1>
+
+<p><a href="/blog/">&larr; Back to all posts</a></p>
+
+<ul class="post-list">
+  
+  <li class="post-item">
+    <span class="post-date">2024-06-06</span>
+    <h3><a href="/blog/2024-06-06-no-audio-in-playing-browser-video.html">Fedora下浏览器播放视频卡住没有声音</a></h3>
+    <p class="excerpt"><p>之前整了nodesk之后就出现了视频播放的问题。用mplayer播放视频时，卡住。用浏览器播放视频的时候卡住，关掉音频之后视频正常播放了。但是没有声音。
+然后</p>
+<pre class="highlight"><code>systemctl --user stop wireplumber
+</code></pre>
+
+<p>关掉了wireplumber以后mplayer和浏览器上都能正常播放了。但每&hellip;</p></p>
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-06-06</span>
+    <h3><a href="/blog/2024-06-06-no-audio-control.html">Fedora下没有音量控制了</a></h3>
+    <p class="excerpt"><p>之前安装todesk没有搞定，总是连不上，于是又把它卸载了。卸载的时候把pulseaudio.x86_64也给卸载了。然后发现没有音量控制条了。然后又给安装回来</p>
+<pre class="highlight"><code>sudo dnf install pulseaudio
+</code></pre>
+
+<p>结果mplayer也出问题了。播放视频的时候卡住，其中一个问题是：
+```
+do_co&hellip;</p></p>
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-05-31</span>
+    <h3><a href="/blog/2024-05-31-how-to-set-X11-in-fedora.html">Fedora下如何登陆X11桌面</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;安装了todesk以后进行远程控制时卡在“connecting to free server 100%”，然后不动。怎么办？</p>
+<!--less-->
+<p>&emsp;&emsp;目前还不知道怎么办，todesk官网说要用x11桌面，现在的fedora已经默认用Wayland了。如何开启X11呢？编辑&hellip;</p></p>
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-05-29</span>
+    <h3><a href="/blog/2024-05-29-to-desk.html">todesk的安装</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;远程登陆服务器进行工作是牛马必备技能。之前用的是teamviewer，老是掉线。从学生那里知道todesk还不错。于是就安装之。</p>
+<!--less-->
+<p>&emsp;&emsp;先从todesk<a href="https://www.todesk.com/linux.html">主页</a>下载适合的Linux版本&hellip;</p></p>
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2020-07-04</span>
+    <h3><a href="/blog/2020-07-04-gmt-time-axes.html">gmt画时间轴</a></h3>
+    <p class="excerpt"><p>{% asset_img spec.png gmt时间轴 %}</p>
+<!-- less -->
+<p>&emsp;&emsp;有些时候画图需要用到时间轴。gmt[^1]里面的时间轴是比较简单的。画basemap的时候对于对于rangeR来说加上T就好了。例如</p>
+<pre class="highlight"><code>-R1990T/1991T/0/1
+</code></pre>
+
+<p>&emsp;&amp;em&hellip;</p></p>
+  </li>
+  
+</ul>
+
+
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

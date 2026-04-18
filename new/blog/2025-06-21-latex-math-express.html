@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>$\LaTeX$的数学公式表达 | Jun Xie</title>
+  <meta name="description" content="$\LaTeX$的数学公式表达">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>$\LaTeX$的数学公式表达</h1>
+    <div class="post-meta">
+      <time>2025-06-21</time>
+       &middot; 4 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">LaTeX</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;$\LaTeX$和markdown的数学算符几乎是一样的，那怎么编辑呢？</p>
+<!--less-->
+
+<blockquote>
+<p><strong>说明</strong>：公式需包裹在 <code>$...$</code>（行内公式）或 <code>$$...$$</code>（块级公式）中，以下表格中的 <strong>渲染效果</strong> 需在支持 LaTeX 的 Markdown 环境中显示（如 Typora、Obsidian 等）。</p>
+</blockquote>
+<hr />
+<h2 id="_1">一、基础运算符号</h2>
+<table>
+<thead>
+<tr>
+<th>符号名称</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加号</td>
+<td><code>a + b</code></td>
+<td>$a + b$</td>
+</tr>
+<tr>
+<td>减号</td>
+<td><code>a - b</code></td>
+<td>$a - b$</td>
+</tr>
+<tr>
+<td>乘号（叉乘）</td>
+<td><code>a \times b</code></td>
+<td>$a \times b$</td>
+</tr>
+<tr>
+<td>乘号（点乘）</td>
+<td><code>a \cdot b</code></td>
+<td>$a \cdot b$</td>
+</tr>
+<tr>
+<td>除号</td>
+<td><code>a \div b</code></td>
+<td>$a \div b$</td>
+</tr>
+<tr>
+<td>加减号</td>
+<td><code>a \pm b</code></td>
+<td>$a \pm b$</td>
+</tr>
+<tr>
+<td>减加号</td>
+<td><code>a \mp b</code></td>
+<td>$a \mp b$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_2">二、关系运算符</h2>
+<table>
+<thead>
+<tr>
+<th>符号名称</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>等于</td>
+<td><code>a = b</code></td>
+<td>$a = b$</td>
+</tr>
+<tr>
+<td>不等于</td>
+<td><code>a \neq b</code></td>
+<td>$a \neq b$</td>
+</tr>
+<tr>
+<td>约等于</td>
+<td><code>a \approx b</code></td>
+<td>$a \approx b$</td>
+</tr>
+<tr>
+<td>大于等于</td>
+<td><code>a \geq b</code></td>
+<td>$a \geq b$</td>
+</tr>
+<tr>
+<td>小于等于</td>
+<td><code>a \leq b</code></td>
+<td>$a \leq b$</td>
+</tr>
+<tr>
+<td>远大于</td>
+<td><code>a \gg b</code></td>
+<td>$a \gg b$</td>
+</tr>
+<tr>
+<td>远小于</td>
+<td><code>a \ll b</code></td>
+<td>$a \ll b$</td>
+</tr>
+<tr>
+<td>正比于</td>
+<td><code>a \propto b</code></td>
+<td>$a \propto b$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_3">三、集合运算符</h2>
+<table>
+<thead>
+<tr>
+<th>符号名称</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>并集</td>
+<td><code>A \cup B</code></td>
+<td>$A \cup B$</td>
+</tr>
+<tr>
+<td>交集</td>
+<td><code>A \cap B</code></td>
+<td>$A \cap B$</td>
+</tr>
+<tr>
+<td>属于</td>
+<td><code>x \in A</code></td>
+<td>$x \in A$</td>
+</tr>
+<tr>
+<td>不属于</td>
+<td><code>x \notin B</code></td>
+<td>$x \notin B$</td>
+</tr>
+<tr>
+<td>子集</td>
+<td><code>A \subset B</code></td>
+<td>$A \subset B$</td>
+</tr>
+<tr>
+<td>真子集</td>
+<td><code>A \subseteq B</code></td>
+<td>$A \subseteq B$</td>
+</tr>
+<tr>
+<td>空集</td>
+<td><code>\emptyset</code></td>
+<td>$\emptyset$</td>
+</tr>
+<tr>
+<td>实数集</td>
+<td><code>\mathbb{R}</code></td>
+<td>$\mathbb{R}$</td>
+</tr>
+<tr>
+<td>自然数集</td>
+<td><code>\mathbb{N}</code></td>
+<td>$\mathbb{N}$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">四、微积分符号</h2>
+<table>
+<thead>
+<tr>
+<th>符号名称</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>积分</td>
+<td><code>\int_{a}^{b} f(x) dx</code></td>
+<td>$\int_{a}^{b} f(x) dx$</td>
+</tr>
+<tr>
+<td>偏导数</td>
+<td><code>\frac{\partial f}{\partial x}</code></td>
+<td>$\frac{\partial f}{\partial x}$</td>
+</tr>
+<tr>
+<td>极限</td>
+<td><code>\lim_{x \to 0} \frac{\sin x}{x}</code></td>
+<td>$\lim_{x \to 0} \frac{\sin x}{x}$</td>
+</tr>
+<tr>
+<td>求和</td>
+<td><code>\sum_{i=1}^{n} i^2</code></td>
+<td>$\sum_{i=1}^{n} i^2$</td>
+</tr>
+<tr>
+<td>导数（撇号形式）</td>
+<td><code>f'(x)</code></td>
+<td>$f&rsquo;(x)$</td>
+</tr>
+<tr>
+<td>梯度</td>
+<td><code>\nabla f</code></td>
+<td>$\nabla f$</td>
+</tr>
+<tr>
+<td>二阶导数</td>
+<td><code>\frac{d^2 y}{dx^2}</code></td>
+<td>$\frac{d^2 y}{dx^2}$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_5">五、希腊字母</h2>
+<table>
+<thead>
+<tr>
+<th>小写字母</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+<th>大写字母</th>
+<th>LaTeX 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>α (alpha)</td>
+<td><code>\alpha</code></td>
+<td>$\alpha$</td>
+<td>Γ (Gamma)</td>
+<td><code>\Gamma</code></td>
+<td>$\Gamma$</td>
+</tr>
+<tr>
+<td>β (beta)</td>
+<td><code>\beta</code></td>
+<td>$\beta$</td>
+<td>Δ (Delta)</td>
+<td><code>\Delta</code></td>
+<td>$\Delta$</td>
+</tr>
+<tr>
+<td>θ (theta)</td>
+<td><code>\theta</code></td>
+<td>$\theta$</td>
+<td>Θ (Theta)</td>
+<td><code>\Theta</code></td>
+<td>$\Theta$</td>
+</tr>
+<tr>
+<td>π (pi)</td>
+<td><code>\pi</code></td>
+<td>$\pi$</td>
+<td>Π (Pi)</td>
+<td><code>\Pi</code></td>
+<td>$\Pi$</td>
+</tr>
+<tr>
+<td>σ (sigma)</td>
+<td><code>\sigma</code></td>
+<td>$\sigma$</td>
+<td>Σ (Sigma)</td>
+<td><code>\Sigma</code></td>
+<td>$\Sigma$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_6">六、箭头符号</h2>
+<table>
+<thead>
+<tr>
+<th>符号名称</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>右箭头</td>
+<td><code>\rightarrow</code></td>
+<td>$\rightarrow$</td>
+</tr>
+<tr>
+<td>左箭头</td>
+<td><code>\leftarrow</code></td>
+<td>$\leftarrow$</td>
+</tr>
+<tr>
+<td>双向箭头</td>
+<td><code>\leftrightarrow</code></td>
+<td>$\leftrightarrow$</td>
+</tr>
+<tr>
+<td>蕴含符号</td>
+<td><code>\Rightarrow</code></td>
+<td>$\Rightarrow$</td>
+</tr>
+<tr>
+<td>等价符号</td>
+<td><code>\Leftrightarrow</code></td>
+<td>$\Leftrightarrow$</td>
+</tr>
+<tr>
+<td>映射箭头</td>
+<td><code>\mapsto</code></td>
+<td>$\mapsto$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_7">七、括号与定界符</h2>
+<table>
+<thead>
+<tr>
+<th>符号名称</th>
+<th>$\LaTeX$ 命令</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>圆括号（自适应）</td>
+<td><code>\left( \frac{a}{b} \right)</code></td>
+<td>$\left( \frac{a}{b} \right)$</td>
+</tr>
+<tr>
+<td>方括号</td>
+<td><code>\left[ x \right]</code></td>
+<td>$\left[ x \right]$</td>
+</tr>
+<tr>
+<td>花括号</td>
+<td><code>\left\{ x \right\}</code></td>
+<td>${ x }$</td>
+</tr>
+<tr>
+<td>绝对值</td>
+<td><code>\lvert x \rvert</code></td>
+<td>$\lvert x \rvert$</td>
+</tr>
+<tr>
+<td>范数</td>
+<td><code>\lVert \mathbf{v} \rVert</code></td>
+<td>$\lVert \mathbf{v} \rVert$</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_8">八、矩阵环境</h2>
+<pre class="highlight"><code class="language-latex">$$ 
+\begin{pmatrix}  % 圆括号矩阵
+a &amp; b \\
+c &amp; d 
+\end{pmatrix}
+\quad
+\begin{bmatrix}  % 方括号矩阵
+a &amp; b \\
+c &amp; d 
+\end{bmatrix}
+\quad
+\begin{vmatrix}  % 行列式
+a &amp; b \\
+c &amp; d 
+\end{vmatrix}
+$$
+</code></pre>
+
+<p>渲染效果：
+$$ 
+\begin{pmatrix}  % 圆括号矩阵
+a &amp; b \
+c &amp; d 
+\end{pmatrix}
+\quad
+\begin{bmatrix}  % 方括号矩阵
+a &amp; b \
+c &amp; d 
+\end{bmatrix}
+\quad
+\begin{vmatrix}  % 行列式
+a &amp; b \
+c &amp; d 
+\end{vmatrix}
+$$</p>
+<p>看样子花括号和矩阵都不太行啊。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

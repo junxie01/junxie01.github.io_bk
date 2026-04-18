@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fedora 40如何安装腾讯会议 | Jun Xie</title>
+  <meta name="description" content="Fedora 40如何安装腾讯会议">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>Fedora 40如何安装腾讯会议</h1>
+    <div class="post-meta">
+      <time>2025-06-17</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;没想到腾讯开发了Linux版本下的腾讯会议。</p>
+<!--less-->
+<p>&emsp;&emsp;那怎么安装呢？
+&emsp;&emsp;我用了老办法，就是google咯，呃不是，我用的bing。搜索出来的第一条是知乎答案。于是按照说明开始安装了。首先在<a href="https://meeting.tencent.com/download">腾讯主页</a>下载deb安装包。只有deb安装包，看样子还是ubuntu比较流行啊。
+&emsp;&emsp;接下来按照说明安装alien。</p>
+<pre class="highlight"><code>sudo dnf install alien
+</code></pre>
+
+<p>&emsp;&emsp;alien可以将deb格式和rpm格式进行转换。还挺不错。转换命令是：</p>
+<pre class="highlight"><code>sudo alien -r deb包
+</code></pre>
+
+<p>&emsp;&emsp;然后就生成了一个rpm包，就可以安装了。。。吧。。。
+&emsp;&emsp;不好意思，有依赖问题，怎么都搞不定。
+&emsp;&emsp;事实上我犯了个错误啊，现在搜索引擎已经落伍了啊。我立马把问题输给了豆包啊。它说可以这么安装：
+ * 安装Flatpak</p>
+<pre class="highlight"><code>sudo dnf install flatpak
+</code></pre>
+
+<p>嗯，我已经安装了。什么时候安装的呢。
+ * 添加Flathub仓库：</p>
+<pre class="highlight"><code>sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+</code></pre>
+
+<ul>
+<li>按转腾讯会议：</li>
+</ul>
+<pre class="highlight"><code>flatpak install flathub com.tencent.wemeet
+</code></pre>
+
+<ul>
+<li>运行</li>
+</ul>
+<pre class="highlight"><code>flatpak run com.tencent.wemeet
+</code></pre>
+
+<p>&emsp;&emsp;然后。。。安装速度慢的可以啊。我直接Ctrl+C掐了。
+&emsp;&emsp;然后我在应用中心直接搜wemeet，就出现了WemeetApp，点击就安装了。好用的很。
+&emsp;&emsp;Linux也变成了点击就运行的玩意儿了啊。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

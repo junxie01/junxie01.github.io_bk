@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用AI做网页 | Jun Xie</title>
+  <meta name="description" content="用AI做网页">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>用AI做网页</h1>
+    <div class="post-meta">
+      <time>2026-03-21</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;我又试着做了两个网页，一个是<a href="https://www.seis-jun.xyz/paper_weekly/frontend/">论文周报</a>，另一个是<a href="https://www.seis-jun.xyz/earthquake_weekly/">每周地震</a>。</p>
+<!--less-->
+<p>&emsp;&emsp;这次用的是<a href="https://developer.android.com/studio">Andriod Studio</a>。套路明白了，大概现在的一些IDE平台都嵌入了大预言模型，可以对话然后让AI帮你做事。这应该跟openclaw差不太多，只是相比起来openclaw给的权限太高，可以操纵你的电脑所有内容，而这些IDE只能操作当前目录。
+&emsp;&emsp;好了分别介绍一下我的两个网页。首先是论文周报：</p>
+<h1 id="paper_weekly">📚 地震学多专题论文周报 (paper_weekly)</h1>
+<p>一个自动追踪 arXiv和主要滴血期刊地震学相关研究（DAS、面波、成像、冰川地震等）并自动翻译、生成 PDF 报告并集成至 Hexo 博客的自动化系统。</p>
+<h2 id="_1">🌐 站点集成说明</h2>
+<h3 id="_2">部署为子站点</h3>
+<ol>
+<li>在本仓库的 <strong>Settings &gt; Pages</strong> 中开启部署，选择 <code>main</code> 分支。</li>
+<li>您的论文页面将自动出现在：<code>https://www.seis-jun.xyz/paper_weekly/</code></li>
+<li>在Hexo中的next主题下的 <code>_config.yml</code> 菜单中添加该链接即可。</li>
+</ol>
+<h3 id="_3">自动化流程</h3>
+<ul>
+<li><strong>定时触发</strong>：每周日北京时间上午 8:00 自动运行。</li>
+<li><strong>手动触发</strong>：在 GitHub Actions 页面点击 &ldquo;Run workflow&rdquo;。</li>
+<li><strong>包含专题</strong>：冰川地震、分布式光纤传感、面波研究、地震成像、地震研究。</li>
+</ul>
+<h2 id="secrets">🛠️ 必须完成的配置 (Secrets)</h2>
+<p>在 GitHub 仓库 <strong>Settings &gt; Secrets and variables &gt; Actions</strong> 中添加：
+- <code>MAIL_USERNAME</code>: Gmail 地址 (如 <code>xxx@gmail.com</code>)。
+- <code>MAIL_PASSWORD</code>: Google 账号生成的 <strong>16 位应用专用密码</strong> (删除空格)。
+- <code>MAIL_TO</code>: 接收邮箱。</p>
+<h2 id="_4">🔍 故障排查 (邮件发送失败)</h2>
+<p>如果 GitHub Actions 报 <code>535 Login fail</code>：
+1. <strong>两步验证</strong>：确保 Google 账号已开启 2-Step Verification。
+2. <strong>应用密码</strong>：必须使用 16 位 App Password，填入 Secret 时删除所有空格。
+3. <strong>YAML 配置</strong>：确保 <code>.github/workflows/update.yml</code> 中 <code>server_port: 465</code> 且 <code>secure: true</code>。</p>
+<h2 id="_5">📂 仓库结构</h2>
+<ul>
+<li><code>update_papers.py</code>: 核心脚本（多专题抓取、翻译、PDF 生成）。</li>
+<li><code>frontend/</code>: 网页展示端（支持多专题切换）。</li>
+<li><code>.github/workflows/update.yml</code>: GitHub Actions 配置文件。</li>
+</ul>
+<p>可以到我的侧边栏点击<a href="https://www.seis-jun.xyz/paper_weekly/frontend/">论文周报</a>查看。每周日它会自动检索文章然后生成pdf发邮件给我，另外也会更新网页。目前版本并没有集成AI，不能总结论文内容，只有翻译。有机会再集成AI吧。</p>
+<p>&emsp;&emsp;另一个网页是每周地震。以前参加组会每周都会有的内容。</p>
+<h1 id="weekly-earthquake-report-usgs-insights">Weekly Earthquake Report (USGS Insights)</h1>
+<p>这是一个基于 USGS 数据实时生成的地震周报系统。它会自动抓取过去一周全球发生的地震，挑选震级最大的三个事件进行深度分析，包括局部历史地震对比、地质构造总结以及来自 USGS 和 Google News 的多源报道。</p>
+<h2 id="_6">🌟 功能特点</h2>
+<ul>
+<li><strong>全球地震图</strong>：实时展示过去 7 天全球地震分布，震级越大圆圈越大。</li>
+<li><strong>板块边界展示</strong>：在地图上叠加全球地质板块边界（Tectonic Plates）。</li>
+<li><strong>重大地震深度分析</strong>：<ul>
+<li><strong>局部地图</strong>：自动定位震中，展示 10 度范围内的地理细节。</li>
+<li><strong>历史对比</strong>：自动调取 1970 年以来该区域所有 M5.0+ 的历史地震（蓝色圆圈）。</li>
+<li><strong>视觉化报告</strong>：直接嵌入 USGS 官方生成的 <strong>Shakemap (烈度图)</strong>、<strong>Moment Tensor (震源球)</strong>、<strong>PAGER (损失预估)</strong> 等专业图表。</li>
+<li><strong>多源新闻</strong>：集成 USGS 内部报告链接和 <strong>Google News</strong> 实时搜索结果。</li>
+</ul>
+</li>
+<li><strong>全自动更新</strong>：利用 GitHub Actions 每周日凌晨（UTC）自动运行抓取脚本并更新网页。</li>
+</ul>
+<h2 id="_7">🛠️ 技术栈</h2>
+<ul>
+<li><strong>前端</strong>: HTML5, CSS3, JavaScript (Leaflet.js)</li>
+<li><strong>后端</strong>: Python 3 (Requests, Regex)</li>
+<li><strong>数据源</strong>: <a href="https://earthquake.usgs.gov/">USGS Earthquake Hazards Program</a></li>
+<li><strong>自动化</strong>: GitHub Actions</li>
+</ul>
+<h2 id="_8">🚀 本地运行</h2>
+<ol>
+<li>
+<p><strong>安装依赖</strong>:
+   <code>bash
+   pip3 install requests</code></p>
+</li>
+<li>
+<p><strong>抓取最新数据</strong>:
+   <code>bash
+   python3 fetch_data.py</code></p>
+</li>
+<li>
+<p><strong>启动预览服务器</strong>:
+   <code>bash
+   python3 -m http.server 8000</code>
+   访问 <code>http://localhost:8000</code> 即可查看。</p>
+</li>
+</ol>
+<h2 id="github-actions">🤖 自动化部署 (GitHub Actions)</h2>
+<p>项目已配置 <code>.github/workflows/update_earthquakes.yml</code>。
+- <strong>定时运行</strong>: 每周日 00:00 UTC。
+- <strong>手动触发</strong>: 在 GitHub 仓库的 <code>Actions</code> 页面选择 &ldquo;Update Earthquake Data&rdquo; 并运行。</p>
+<h2 id="_9">🔗 部署为子站点</h2>
+<ol>
+<li>在本仓库的 <strong>Settings &gt; Pages</strong> 中开启部署，选择 <code>main</code> 分支。</li>
+<li>您的论文页面将自动出现在：<code>https://www.seis-jun.xyz/earthquake_weekly</code></li>
+<li>在 Hexo 的 <code>_config.yml</code> 菜单中添加该链接即可。</li>
+</ol>
+<p>也可以到我的侧边栏点击<a href="https://www.seis-jun.xyz/earthquake_weekly/">每周地震</a>查看。每周日会重新抓取数据，更新网页。目前版本比较简单，欢迎提意见。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

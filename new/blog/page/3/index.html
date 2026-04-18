@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Jun Xie</title>
+  <meta name="description" content="Blog posts by Jun Xie on seismology and geophysics">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<h1 class="page-title">Blog</h1>
+
+<ul class="post-list">
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-30</span>
+    <h3><a href="/new/blog/2025-06-30-python-script2.html">PYTHON脚本练习（二）</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;以下是python脚本练习2，功能为读取选定时间段内的hdf5文件，文件名形如20130512_cross_spec.hdf5。该文件总共有24段，每一段是一个小时某台阵平均互相关谱。然后画出这个互相关谱，保存为png格式图片。</p>
+<!--less-->
+<p>```python
+import os
+i&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-27</span>
+    <h3><a href="/new/blog/2025-06-27-mfp.html">学习匹配场</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;今天学习匹配场处理（Matched Field Processing, MFP），见<a href="https://geophydog.cool/post/matched_field_processing/#__1-basic-descriptions__">这里</a>。</p>
+<!--less-->
+<p>&emsp;&amp;e&hellip;</p></p>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-21</span>
+    <h3><a href="/new/blog/2025-06-21-latex-math-express.html">$\LaTeX$的数学公式表达</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;$\LaTeX$和markdown的数学算符几乎是一样的，那怎么编辑呢？</p>
+<!--less--></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/latex/">LaTeX</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-21</span>
+    <h3><a href="/new/blog/2025-06-21-jupyter-notebook-extensions.html">有趣的jupyter-notebook插件</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;收集了一些有趣的jupyter notebook插件。</p>
+<!--less--></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-21</span>
+    <h3><a href="/new/blog/2025-06-21-python-script1.html">PYTHON脚本练习（一）</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;以下是python脚本练习1，功能包括：
+  * 遍历目录events_20250619下所有子目录中以bhz.SAC_rm结尾的SAC文件；
+  * 对这些数据进行窄带滤波，宽度为中心频率（周期分之一）的$\pm$5mHz，滤波器为4个极点0相位的Butterworth，滤波周期为arange&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-21</span>
+    <h3><a href="/new/blog/2025-06-21-news-website.html">有趣的新闻网站</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;哪里去了解有趣全球新闻？</p>
+<!--less-->
+<ul>
+<li><a href="https://www.allyoucanread.com/">AllYouCanRead</a>是一个综合性资讯导航平台，按地域聚合全球六大洲新闻站点，同时以艺术、商业、科技等超 30 个主题精细分类各类网站资源，杂志专区更细分动物、时尚、&hellip;</li>
+</ul></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/fun/">Fun</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-17</span>
+    <h3><a href="/new/blog/2025-06-17-plot-work-flow.html">Hexo下如何画流程图</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;那么Hexo下如何画流程图呢？</p>
+<!--less-->
+<p>&emsp;&emsp;因为Hexo是用的Markdown的语法，所以是指Markdown的语法。这里我用的是mermaid。用之前需要安装啊。</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/linux/">Linux</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-17</span>
+    <h3><a href="/new/blog/2025-06-17-how-to-install-wemeet.html">Fedora 40如何安装腾讯会议</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;没想到腾讯开发了Linux版本下的腾讯会议。</p>
+<!--less-->
+<p>&emsp;&emsp;那怎么安装呢？
+&emsp;&emsp;我用了老办法，就是google咯，呃不是，我用的bing。搜索出来的第一条是知乎答案。于是按照说明开始安装了。首先在[腾讯主页](https://meeting....</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/linux/">Linux</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-17</span>
+    <h3><a href="/new/blog/2025-06-17-run-sequencer.html">学习Sequencer</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;今天学习Sequencer。</p>
+<!--less-->
+<p>&emsp;&emsp;什么是Sequencer？具体请参见<a href="https://github.com/dalya/Sequencer/blob/master/Sequencer_paper.pdf">这篇文章</a>。脚本在[这里](https://&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-08</span>
+    <h3><a href="/new/blog/2025-06-08-download-continous-data-update.html">python脚本下载连续波形数据更新</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;python脚本下载连续波形数据更新。</p>
+<!--less-->
+<p>```python
+import os
+import numpy as np
+from obspy import UTCDateTime, Stream, Trace
+from obspy.io.sac import SACTrac&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-08</span>
+    <h3><a href="/new/blog/2025-06-08-problem-of-urllib3.html">urllib3的问题</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;安装了seisman的<a href="https://github.com/seisman/HinetPy">HinetPy</a>，运行脚本数据下载脚本的时候就遇到这个问题：
+```
+from HinetPy import Client, win32
+  File &ldquo;/home/junxie/work/Snet/&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-07</span>
+    <h3><a href="/new/blog/2025-06-07-download-continuous-seis.html">python脚本下载连续波形数据</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;这是连续波形数据下载python脚本更新。</p>
+<!--less-->
+<p>```python
+import os
+import time
+import socket
+import numpy as np
+from obspy import UTCDateTime, Stream
+from obspy....</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-07</span>
+    <h3><a href="/new/blog/2025-06-07-statistic-data-download.html">统计数据下载情况</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;数据下载好后怎么统计数据连续性？</p>
+<!--less-->
+<p>&emsp;&emsp;python脚本如下。
+```python
+import os
+from obspy import read
+from datetime import datetime as dt
+import numpy as&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-06-01</span>
+    <h3><a href="/new/blog/2025-06-01-attention-mechanism.html">注意力机制</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;今天学习注意力机制（<a href="https://towardsdatascience.com/hands-on-attention-mechanism-for-time-series-classification-with-python/">Attention Mechanism</a>）。
+&lt;!&ndash;less-&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-05-31</span>
+    <h3><a href="/new/blog/2025-05-31-bad-and-evil.html">即“蠢”又“坏”？</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;人大约都是即“蠢”又“坏”的吧！</p>
+<!--less-->
+<p>&emsp;&emsp;不要误会，并不是你想象中的“蠢”和“坏”。我们在讨论某个“东西”的时候，有必要对这个“东西”的概念进行解释，否则会造成鸡同鸭讲，对牛弹琴的结果。另外你也会发现，像我这种学理的，总会在和别人讨论之前要明确“东西”的定&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/乱笔/">乱笔</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-05-16</span>
+    <h3><a href="/new/blog/2025-05-16-download-eq-data.html">下载地震数据更新</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;要是指定台站列表怎么下载地震数据呢？</p>
+<!--less-->
+<p>&emsp;&emsp;python脚本如下。
+```
+import os
+from obspy import UTCDateTime
+from obspy.clients.fdsn import Client
+from obspy....</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-05-10</span>
+    <h3><a href="/new/blog/2025-05-10-mouse-click-monitoring.html">鼠标点击位置记录</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;有些时候需要抓取别人图片中的点的信息，应该怎么整？</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-05-10</span>
+    <h3><a href="/new/blog/2025-05-10-gmt-arrow.html">gmt怎么画箭头</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;用gmt画箭头还是挺常见的。<a href="https://docs.generic-mapping-tools.org/dev/plot.html">GMT document</a>和<a href="https://docs.gmt-china.org/latest/basis/vector/">GMT中文手册</a>虽好，但如果网&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/gmt/">gmt</a>
+      
+      <a href="/blog/tag/script/">script</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-04-24</span>
+    <h3><a href="/new/blog/2025-04-24-download-earthquake-py.html">下载地震数据练习</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;地震波形数据怎么下载？</p>
+<!--less-->
+<p>&emsp;&emsp;可以去<a href="http://iris.edu/">IRIS</a>网站下啊。这里给出结合FetchEvent和obspy进行数据下载的例子，还比较简单哈。
+&emsp;&emsp;FetchEvent从地址https://github....</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-04-23</span>
+    <h3><a href="/new/blog/2025-04-23-paper-reading-27.html">文献阅读(27)</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;[Coherence-Based Characterization of a Long-Period Monochromatic Seismic Signal](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024GL1132&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+</ul>
+
+
+
+
+<nav class="pagination">
+  
+    
+    <a href="/blog/page/2/">&larr; Newer</a>
+    
+  
+
+  <span class="page-info">Page 3 / 10</span>
+
+  
+    <a href="/blog/page/4/">Older &rarr;</a>
+  
+</nav>
+
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

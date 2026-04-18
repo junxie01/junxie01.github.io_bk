@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power Spectral Density | Jun Xie</title>
+  <meta name="description" content="Power Spectral Density">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>Power Spectral Density</h1>
+    <div class="post-meta">
+      <time>2021-03-29</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">work</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p><img alt="ANMO台2013年12月的能量谱密度" src="https://i.loli.net/2021/03/29/OXQhg3SjozrPT6e.png" /></p>
+<!-- less -->
+<p><img alt="" src="http://service.iris.edu/mustang/noise-pdf/1/query?target=IU.ANMO.00.BHZ.M&amp;starttime=2013-12-01&amp;endtime=2013-12-31&amp;format=plot" />
+&emsp;&emsp;封面图是IRIS提供的查看台站能量谱密度图，网址见<a href="http://service.iris.edu/mustang/noise-pdf/1/query?target=IU.ANMO.00.BHZ.M&amp;starttime=2013-12-01&amp;endtime=2013-12-31&amp;format=plot">mustang</a>.
+&emsp;&emsp;咱们也得会啊，要不然怎么分析自己的数据？于是按照MacNamara and Buland (2004)的文章给的公式自己编了一个程序。同样计算了ANMO台2013年12月竖直分量BHZ的能量谱密度，是这个样子：
+<img alt="自己算的ANMO台BHZ分量2013年12月能量谱密度" src="https://i.loli.net/2021/03/29/rLfmZ1hWNleQKC8.png" />
+&emsp;&emsp;对比看来好像形状差不多了，但是。。。怎么我算出来的比IRIS的整体高了20分贝呢？
+&emsp;&emsp;后来明白了，是公式里dt的原因。我是除的dt，其实应该是乘。乘上dt就对了，开森。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文献阅读（十三） | Jun Xie</title>
+  <meta name="description" content="文献阅读（十三）">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>文献阅读（十三）</h1>
+    <div class="post-meta">
+      <time>2024-06-20</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">paper</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;<a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2020GL088353?af=R">Identifying Different Classes of Seismic Noise Signals Using Unsupervised Learning</a></p>
+<!--less-->
+
+<h3 id="_1">摘要</h3>
+<p>&emsp;&emsp;适当的非构造性地震信号分类对于检测微地震和提高对持续弱地面运动的理解至关重要。我们利用无监督机器学习来标记连续波形中常见的五种非平稳地震噪声类别。描述数据的时间和频谱特征被聚类以识别可分离的紧急和脉冲波形类型。训练好的聚类模型被用来分类来自密集地震阵列的每1秒连续地震记录，站点间隔为10-30米。研究表明，主导噪声信号可以高度局部化，尺度在数百米。该方法展示了弱地面运动的复杂性，并提高了在低信噪比下分析地震波形的标准。应用这种技术将提高在嘈杂环境中检测真实微小地震事件的能力，其中地震传感器记录了来自非构造性源的类似地震信号。</p>
+<h3 id="_2">相关研究的重要性</h3>
+<ul>
+<li><strong>微地震检测</strong>：提高微地震的检测能力有助于更好地理解断层上的故障过程。</li>
+<li><strong>地震信号与噪声的区分</strong>：正确区分地震信号和噪声对于地震监测和预测至关重要。</li>
+</ul>
+<h3 id="_3">前人研究及不足</h3>
+<ul>
+<li><strong>Aguiar &amp; Beroza, 2014; Hammer et al., 2013; Linville et al., 2019; Mousavi et al., 2016; Perol et al., 2018; Ross, Meier, &amp; Hauksson, 2018; Ross, Meier, Hauksson, &amp; Heaton, 2018; Rouet-Leduc et al., 2019</strong>：这些研究使用有监督的机器学习来识别地震、颤动、山体滑坡、雪崩和矿震等。</li>
+<li><strong>不足</strong>：现有研究多集中在使用有监督学习，需要大量正确标记的数据，对于新出现的或未知的信号类型识别能力有限。</li>
+</ul>
+<h3 id="_4">本文使用的数据和方法</h3>
+<ul>
+<li><strong>数据</strong>：来自加利福尼亚大学圣地亚哥分校斯克里普斯海洋学研究所的密集地震阵列的连续波形数据。</li>
+<li><strong>方法</strong>：</li>
+<li>使用无监督机器学习对数据进行聚类分析。</li>
+<li>利用主成分分析（PCA）对标准化的特征向量进行降维。</li>
+<li>应用k-means聚类算法对特征向量进行分类。</li>
+</ul>
+<h3 id="_5">本文结果</h3>
+<ul>
+<li><strong>识别了五种不同的噪声类别</strong>：具有不同的频谱和时间波形属性。</li>
+<li><strong>噪声信号的空间分布</strong>：在密集阵列中表现出高度的局部化和变化。</li>
+</ul>
+<h3 id="_6">本文创新之处和贡献</h3>
+<ul>
+<li><strong>无监督学习的应用</strong>：首次尝试在密集地震阵列中对连续波形的每一秒进行标记和评估。</li>
+<li><strong>聚类模型</strong>：训练的模型能够快速分类大量连续地震波形数据。</li>
+</ul>
+<h3 id="_7">本文不足</h3>
+<ul>
+<li>文章中并未明确指出研究的局限性，但可能包括对噪声源的物理特性缺乏直接的实验验证，以及模型在不同地区或不同类型噪声的泛化能力尚未得到验证。</li>
+</ul>
+<h3 id="_8">数据可用性声明</h3>
+<ul>
+<li>原始数据通过地震学研究机构的联合研究机构公开获取。训练数据可通过国际数字地震图网络获取。</li>
+</ul>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

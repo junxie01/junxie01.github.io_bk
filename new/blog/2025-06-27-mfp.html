@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习匹配场 | Jun Xie</title>
+  <meta name="description" content="学习匹配场">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>学习匹配场</h1>
+    <div class="post-meta">
+      <time>2025-06-27</time>
+       &middot; 2 min read
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;今天学习匹配场处理（Matched Field Processing, MFP），见<a href="https://geophydog.cool/post/matched_field_processing/#__1-basic-descriptions__">这里</a>。</p>
+<!--less-->
+<p>&emsp;&emsp;MFP是一种定位算法，最早应用于海洋声学领域（Baggeroer &amp; Kuperman，1988），目前在地震学中已广泛用于地震或微震定位（如 Cros et al.，2011；Gal et al.，2018）。以下为 MFP 的简要原理：</p>
+<h2 id="mfp">MFP 功率计算</h2>
+<p>首先计算频率域的谱向量：</p>
+<p>$$
+\boldsymbol{u}(\omega) = [u_1(\omega), u_2(\omega), \cdots, u_N(\omega)]^T \tag{1}
+$$</p>
+<p>其中，$N$ 表示接收器的总数，$T$ 表示转置操作，$u_i(\omega)$ 是第 $i$ 个接收器的傅里叶谱，$\omega$ 是角频率。</p>
+<p>然后计算协方差矩阵：</p>
+<p>$$
+\boldsymbol{C}(\omega) = \boldsymbol{u}(\omega) \boldsymbol{u}^H(\omega) \tag{2}
+$$</p>
+<p>其中 $H$ 表示厄米共轭（复转置）操作。</p>
+<p>通常我们仅保留相位信息，因此对协方差矩阵进行归一化处理：</p>
+<p>$$
+\tilde{C}<em mn="mn">{mn}(\omega) = \frac{C</em>
+$$}(\omega)}{|C_{mn}(\omega)|} \tag{3</p>
+<p>接着构造导向矢量（steering vector）：</p>
+<p>$$
+\boldsymbol{a}(\omega, v, \boldsymbol{r}) = [e^{-i\omega |\boldsymbol{r}-\boldsymbol{r}_1|/v}, \cdots, e^{-i\omega |\boldsymbol{r}-\boldsymbol{r}_N|/v}]^T \tag{4}
+$$</p>
+<p>其中，$v$ 为波速，$\boldsymbol{r}$ 表示候选源位置，$\boldsymbol{r}_i$ 为第 $i$ 个接收器的位置。</p>
+<p>最终，MFP 相干性定义为：</p>
+<p>$$
+P(\omega, v, \boldsymbol{r}) = \frac{1}{N^2} \boldsymbol{a}^H(\omega, v, \boldsymbol{r}) \tilde{\boldsymbol{C}}(\omega) \boldsymbol{a}(\omega, v, \boldsymbol{r}) \tag{5}
+$$</p>
+<p>当 $P(\omega, v, \boldsymbol{r})$ 达到最大值时，对应的 $\boldsymbol{r}$ 即为可能的震源位置。</p>
+<p>不过，由于地球介质的非均匀性会影响地震波的传播速度，因此 MFP 在地震学中也存在局限。有研究者提出在三维速度模型中引入射线追踪（ray tracing）来计算旅行时间（Gal 等，2018）。</p>
+<h2 id="mfp_1">MFP阵列响应函数</h2>
+<p>类似于 F-K 波束形成（beamforming）方法，我们可以指定信号的震源位置、传播速度和频率，用以评估阵列几何结构的分辨能力。</p>
+<p>已知信号的波速 $v$、震源位置 $\boldsymbol{r}_0$ 和频率 $\omega$，构造其复频谱向量如下：</p>
+<p>$$
+\boldsymbol{u}(\omega, v, \boldsymbol{r}_0) = [e^{-i\omega|\boldsymbol{r}_0-\boldsymbol{r}_1|/v}, \cdots, e^{-i\omega|\boldsymbol{r}_0-\boldsymbol{r}_N|/v}]^T \tag{6}
+$$</p>
+<p>对应的协方差矩阵为：</p>
+<p>$$
+\boldsymbol{C}(\omega) = \boldsymbol{u}(\omega, v, \boldsymbol{r}_0) \boldsymbol{u}^H(\omega, v, \boldsymbol{r}_0) \tag{7}
+$$</p>
+<p>提取协方差矩阵的相位信息：</p>
+<p>$$
+\tilde{C}<em mn="mn">{mn}(\omega) = \frac{C</em>
+$$}(\omega)}{|C_{mn}(\omega)|} \tag{8</p>
+<p>然后再次生成导向矢量：</p>
+<p>$$
+\boldsymbol{a}(\omega, v, \boldsymbol{r}) = [e^{-i\omega|\boldsymbol{r}-\boldsymbol{r}_1|/v}, \cdots, e^{-i\omega|\boldsymbol{r}-\boldsymbol{r}_N|/v}]^T \tag{9}
+$$</p>
+<p>计算 MFP 相干性：</p>
+<p>$$
+P(\omega, v, \boldsymbol{r}) = \frac{1}{N^2} \boldsymbol{a}^H(\omega, v, \boldsymbol{r}) \tilde{\boldsymbol{C}}(\omega) \boldsymbol{a}(\omega, v, \boldsymbol{r}) \tag{10}
+$$</p>
+<p>为了简化处理，可以对多个频率下的相干性进行平均，得到最终的 MFP 相干性值：</p>
+<p>$$
+P_0(v, \boldsymbol{r}) = \frac{1}{K} \sum_{k}P(\omega_k, v, \boldsymbol{r}) \tag{11}
+$$</p>
+<p>参考文献：
+Baggeroer, A. B., Kuperman, W. A., &amp; Schmidt, H. (1988). Matched field processing: Source localization in correlated noise as an optimum parameter estimation problem. The Journal of the Acoustical Society of America, 83(2), 571-587.</p>
+<p>Cros, E., Roux, P., Vandemeulebrouck, J., &amp; Kedar, S. (2011). Locating hydrothermal acoustic sources at Old Faithful Geyser using matched field processing. Geophysical Journal International, 187(1), 385-393.</p>
+<p>Gal, M., Reading, A. M., Rawlinson, N., &amp; Schulte‐Pelkum, V. (2018). Matched field processing of three‐component seismic array data applied to Rayleigh and Love microseisms. Journal of Geophysical Research: Solid Earth, 123(8), 6871-6889.</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

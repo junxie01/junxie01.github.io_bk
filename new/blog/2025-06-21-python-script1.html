@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PYTHON脚本练习（一） | Jun Xie</title>
+  <meta name="description" content="PYTHON脚本练习（一）">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>PYTHON脚本练习（一）</h1>
+    <div class="post-meta">
+      <time>2025-06-21</time>
+       &middot; 3 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;以下是python脚本练习1，功能包括：
+  * 遍历目录events_20250619下所有子目录中以bhz.SAC_rm结尾的SAC文件；
+  * 对这些数据进行窄带滤波，宽度为中心频率（周期分之一）的$\pm$5mHz，滤波器为4个极点0相位的Butterworth，滤波周期为arange(25,145,10)；
+  * 计算窄带滤波后的每个周期的信噪比。信噪比定义为信号窗口内，波形包络的最大值比上噪声窗口的均方根。信号窗口定义为2.5-5km/s的到时。噪声窗定义为信号末端之后1000秒开始的1000秒长度的窗口。计算的信噪比写入到user0；
+  * 将处理后的数据写到新的文件夹bp_sac中，文件名命名为z.year.jday.00.STA.bhz.period，仅保留信噪比大于3的数据。
+  * 采用并行处理(8个cpu)。
+  * 统计每个周期信噪比大于3的波形数据。
+  * 统计每个周期信噪比大于3的波形的平均信噪比。
+  * 将统计结构写入csv，并画出统计结果。</p>
+<!--less-->
+
+<pre class="highlight"><code>import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from obspy import read
+from obspy.signal.filter import envelope
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import defaultdict
+
+# 参数设置 
+input_root = &quot;events_20250619&quot;
+output_root = &quot;bp_sac&quot;
+center_periods = np.arange(25, 150, 10)
+bandwidth = 0.010
+vmin, vmax = 2.5, 5.0
+noise_offset, noise_len = 1000, 1000
+snr_threshold = 3.0
+max_workers = 8  # 根据 CPU 核心数调整
+
+# 存储每个周期的 SNR 值
+period_snr_map = defaultdict(list)
+
+def process_file(filepath, root):
+    results = []
+    try:
+        st = read(filepath)
+        tr = st[0]
+        sac = tr.stats.sac
+    except Exception as e:
+        print(f&quot;跳过 {filepath}: {e}&quot;)
+        return results
+
+    if not hasattr(sac, &quot;o&quot;) or not hasattr(sac, &quot;dist&quot;):
+        return results
+
+    dist = sac.dist
+    starttime = tr.stats.starttime
+    win_start = starttime + dist / vmax
+    win_end = starttime + dist / vmin
+    t = tr.times()
+    abs_time = np.array([starttime + float(tt) for tt in t])
+
+    for period in center_periods:
+        fc = 1.0 / period
+        fmin, fmax = fc - bandwidth / 2, fc + bandwidth / 2
+        if fmin &lt;= 0:
+            continue
+        tr_filt = tr.copy()
+        tr_filt.detrend(&quot;demean&quot;)
+        tr_filt.taper(0.05)
+        tr_filt.filter(&quot;bandpass&quot;, freqmin=fmin, freqmax=fmax, corners=4, zerophase=True)
+        env = envelope(tr_filt.data)
+        idx_sig = np.where((abs_time &gt;= win_start) &amp; (abs_time &lt;= win_end))[0]
+        if len(idx_sig) == 0:
+            continue
+        signal_max = np.max(env[idx_sig])
+        noise_start = win_end + noise_offset
+        noise_end = noise_start + noise_len
+        idx_noise = np.where((abs_time &gt;= noise_start) &amp; (abs_time &lt;= noise_end))[0]
+        if len(idx_noise) == 0:
+            continue
+        noise_rms = np.sqrt(np.mean(env[idx_noise] ** 2))
+        snr = signal_max / noise_rms if noise_rms &gt; 0 else 0
+
+        if snr &gt;= snr_threshold:
+            tr_filt.stats.sac.user0 = snr
+            year = tr.stats.starttime.year
+            jday = tr.stats.starttime.julday
+            station = tr.stats.station.lower()
+            channel = tr.stats.channel.lower()
+            outname = f&quot;z.{year}.{jday:03d}.00.{station}.{channel}.{period:03d}&quot;
+
+            rel_dir = os.path.relpath(root, input_root)
+            out_dir = os.path.join(output_root, rel_dir)
+            os.makedirs(out_dir, exist_ok=True)
+            outpath = os.path.join(out_dir, outname)
+            tr_filt.write(outpath, format=&quot;SAC&quot;)
+
+            results.append((period, snr))
+            print(f&quot;✔ 保存: {outname}, SNR={snr:.2f}&quot;)
+
+    return results
+# ===== 收集所有文件路径 =====
+all_files = []
+for root, dirs, files in os.walk(input_root):
+    for file in files:
+        if file.endswith(&quot;bhz.SAC_rm&quot;):
+            all_files.append((os.path.join(root, file), root))
+
+print(f&quot;📁 待处理文件数: {len(all_files)}&quot;)
+
+# ===== 并行处理 =====
+with ThreadPoolExecutor(max_workers=max_workers) as executor:
+    future_to_file = {executor.submit(process_file, fpath, root): (fpath, root) for fpath, root in all_files}
+    for future in as_completed(future_to_file):
+        try:
+            result = future.result()
+            for period, snr in result:
+                period_snr_map[period].append(snr)
+        except Exception as e:
+            fpath, _ = future_to_file[future]
+            print(f&quot;❌ 文件出错 {fpath}: {e}&quot;)
+
+# ===== 统计与可视化 =====
+periods = sorted(period_snr_map.keys())
+counts = [len(period_snr_map[p]) for p in periods]
+means = [np.mean(period_snr_map[p]) if len(period_snr_map[p]) &gt; 0 else 0 for p in periods]
+
+df = pd.DataFrame({
+    &quot;Period(s)&quot;: periods,
+    &quot;Count(SNR&gt;3)&quot;: counts,
+    &quot;Mean_SNR(SNR&gt;3)&quot;: means
+})
+df.to_csv(&quot;snr_stats.csv&quot;, index=False)
+
+# === 可视化 ===
+plt.figure(figsize=(10, 6))
+plt.bar(periods, counts, width=4, color='skyblue', edgecolor='black')
+plt.xlabel(&quot;Period (s)&quot;)
+plt.ylabel(&quot;Count of SNR &gt; 3&quot;)
+plt.title(&quot;Number of Traces with SNR &gt; 3 per Period&quot;)
+plt.grid(True, linestyle=&quot;--&quot;, alpha=0.5)
+plt.tight_layout()
+plt.savefig(&quot;snr_count_bar.png&quot;, dpi=150)
+
+plt.figure(figsize=(10, 6))
+plt.plot(periods, means, marker='o', linestyle='-', color='orange')
+plt.xlabel(&quot;Period (s)&quot;)
+plt.ylabel(&quot;Mean SNR (SNR &gt; 3)&quot;)
+plt.title(&quot;Mean SNR of Traces with SNR &gt; 3 per Period&quot;)
+plt.grid(True, linestyle=&quot;--&quot;, alpha=0.5)
+plt.tight_layout()
+plt.savefig(&quot;snr_mean_line.png&quot;, dpi=150)
+
+print(&quot;🎉 并行处理完成，统计结果写入 snr_stats.csv&quot;)
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

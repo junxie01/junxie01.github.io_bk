@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文献阅读(32) | Jun Xie</title>
+  <meta name="description" content="文献阅读(32)">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>文献阅读(32)</h1>
+    <div class="post-meta">
+      <time>2025-12-09</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">paper</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;<a href="https://www.nature.com/articles/s41598-022-16027-3">Feasibility of source-free DAS logging for next-generation borehole imaging</a></p>
+<!--less-->
+<h3 id="_1">摘要</h3>
+<p>准确刻画与监测井周地质体对能源与环境工程至关重要，但常规声波测井在高温环境中无法长期工作，也难以实现时移监测。本文提出并验证了一种<strong>无源分布式声波传感（DAS）测井</strong>新方法：利用井中天然环境噪声作为震源，无需井下声源即可成像。光纤缆永久固定于套管后，可耐受高温高压，空间采样密度达1 m，实现全井段、长周期、低成本监测。我们在美国犹他州 FORGE 地热场 1 km 深观测井中采集 14 天 DAS 环境噪声，计算 RMS 振幅深度曲线，发现其峰值与常规测井低速层（LVL）、高孔隙、低泊松比、岩性界面高度吻合，可指示强裂缝带。研究证实：无源 DAS 测井可作为下一代井中成像工具，尤其适用于高温地热储层。</p>
+<hr />
+<h3 id="_2">相关研究的重要性</h3>
+<ol>
+<li>高温储层（EGS、深部碳封存）需要<strong>长期、低成本、耐高温</strong>的井周结构与裂缝监测手段。</li>
+<li>常规声波测井：</li>
+<li>仪器长度 ~3 m，需流体耦合，&gt;150 °C 长期失效；</li>
+<li>完井后难以重新下入，<strong>时移监测经济性差</strong>。</li>
+<li>DAS 光纤无电子器件，可<strong>永久安放于套管后</strong>，为“一次部署、终身监测”提供可能。</li>
+<li>前人已将<strong>地表 DAS 环境噪声</strong>用于浅层 S 波速度层析，但<strong>井中 DAS 噪声随深度变化特征</strong>尚未系统研究。</li>
+</ol>
+<hr />
+<h3 id="_3">前人研究及不足</h3>
+<table>
+<thead>
+<tr>
+<th>研究</th>
+<th>内容</th>
+<th>不足</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Paillet &amp; Cheng (1991)</strong></td>
+<td>建立常规声波测井理论框架</td>
+<td>仅适用于低温、可重复下入井筒；高温/时移监测未解决</td>
+</tr>
+<tr>
+<td><strong>Ajo-Franklin et al. (2019)</strong></td>
+<td>利用暗光纤地表 DAS 噪声做浅层成像</td>
+<td>未涉及井中环境噪声；深度分辨率受限</td>
+</tr>
+<tr>
+<td><strong>Dou et al. (2017)</strong></td>
+<td>交通噪声干涉法获取近地表 S 波速度</td>
+<td>数据来源于地表光缆，无法提供井周精细结构</td>
+</tr>
+<tr>
+<td><strong>Chang &amp; Nakata (2022)</strong></td>
+<td>反褶积干涉法提取 Brady 地热井 DAS 振铃波</td>
+<td>研究对象为<strong>套管振铃机制</strong>，未利用环境噪声成像地层</td>
+</tr>
+<tr>
+<td><strong>Li et al. (2020)</strong></td>
+<td>高斯束成像去除井中频散波</td>
+<td>仍依赖主动声源，未解决“无源”需求</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_4">本文数据</h3>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>井中 DAS 环境噪声</strong></td>
+<td>美国犹他州 FORGE 78-32 观测井，830–968 m 井段，1 m 道距，10 m  gauge，0.5 ms 采样，连续 14 天（2019-04-19 至 05-03）</td>
+</tr>
+<tr>
+<td><strong>常规测井</strong></td>
+<td>同一井段水泥胶结测井（CBL）、伽马、声波时差、密度、中子孔隙度、Poisson 比等</td>
+</tr>
+<tr>
+<td><strong>邻井（58-32）开井测井</strong></td>
+<td>提供 Vp、Vs、阻抗、反射系数、孔隙度等，用于验证 RMS 峰值地质意义</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_5">本文方法</h3>
+<ol>
+<li><strong>噪声分类与清洗</strong></li>
+<li>定义“Type A”为可用环境噪声；</li>
+<li>
+<p>剔除 Type B（6E5M 规则脉冲）、Type C（ interrogator 端脉冲）、Type D（疑似地震事件）。</p>
+</li>
+<li>
+<p><strong>RMS 振幅深度剖面</strong></p>
+</li>
+<li>
+<p>每 15 s 计算一次 RMS，沿 138 通道（830–968 m）平均 48 h，得到稳定深度曲线。</p>
+</li>
+<li>
+<p><strong>多测井对比验证</strong></p>
+</li>
+<li>
+<p>与 CBL、伽马、Vp、Vs、Poisson 比、孔隙度、反射系数等对比，确认 RMS 峰值对应低速、高孔隙、低 Poisson 比、岩性界面。</p>
+</li>
+<li>
+<p><strong>时移与频谱分析</strong></p>
+</li>
+<li>观察 48 h 内 RMS 时序，发现“噪声区”振幅为“安静区”5–10 倍；</li>
+<li>频谱显示噪声区高频能量更丰富，可能与裂缝诱导的局域散射/俘获波有关。</li>
+</ol>
+<hr />
+<h3 id="_6">本文结果</h3>
+<ol>
+<li><strong>RMS 峰值与地质异常一一对应</strong></li>
+<li>849 m 处 1.1 m 厚 LVL（Vp=3068 m/s）对应 RMS 主峰 Na，伽马谷值，花岗岩-沉积岩界面；</li>
+<li>
+<p>945 m 处 20 m 厚 LVZ（Vp=4770 m/s）对应 RMS 主峰 Ne，花岗岩-闪长岩界面，高孔隙、低泊松比（&lt;0.25，脆性域）。</p>
+</li>
+<li>
+<p><strong>次要 RMS 峰与薄 LVL 对应</strong></p>
+</li>
+<li>
+<p>880 m、904 m、914 m 等次要峰与薄低速层位置一致，反映次级断裂/界面。</p>
+</li>
+<li>
+<p><strong>高泊松比（&gt;0.35，韧性域）LVL 对应安静带</strong></p>
+</li>
+<li>
+<p>859–868 m 段虽低速高孔，但 Poisson 比 ~0.35，RMS 无异常，验证“易裂性”控制噪声强度。</p>
+</li>
+<li>
+<p><strong>48 h 内 RMS 形态稳定</strong></p>
+</li>
+<li>主峰、次峰位置不变，振幅日内小幅波动，证实方法可重复。</li>
+</ol>
+<hr />
+<h3 id="_7">创新点与贡献</h3>
+<table>
+<thead>
+<tr>
+<th>创新</th>
+<th>贡献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>首次提出“无源 DAS 测井”概念</strong></td>
+<td>无需声源，仅利用井中天然环境噪声即可成像，突破高温井无法重复下入难题</td>
+</tr>
+<tr>
+<td><strong>建立 RMS 振幅-地质属性对应关系</strong></td>
+<td>通过多测井对比，证明 RMS 峰值=低速+高孔+低泊松比+岩性界面，可直接指示裂缝带</td>
+</tr>
+<tr>
+<td><strong>验证光纤永久安放可行性</strong></td>
+<td>水泥后 1 m 间距 DAS 可稳定获取 14 天连续数据，为“终身监测”提供范例</td>
+</tr>
+<tr>
+<td><strong>提出噪声分区物理机制</strong></td>
+<td>低 Poisson 比脆性域 LVL 易产生俘获波/散射，导致 RMS 放大；韧性域 LVL 无此效应</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_8">不足与未来方向</h3>
+<table>
+<thead>
+<tr>
+<th>不足</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>尚未定量反演 Vp、Vs、孔隙度</strong></td>
+<td>目前仅定性对比，需建立 RMS-弹性参数转换模型</td>
+</tr>
+<tr>
+<td><strong>空间分辨率受 1 m 道距限制</strong></td>
+<td>薄至 1.1 m 的 LVL 可识别，但亚米级裂缝需 0.2–0.25 m 道距验证</td>
+</tr>
+<tr>
+<td><strong>未进行深度精确对齐</strong></td>
+<td>DAS 光纤与测井电缆存在 ~1–2 m 深度误差，影响薄层对比精度</td>
+</tr>
+<tr>
+<td><strong>仅单井验证</strong></td>
+<td>需在更多高温地热井或油气井测试方法普适性</td>
+</tr>
+<tr>
+<td><strong>噪声源物理机制待细化</strong></td>
+<td>需结合数值模拟区分“俘获波”“散射波”“微裂隙声发射”等贡献权重</td>
+</tr>
+</tbody>
+</table>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

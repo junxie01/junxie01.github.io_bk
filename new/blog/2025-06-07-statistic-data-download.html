@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>统计数据下载情况 | Jun Xie</title>
+  <meta name="description" content="统计数据下载情况">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>统计数据下载情况</h1>
+    <div class="post-meta">
+      <time>2025-06-07</time>
+       &middot; 3 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;数据下载好后怎么统计数据连续性？</p>
+<!--less-->
+<p>&emsp;&emsp;python脚本如下。</p>
+<pre class="highlight"><code class="language-python">import os
+from obspy import read
+from datetime import datetime as dt
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.dates as mdates
+from collections import defaultdict
+from matplotlib.transforms import blended_transform_factory
+
+# ===== 配置 =====
+data_dir = &quot;daily_waveforms&quot;  # 存放YYYYMMDD.mseed文件目录
+station_file = &quot;station.list&quot;  # 台站列表，格式：NET STA（两列）
+components = [&quot;LHZ&quot;, &quot;LHN&quot;, &quot;LHE&quot;]
+start_year = 2020
+end_year = 2020
+
+# ===== 读取台站列表 =====
+stations = []
+with open(station_file, &quot;r&quot;) as f:
+    for line in f:
+        if line.strip():
+            net, sta = line.strip().split()[:2]
+            stations.append((net, sta))
+
+station_set = set(f&quot;{net}.{sta}&quot; for net, sta in stations)
+
+# ===== 初始化 =====
+station_dates = {comp: defaultdict(set) for comp in components}  # comp -&gt; {net.sta -&gt; set(date)}
+station_file_sizes = defaultdict(int)  # 台站对应所有文件大小
+total_files = 0
+total_file_size = 0
+
+# ===== 遍历所有mseed文件 =====
+all_files = sorted(f for f in os.listdir(data_dir) if f.endswith(&quot;.mseed&quot;))
+for filename in all_files:
+    filepath = os.path.join(data_dir, filename)
+
+    size = os.path.getsize(filepath)
+    total_files += 1
+    total_file_size += size
+
+    try:
+        st = read(filepath)
+    except Exception as e:
+        print(f&quot;读取文件失败 {filename}: {e}&quot;)
+        continue
+
+    # 解析文件日期 YYYYMMDD
+    try:
+        file_date = dt.strptime(filename[:8], &quot;%Y%m%d&quot;).date()
+    except Exception as e:
+        print(f&quot;无法解析日期 {filename}: {e}&quot;)
+        continue
+
+    for tr in st:
+        net = tr.stats.network
+        sta = tr.stats.station
+        comp = tr.stats.channel[-3:]
+
+        key = f&quot;{net}.{sta}&quot;
+        if key not in station_set:
+            continue
+        if comp not in components:
+            continue
+
+        station_dates[comp][key].add(file_date)
+        station_file_sizes[key] += size
+
+print(f&quot;共计读取文件数: {total_files}&quot;)
+print(f&quot;所有文件总大小: {total_file_size / (1024**2):.2f} MB&quot;)
+
+# ===== 删除无有效数据台站 =====
+for comp in components:
+    keys_to_remove = [k for k, dates in station_dates[comp].items() if len(dates) == 0]
+    for k in keys_to_remove:
+        del station_dates[comp][k]
+
+# ===== 输出有效天数统计文本 =====
+for comp in components:
+    with open(f&quot;station_day_count_{comp}.txt&quot;, &quot;w&quot;) as f:
+        for key in sorted(station_dates[comp].keys()):
+            f.write(f&quot;{key} {len(station_dates[comp][key])}\n&quot;)
+
+# ===== 台网颜色映射 =====
+all_nets = sorted(set(net for net, sta in stations))
+net_color_map = {net: cm.get_cmap(&quot;tab20&quot;)(i / max(len(all_nets)-1,1)) for i, net in enumerate(all_nets)}
+
+# ===== 绘图函数 =====
+def plot_component_availability(comp, station_dates_comp):
+    valid_stations = sorted(station_dates_comp.keys(), key=lambda x: (x.split(&quot;.&quot;)[0], x.split(&quot;.&quot;)[1]))
+    fig, ax = plt.subplots(figsize=(14, max(6, 0.3 * len(valid_stations))))
+
+    def to_datetime(d):
+        return dt(d.year, d.month, d.day)
+
+    for idx, key in enumerate(valid_stations):
+        net = key.split(&quot;.&quot;)[0]
+        dates = sorted(station_dates_comp[key])
+        x_vals = [to_datetime(d) for d in dates]
+        ax.plot(x_vals, [idx]*len(dates), &quot;.&quot;, color=net_color_map[net], markersize=2)
+
+    ax.set_xlabel(&quot;时间&quot;)
+    ax.set_ylabel(&quot;台站&quot;)
+    ax.set_yticks(range(len(valid_stations)))
+    ax.set_yticklabels(valid_stations, fontsize=5)
+
+    ax.grid(True, linestyle=&quot;:&quot;, alpha=0.5)
+
+    x_start = dt(start_year, 1, 1)
+    x_end = dt(end_year, 12, 31)
+    ax.set_xlim(x_start, x_end)
+
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter(&quot;%Y&quot;))
+
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
+
+    # 右侧外部标注台网名
+    trans = blended_transform_factory(ax.transAxes, ax.transData)
+    net_indices = defaultdict(list)
+    for idx, key in enumerate(valid_stations):
+        net = key.split(&quot;.&quot;)[0]
+        net_indices[net].append(idx)
+
+    for net, indices in net_indices.items():
+        mid_idx = indices[len(indices)//2]
+        color = net_color_map[net]
+        ax.text(1.02, mid_idx, net, color=color, fontsize=8, fontweight='bold',
+                verticalalignment='center', horizontalalignment='left',
+                transform=trans)
+
+    plt.savefig(f&quot;{comp}_availability_2013_2022.png&quot;, dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f&quot;已保存图像: {comp}_availability_2013_2022.png&quot;)
+
+# ===== 画三分量图 =====
+for comp in components:
+    plot_component_availability(comp, station_dates[comp])
+
+# ===== 台网统计 =====
+network_stats = defaultdict(lambda: {&quot;total&quot;: 0, &quot;valid&quot;: 0, &quot;day_counts&quot;: []})
+
+for net, sta in stations:
+    network_stats[net][&quot;total&quot;] += 1
+
+all_valid_keys = set()
+for comp in components:
+    all_valid_keys.update(station_dates[comp].keys())
+
+for key in all_valid_keys:
+    net = key.split(&quot;.&quot;)[0]
+    days_list = [len(station_dates[comp].get(key, [])) for comp in components]
+    valid_days = max(days_list)
+    network_stats[net][&quot;valid&quot;] += 1
+    network_stats[net][&quot;day_counts&quot;].append(valid_days)
+
+print(&quot;\n台网统计汇总：&quot;)
+print(f&quot;{'Net':&lt;6} {'Total':&gt;6} {'Valid':&gt;6} {'AvgDays':&gt;10}&quot;)
+print(&quot;-&quot; * 32)
+with open(&quot;network_summary_all_components.txt&quot;, &quot;w&quot;) as f:
+    f.write(f&quot;{'Net':&lt;6} {'Total':&gt;6} {'Valid':&gt;6} {'AvgDays':&gt;10}\n&quot;)
+    for net in sorted(network_stats.keys()):
+        total = network_stats[net][&quot;total&quot;]
+        valid = network_stats[net][&quot;valid&quot;]
+        avg_days = np.mean(network_stats[net][&quot;day_counts&quot;]) if network_stats[net][&quot;day_counts&quot;] else 0
+        line = f&quot;{net:&lt;6} {total:&gt;6} {valid:&gt;6} {avg_days:&gt;10.1f}&quot;
+        print(line)
+        f.write(line + &quot;\n&quot;)
+
+# ===== 总结 =====
+print(f&quot;\n文件总数: {total_files}&quot;)
+print(f&quot;文件总大小: {total_file_size/(1024**2):.2f} MB ({total_file_size/(1024**3):.2f} GB)&quot;)
+</code></pre>
+
+<p>&emsp;&emsp;这个脚本实现的功能包括：
+   * 统计开始时间start_year到结束时间end_year的数据下载情况
+   * 对LHZ、LHN和LHE分别进行统计。
+   * 对统计结果进行可视化输出。
+   * 横轴是时间，纵轴是台站名。不同台网用不同颜色标出。在图右侧标出台网名。
+   * 输出文件network_summary_all_components.txt，给出台网包含台站数目，有效台站数目和各自平均天数。
+   * 输出文件station_day_count_{comp}.txt，给出台站名和有效天数。
+   * 输出文件总数，文件总大小。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

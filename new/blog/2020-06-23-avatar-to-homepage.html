@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hexo next点击头像回到主页 | Jun Xie</title>
+  <meta name="description" content="hexo next点击头像回到主页">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>hexo next点击头像回到主页</h1>
+    <div class="post-meta">
+      <time>2020-06-23</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">hexo</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">next</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;有了头像以后，看到头像一般就想点一点，点击了可以回到主页不是挺好的吗。</p>
+<!-- more -->
+<p>&emsp;&emsp;网上高手还是挺多。例如这位<a href="http://eternalzttz.com/hexo-next.html">上仙</a>说要找到文件/themes/next/layout/_macro/sidebar.swig然后做修改。</p>
+<pre class="highlight"><code>+ &lt;a href=&quot;/&quot;&gt;
+    &lt;img class=&quot;site-author-image&quot; itemprop=&quot;image&quot;
+       src=&quot;{{ url_for( theme.avatar.url | default(theme.images + '/avatar.gif') ) }}&quot;
+       alt=&quot;{{ author }}&quot; /&gt;
++ &lt;/a&gt;
+</code></pre>
+
+<p>&emsp;&emsp;于是我也这么干。但是，然而，怎么我的sidebar.swig没有这个avatar.gif的语句呢。瞎折腾半天也没明白。后来试了一下：</p>
+<pre class="highlight"><code>find . -name sidebar*
+</code></pre>
+
+<p>&emsp;&emsp;然后找到了themes/next/layout/_partials/sidebar/site-overview.swig。在里面做修改</p>
+<pre class="highlight"><code>+ &lt;a href=&quot;/&quot;&gt;
+&lt;img class=&quot;site-author-image&quot; itemprop=&quot;image&quot; alt=&quot;{{ author }}&quot;
+src=&quot;{{ url_for(theme.avatar.url) }}&quot;&gt;
++ &lt;/a&gt;
+</code></pre>
+
+<p>Finally, it works.</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

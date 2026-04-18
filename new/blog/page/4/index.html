@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Jun Xie</title>
+  <meta name="description" content="Blog posts by Jun Xie on seismology and geophysics">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<h1 class="page-title">Blog</h1>
+
+<ul class="post-list">
+  
+  <li class="post-item">
+    <span class="post-date">2025-04-23</span>
+    <h3><a href="/new/blog/2025-04-23-remove-response-miniseed.html">去仪器响应练习</a></h3>
+    <p class="excerpt"><p>用我的脚本下载了一堆的miniseed放在seed下，仪器响应文件放在resp文件夹下，利用obspy去除仪器响应，还保存为miniseed。
+```
+import os
+from glob import glob
+from obspy import read, read_inventory</p>
+<h1 id="_1">设置路径</h1>
+<p>seed_f&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-04-22</span>
+    <h3><a href="/new/blog/2025-04-22-download-fnet-data-py.html">如何下载Fnet数据</a></h3>
+    <p class="excerpt"><p>感谢Seisman写了<a href="https://github.com/seisman/FnetPy">FnetPy</a>,可以很方便地下载数据。
+安装：</p>
+<pre class="highlight"><code>pip install https://github.com/seisman/FnetPy/archive/master.zip
+</code></pre>
+
+<p>例子：
+```
+import o&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-04-21</span>
+    <h3><a href="/new/blog/2025-04-21-down-ambient-noise-py.html">obspy下载连续背景噪声数据</a></h3>
+    <p class="excerpt"><p>利用obspy的MassDownloader下载连续的波形示例。
+```python
+import obspy
+from obspy.clients.fdsn.mass_downloader import RectangularDomain, CircularDomain, \
+    Restrictions, Ma&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/obspy/">obspy</a>
+      
+      <a href="/blog/tag/python/">python</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-04-17</span>
+    <h3><a href="/new/blog/2025-04-17-code-and-project2.html">有趣的程序和项目（二）</a></h3>
+    <p class="excerpt"><ol>
+<li><a href="https://ssa2py.readthedocs.io/en/stable/basic_info.html">Fast analysis of the seismic rupture</a> SSA2py is an emergent python based software that allows fast&hellip;</li>
+</ol></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/code/">code</a>
+      
+      <a href="/blog/tag/project/">project</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-02-14</span>
+    <h3><a href="/new/blog/2025-02-14-paper-reading-26.html">文献阅读(26)</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;[Depth-dependent seismic sensing of groundwater recovery from the atmospheric-river storms of 2023](https://www.science.org/doi/10.1126/science.adr6&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-02-10</span>
+    <h3><a href="/new/blog/2025-02-10-paper-reading-25.html">文献阅读(25)</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;<a href="https://www.science.org/doi/10.1126/science.adp8094">Hidden cascades of seismic ice stream deformation</a></p>
+<!--less-->
+<h3 id="_1">摘要</h3></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2025-02-05</span>
+    <h3><a href="/new/blog/2025-02-05-how-to-install-deepseek.html">如何在自己电脑中部署deepseek</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;deepseek很火，我也来凑热闹。之前发布的一些LLM都没关注本地部署，因为似乎要钱，而deepseek是免费的（贫穷限制了我的想象）。</p>
+<!--less-->
+<h1 id="windowsdeepseek">Windows下deepseek部署</h1>
+<p>&emsp;&emsp;首先是在windows下下载[ollama](https://ol&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/linux/">Linux</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-12-19</span>
+    <h3><a href="/new/blog/2024-12-19-find-linux-back.html">记一次找回Linux启动项的经历</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;记一次找回Linux启动项的经历</p>
+<!--less-->
+<p>&emsp;&emsp;我的笔记本是Windows10和Fedora40的双系统。平时都在Fedora下面干活，因此给windows的C盘分配了120G。然而Linux下面对于word的支持不太行，因此也需要在windows下面处理文档。&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/linux/">Linux</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-11-07</span>
+    <h3><a href="/new/blog/2024-11-07-paper-reading-24.html">文献阅读(24)</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;<a href="https://iopscience.iop.org/article/10.1088/1361-6633/aa8473">Glacial seismology</a></p>
+<!--less-->
+<h3 id="_1">摘要翻译</h3></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-11-02</span>
+    <h3><a href="/new/blog/2024-11-02-paper-reading-23.html">文献阅读(23)</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;[Drivers of Recurring Seasonal Cycle of Glacier Calving Styles and Patterns](https://www.frontiersin.org/journals/earth-science/articles/10.3389/fea&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-10-30</span>
+    <h3><a href="/new/blog/2024-10-30-paper-reading-22.html">文献阅读（二十二）</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;<a href="https://www.science.org/doi/10.1126/science.1162543">A Simple Law for Ice-Shelf Calving</a></p>
+<!--less--></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-10-12</span>
+    <h3><a href="/new/blog/2024-10-12-efficient-shell-script.html">高效bash脚本</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;转学习到的高效bash脚本。</p>
+<!--less-->
+<h1 id="build-in-commands">build-in commands</h1>
+<pre class="highlight"><code class="language-bash">if [[ &quot;$var&quot; -eq 3 ]];then
+   echo &quot;hello&quot;
+fi
+</code></pre></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/linux/">Linux</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-10-05</span>
+    <h3><a href="/new/blog/2024-10-05-paper-reading-21.html">文献阅读（二十一）</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;<a href="https://academic.oup.com/gji/article/218/1/560/5421624">Global scale analysis and modelling of primary microseisms</a></p>
+<!--less-->
+<h3 id="_1">摘要翻译</h3></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-09-09</span>
+    <h3><a href="/new/blog/2024-09-09-paper-reading-20.html">文献阅读（二十）</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;[Using Ocean Ambient Sound to Measure Local Integrated Deep Ocean Temperature](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2024GL108943?af=R&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-09-03</span>
+    <h3><a href="/new/blog/2024-09-03-paper-reading-19.html">文献阅读（十九）</a></h3>
+    <p class="excerpt"><p>[Estimation of the Orientations of the S-net Cabled Ocean-Bottom Sensors](https://pubs.geoscienceworld.org/ssa/srl/article-abstract/90/6/2175/573516/Estimation-&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-09-01</span>
+    <h3><a href="/new/blog/2024-09-01-how-to-download-fnet-station-list.html">如何下载Fnet的台站列表</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;如何下载Fnet的台站列表？</p>
+<!--less-->
+<p>&emsp;&emsp;这里其实是一个网页抓取的工作。Fnet台站列表网址是https://www.fnet.bosai.go.jp/st_info/?LANG=en。那么下载其列表并保存到本地的python脚本如下：
+```
+import&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/web/">web</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-07-25</span>
+    <h3><a href="/new/blog/2024-07-25-obspy-paz.html">obspy去polezero类型仪器仪响应</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;有些时候数据下载下来只有polezero格式的仪器响应，那python脚本怎么去仪器响应呢？</p>
+<!--less-->
+<p>&emsp;&emsp;如果有polezero文件，那可以用attach_paz来读取。然后去仪器响应的脚本如下：
+```python
+import numpy as np
+im&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/python/">python</a>
+      
+      <a href="/blog/tag/seismology/">seismology</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-07-19</span>
+    <h3><a href="/new/blog/2024-07-19-music.html">学习聚束分析(一)</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;这是聚束分析学习一，参见<a href="https://geophydog.cool/post/music_array_process/">这里</a>。</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/seismology/">Seismology</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-07-09</span>
+    <h3><a href="/new/blog/2024-07-09-how-to-download-Snet-data.html">如何下载S-net数据</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;如何下载S-net数据呢？</p>
+<!--less-->
+<p>&emsp;&emsp;S-net是NIED（日本国立防灾科学技术研究所）布设的海底地震动观测网络，由150台三分量地震仪组成。观测区域覆盖了2011年东日本大地震及其邻近地区的震源区域。自2017年4月以来，S-net已全面开始运作，实时地将&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/seismic/">seismic</a>
+      
+    </div>
+    
+  </li>
+  
+  <li class="post-item">
+    <span class="post-date">2024-06-29</span>
+    <h3><a href="/new/blog/2024-06-29-paper-reading-18.html">文献阅读（十八）</a></h3>
+    <p class="excerpt"><p>&emsp;&emsp;<a href="https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019GL084123">Ross Ice Shelf Icequakes Associated With Ocean Gravity Wave Activity</a>
+&lt;!&ndash;le&hellip;</p></p>
+    
+    <div class="post-tags">
+      
+      <a href="/blog/tag/paper/">paper</a>
+      
+    </div>
+    
+  </li>
+  
+</ul>
+
+
+
+
+<nav class="pagination">
+  
+    
+    <a href="/blog/page/3/">&larr; Newer</a>
+    
+  
+
+  <span class="page-info">Page 4 / 10</span>
+
+  
+    <a href="/blog/page/5/">Older &rarr;</a>
+  
+</nav>
+
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

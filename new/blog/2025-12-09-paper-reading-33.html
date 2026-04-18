@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文献阅读(33) | Jun Xie</title>
+  <meta name="description" content="文献阅读(33)">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>文献阅读(33)</h1>
+    <div class="post-meta">
+      <time>2025-12-09</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">paper</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;<a href="https://pubs.geoscienceworld.org/seg/geophysics/article/88/6/WC47/627513/Characterizing-hydraulic-fracture-growth-using">Characterizing hydraulic fracture growth using distributed acoustic sensing-recorded microseismic reflections</a></p>
+<!--less-->
+<h3 id="_1">摘要</h3>
+<p>水力压裂是提高非常规储层油气产量的关键手段，刻画裂缝几何形态与扩展过程对理解储层响应、优化完井设计具有重要价值。分布式声波传感（DAS）可记录包含直达 P/S 波、转换波与反射波在内的完整微地震波场，提供大孔径观测。本文利用 DAS 记录的微地震反射 S 波，结合 f-k 滤波与射线追踪，将反射波走时映射为空间反射率，实现裂缝成像。实例研究表明，反射成像推断的裂缝发育与低频 DAS（LF-DAS）观测的裂缝驱动相互作用（FDI）高度一致，并能揭示未抵达光纤的远端裂缝。同一压裂阶段多个事件的成像结果可拼接为裂缝动态演化的“快照”。该方法为微地震监测提供了新的高分辨率成像维度。</p>
+<hr />
+<h3 id="_2">相关研究的重要性</h3>
+<ol>
+<li>
+<p><strong>水力压裂裂缝几何未知</strong><br />
+   传统微地震云仅能给出事件点集，无法直接成像裂缝面，导致“缝长、缝高、缝网复杂度”估计误差大。</p>
+</li>
+<li>
+<p><strong>DAS 高密度优势待挖掘</strong><br />
+   DAS 空间采样&lt;1 m，可记录反射波，但业界主要利用直达波定位，大量反射信息被当作噪声丢弃。</p>
+</li>
+<li>
+<p><strong>LF-DAS 只能感知“到光纤”的应变</strong><br />
+   LF-DAS（&lt;1 Hz）可观测裂缝开闭，但无法探测未抵达光纤的远端裂缝，存在“盲区”。</p>
+</li>
+<li>
+<p><strong>反射波成像在微地震领域应用少</strong><br />
+   地面或井中主动源反射成像成熟，但“微地震事件即震源”的反射成像尚处起步阶段，亟需验证可行性。</p>
+</li>
+</ol>
+<hr />
+<h3 id="_3">前人研究及不足</h3>
+<table>
+<thead>
+<tr>
+<th>研究</th>
+<th>内容</th>
+<th>不足</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Maxwell (2014)</strong></td>
+<td>微地震云解释裂缝系统</td>
+<td>仅事件点集，无裂缝面成像；无法识别远端裂缝</td>
+</tr>
+<tr>
+<td><strong>Jin &amp; Roy (2017)</strong></td>
+<td>LF-DAS 观测裂缝开闭应变</td>
+<td>只能感知光纤附近应变，对远端裂缝“看不见”</td>
+</tr>
+<tr>
+<td><strong>Staněk et al. (2022)</strong></td>
+<td>提出射线追踪微地震反射成像理论</td>
+<td>仅合成数据验证，缺乏现场多事件、时移验证</td>
+</tr>
+<tr>
+<td><strong>Grechka et al. (2017)</strong></td>
+<td>3C 检波器反射波联合反演位置与速度</td>
+<td>检波器稀疏，反射波识别困难；未利用 DAS</td>
+</tr>
+<tr>
+<td><strong>Lellouch et al. (2022)</strong></td>
+<td>DAS 导波研究</td>
+<td>聚焦导波机制，未利用反射波成像裂缝面</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_4">本文数据</h3>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DAS 微地震数据</strong></td>
+<td>加拿大 Montney 组三井同步压裂，水平监测井 B 光纤，4 m gauge，2 kHz 采样，道距 4 m</td>
+</tr>
+<tr>
+<td><strong>LF-DAS 应变数据</strong></td>
+<td>同一光纤 0.1 Hz 采样，记录裂缝开闭与 FDI</td>
+</tr>
+<tr>
+<td><strong>测井速度模型</strong></td>
+<td>垂直监测井 C 的声波测井建立层状各向同性 Vp/Vs 模型</td>
+</tr>
+<tr>
+<td><strong>微地震事件目录</strong></td>
+<td>机器学习自动检测与定位，3 个阶段共 110 个事件，其中 29 个含清晰反射 S 波</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_5">本文方法</h3>
+<ol>
+<li><strong>事件筛选与反射波识别</strong>  </li>
+<li>f-k 滤波分离 heel/toe 向波场  </li>
+<li>切除直达波，保留反射 S 波  </li>
+<li>
+<p>人工+自动挑选含线性同相轴的事件</p>
+</li>
+<li>
+<p><strong>射线追踪映射成像</strong>  </p>
+</li>
+<li>将事件震源→光纤平面离散为潜在反射点  </li>
+<li>计算各点反射 S 波到时，将 DAS 振幅映射到空间反射点  </li>
+<li>
+<p>合并双向成像，低通+中值滤波</p>
+</li>
+<li>
+<p><strong>时移成像与 LF-DAS 对比</strong>  </p>
+</li>
+<li>同一阶段 3 个事件成像，观察裂缝生长→抵达光纤→闭合过程  </li>
+<li>与 LF-DAS 应变瀑布图对比，验证反射体为新裂缝</li>
+</ol>
+<hr />
+<h3 id="_6">本文结果</h3>
+<ol>
+<li><strong>裂缝面清晰成像</strong>  </li>
+<li>事件 A：距光纤 50–125 m 裂缝垂直光纤，与 LF-DAS 无 FDI 区域对应，证实为远端裂缝  </li>
+<li>
+<p>事件 B：裂缝斜交光纤，形态弯曲，揭示速度不均质影响</p>
+</li>
+<li>
+<p><strong>动态演化“快照”</strong>  </p>
+</li>
+<li>
+<p>阶段 13 三事件序列：<br />
+     事件 1（压裂 36 min 前）→裂缝距光纤 80 m<br />
+     事件 2（4 min 后）→裂缝抵达光纤，LF-DAS 出现 FDI<br />
+     事件 3（36 min 后）→反射能量增强，裂缝更连续，随后振幅减弱→闭合</p>
+</li>
+<li>
+<p><strong>反射波可持续 10 天</strong>  </p>
+</li>
+<li>
+<p>反射振幅随时间衰减，可用于评估支撑剂保持效果</p>
+</li>
+<li>
+<p><strong>成像盲区定量给出</strong>  </p>
+</li>
+<li>事件震源与光纤夹角、裂缝阻抗对比、几何扩散决定可成像长度，实际裂缝可能比像更长</li>
+</ol>
+<hr />
+<h3 id="_7">创新点与贡献</h3>
+<table>
+<thead>
+<tr>
+<th>创新</th>
+<th>贡献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>首次现场验证“微地震事件=主动源”反射成像</strong></td>
+<td>将理论方法落地，用 29 个事件拼接出裂缝动态演化电影</td>
+</tr>
+<tr>
+<td><strong>提出 DAS 反射成像与 LF-DAS 联合解释框架</strong></td>
+<td>反射成像定位远端裂缝，LF-DAS 记录近光纤应变，二者互补</td>
+</tr>
+<tr>
+<td><strong>揭示反射波“生命周期”</strong></td>
+<td>裂缝形成后数小时反射最强，10 天后衰减，可用于支撑剂耐久性评估</td>
+</tr>
+<tr>
+<td><strong>给出成像适用条件与盲区</strong></td>
+<td>震源-光纤几何、裂缝阻抗、速度模型误差对成像长度与形态的影响被量化</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_8">不足与未来方向</h3>
+<table>
+<thead>
+<tr>
+<th>不足</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>假设裂缝垂直光纤、零开口</strong></td>
+<td>实际裂缝可能弯曲、倾斜，需 3D kirchhoff 或 RTM 成像</td>
+</tr>
+<tr>
+<td><strong>使用均匀速度模型</strong></td>
+<td>远源（&gt;500 m）时各向异性/横向变化导致像弯曲，需层析或全波形反演</td>
+</tr>
+<tr>
+<td><strong>振幅未做真幅恢复</strong></td>
+<td>几何扩散、辐射图案、DAS 角度响应未校正，难以反演裂缝开口与阻抗</td>
+</tr>
+<tr>
+<td><strong>近源区反射被切除</strong></td>
+<td>为保护直达波而 mute，导致光纤附近 0–25 m 裂缝信息丢失，需改进波场分离</td>
+</tr>
+<tr>
+<td><strong>自动化程度待提高</strong></td>
+<td>反射波识别、速度模型更新、成像参数选取仍需人工干预，未来可嵌入深度学习实现实时成像</td>
+</tr>
+</tbody>
+</table>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

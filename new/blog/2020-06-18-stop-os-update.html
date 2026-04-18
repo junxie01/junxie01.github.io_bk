@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何让Elementary OS取消自动更新检查 | Jun Xie</title>
+  <meta name="description" content="如何让Elementary OS取消自动更新检查">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>如何让Elementary OS取消自动更新检查</h1>
+    <div class="post-meta">
+      <time>2020-06-18</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;我的HP笔记本上的Linux系统安装的是Elementary OS。这是个基于Ubuntu的注重界面美观的系统。是挺漂亮的，但几乎每天那个引用中心都会跳出来，帮我检查更新。</p>
+<!-- more -->
+<p>{% asset_img app.png 应用中心 %}
+&emsp;&emsp;这很烦人，尤其是还有出错，不能忍。所以必须让它停止自己更新啊。解决办法是这样。在文件/etc/apt/apt.conf.d/10periodic中将第一行的1改为0，成这样：</p>
+<pre class="highlight"><code>APT::Periodic::Update-Package-Lists &quot;0&quot;;
+APT::Periodic::Download-Upgradeable-Packages &quot;0&quot;;
+APT::Periodic::AutocleanInterval &quot;0&quot;;
+</code></pre>
+
+<p>0表示false，自然就不帮您自动更新了。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

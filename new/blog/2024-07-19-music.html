@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习聚束分析(一) | Jun Xie</title>
+  <meta name="description" content="学习聚束分析(一)">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>学习聚束分析(一)</h1>
+    <div class="post-meta">
+      <time>2024-07-19</time>
+       &middot; 4 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Seismology</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;这是聚束分析学习一，参见<a href="https://geophydog.cool/post/music_array_process/">这里</a>。</p>
+<!--less-->
+
+<p>&emsp;&emsp;聚束分析技术（Bartlett 聚束成形器）虽然稳定性和稳健性很好，但分辨率较差。Schmidt 提出了一种称为多信号分类 （MUSIC） 的新聚束分析算法，用于在保持波束形成器稳定性的同时解决分辨率问题 （Schmidt, 1986）。这里我们学习 MUSIC 算法，并给出一些Python代码来展示该技术的工作原理。</p>
+<p>&emsp;&emsp;假设一个信号为$u(t)$则傅里叶频谱为$U(\omega)$, $N$ 个接收器的向量为, 
+$$ \vec{u}(\omega) = [U_{1}(\omega), U_{2}(\omega), \cdots, U_{N}(\omega)]^T \tag{1} $$ 
+互相关矩阵由下式给出,
+$$ \bar{C}(\omega) = \frac{1}{N}\vec{u}(\omega) \vec{u}^H(\omega) \tag{2} $$ 
+式中$H$表示Hermitian转置算符。互相关矩阵$\bar{C}(\omega)$通常受到非相干信号及仪器产生的噪声干扰。因此该矩阵包括相干信号和噪声。对$\bar{C}(\omega)$进行特征值分解获得，</p>
+<p>$$ \bar{C}(\omega) = \bar{E}(\omega) \bar{\Lambda}(\omega) \bar{E}^{-1}(\omega) \tag{3} $$</p>
+<p>式中$\bar{E}(\omega)$由$N$个特征向量$\vec{e}_{i} $ 组成，</p>
+<p>$$ \bar{E}(\omega) = [\vec{e}_1, \vec{e}_2, \cdots, \vec{e}_N] \tag{4} $$</p>
+<p>$\bar{\Lambda}(\omega)$ 是对角矩阵，对角元素$\lambda_{i}$是$\bar{C}(\omega)$的特征值，</p>
+<p>$$ \bar{\Lambda}(\omega) = diag { \lambda_{1}, \lambda_{2}, \cdots, \lambda_{N} } \tag{5} $$</p>
+<p>&emsp;&emsp;最大的特征值表示相干信号（可能有多个相干信号），左边的特征值及其特征向量被噪声占据，这意味着这些噪声是正交的。在这里，我们使用噪声的特征向量构造一个新矩阵</p>
+<p>$$ \bar{N}<em ne="ne">e(\omega) = [\vec{e}_1, \vec{e}_2, \cdots, \vec{e}</em>}] [\vec{e<em ne="ne">1, \vec{e}_2, \cdots, \vec{e}</em> $$}]^H \tag{6</p>
+<p>&emsp;&emsp;Barlett聚束器从 </p>
+<p>$$ P(\omega) = \vec{a}(\omega) \bar{C}(\omega) \vec{a}^H(\omega) \tag{7} $$</p>
+<p>变为，</p>
+<p>$$ P(\omega) =\frac{1}{ \vec{a}(\omega) \bar{N}_e(\omega) \vec{a}^H(\omega) } \tag{8} $$ 
+式中 $\vec{a}(\omega)$ 表示转向向量 $\vec{a}_n=e^{-i\omega \Delta t_n}$。 当我们将转向向量投影到噪声特征向量跨越的噪声矩阵子空间时, 公式$(8)$的分母项将为零。在这种情况下 $P(\omega)$ 将取极大值。$\Delta t_n$ 是时间延迟，其形式为，</p>
+<p>$$ \Delta t_{n} = \vec{s} \cdot \vec{r}_n \tag{9} $$</p>
+<p>式中$\vec{s}=s[-sin\theta, -cos\theta]^T$ 和 $\vec{r}_{n}$ 是慢度和位置矢量，其中接收器的反方位角为$\theta$。$\vec{r}_s$ 和 $v$ 是源位置向量和传播速度。</p>
+<p>&emsp;&emsp;MUSIC 算法在分辨率上优于 Bartlett 波束成形器。然而，与 MUSIC 相比，Bartlett 波束成形器具有更好的稳定性。以下是两种算法的python脚本示例。</p>
+<pre class="highlight"><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# ARF of the Bartlett beamformer.
+def arf_beam_barlett(c0, xy, f0=10, b0=90, s0=3.5e-3, b1=0, b2=360, nb=181, s1=1e-3, s2=5e-3, ns=81):
+    n = xy.shape[0]
+    a = np.zeros((n, 1), dtype=complex)
+    b = np.linspace(b1, b2, nb)
+    bb = np.radians(b)
+    s = np.linspace(s1, s2, ns)
+    p = np.zeros((ns, nb), dtype=complex)
+    for i in range(ns):
+        for j in range(nb):
+            shift = -s[i] * (np.sin(bb[j])*xy[:, 0]+np.cos(bb[j])*xy[:, 1])
+            a[:, 0] = np.exp(-2j*np.pi*f0*shift)
+            p[i, j] = np.conjugate(a.T) @ c0 @ a
+    return b, s, p/n**2
+
+# ARF of the MUSIC beamformer.
+def arf_beam_music(c0, xy, f0=10, b0=90, s0=3.5e-3, b1=0, b2=360, nb=181, s1=1e-3, s2=5e-3, ns=81, ne=10):
+    n = xy.shape[0]
+    a = np.zeros((n, 1), dtype=complex)
+    b = np.linspace(b1, b2, nb)
+    bb = np.radians(b)
+    s = np.linspace(s1, s2, ns)
+    p = np.zeros((ns, nb), dtype=complex)
+    w, v = np.linalg.eigh(c0)
+    ve = v[:, :ne]
+    ne = ve @ np.conjugate(ve.T)
+
+    for i in range(ns):
+        for j in range(nb):
+            shift = -s[i] * (np.sin(bb[j])*xy[:, 0]+np.cos(bb[j])*xy[:, 1])
+            a[:, 0] = np.exp(-2j*np.pi*f0*shift)
+            p[i, j] = 1 / (np.conjugate(a.T) @ ne @ a)
+    return b, s, p / np.abs(p).max()
+</code></pre>
+
+<pre class="highlight"><code># Number of receivers
+nr = 15
+# Aperture of the array
+r = 1e2
+# Randomly generating the Cartician coordinates
+xy = np.random.random((nr, 2)) * r
+# Frequency, back-azimuth and slowness of signal
+f0 = 5; b0 = 90; s0 = 3.5e-3
+# From degree to radian
+bb0 = np.radians(b0)
+# Fourier vector if signal
+u = np.zeros((nr, 1), dtype=complex)
+u[:, 0] = np.exp(-2j*np.pi*f0*s0*(-np.sin(bb0)*xy[:, 0]-np.cos(bb0)*xy[:, 1]))
+# Generating correlation matrix using u
+c0 = u @ np.conjugate(u.T)
+c0 /= np.abs(c0); c0[np.isnan(c0)] = 0.
+# Back-azimuth and slowness ranges of computing
+b1 = 0; b2 = 360; nb = 361
+s1 = 1e-3; s2 = 5e-3; ns = 81
+# Adding noise to the correlation matrix
+noiser = np.random.randn(nr, nr)
+noisei = np.random.randn(nr, nr)
+ratio = 1.25
+c0 = c0 + noiser * ratio + 1j * noisei * ratio
+# Computing the Bartlett beamformer
+b, s, p1 = arf_beam_barlett(c0, xy, f0=f0, b0=b0, s0=s0, b1=b1, b2=b2, nb=nb, s1=s1, s2=s2, ns=ns)
+# Computing the MUSIC beamformer.
+_, _, p2 = arf_beam_music(c0, xy, f0=f0, b0=b0, s0=s0, b1=b1, b2=b2, nb=nb, s1=s1, s2=s2, ns=ns, ne=nr-1)
+# Normalizing beam power
+p1 = np.abs(p1); p1 /= p1.max()
+p2 = np.abs(p2); p2 /= p2.max()
+
+
+## Visualizing the beam power results.
+# Array configuration
+plt.figure(figsize=(12, 8))
+plt.subplot(221)
+plt.scatter(xy[:, 0], xy[:, 1], marker='v', s=100, edgecolor='k', alpha=0.5)
+plt.xlabel('Easting (m)', fontsize=14)
+plt.ylabel('Northing (m)', fontsize=14)
+plt.gca().tick_params(labelsize=12)
+plt.axis('equal')
+plt.grid(ls='--')
+
+# Comparing the accuracy
+sn = int((s0-s.min())/(s[1]-s[0])); dsn = 2
+pp1 = np.mean(p1[sn-dsn:sn+dsn], axis=0)
+pp2 = np.mean(p2[sn-dsn:sn+dsn], axis=0)
+pp1 /= pp1.max(); pp2 /= pp2.max()
+ax = plt.subplot(222, projection='polar')
+ax.plot(np.radians(b), pp1, 'r', label='Bartlett')
+ax.plot(np.radians(b), pp2, 'b', label='MUSIC')
+ax.plot([np.radians(b0), np.radians(b0)], [0, 1], 'k--', label='True')
+ax.legend(fontsize=11)
+ax.set_theta_zero_location('N')
+ax.set_theta_direction(-1)
+plt.gca().tick_params(labelsize=13)
+
+# Barlett beam power
+ax = plt.subplot(223, projection='polar')
+plt.pcolormesh(np.radians(b), s*1e3, p1, cmap='gnuplot2_r')
+cbar = plt.colorbar(shrink=0.8, pad=0.075)
+cbar.set_label(r'Barlett beam power', fontsize=13)
+cbar.ax.tick_params(labelsize=11)
+ax.grid(color='#333333', ls=(10, (6, 5)), lw=0.5)
+ax.tick_params(axis='y', colors='k', labelsize=13)
+ax.set_theta_zero_location('N')
+ax.set_theta_direction(-1)
+ax.set_xlabel('Slowness (s/km)', fontsize=14)
+ax.tick_params(labelsize=13)
+ax.scatter(bb0, s0*1e3, marker='o', s=100, facecolor='none', edgecolor='c', lw=2)
+
+# MUSIC beam power
+ax = plt.subplot(224, projection='polar')
+plt.pcolormesh(np.radians(b), s*1e3, p2, cmap='gnuplot2_r')
+cbar = plt.colorbar(shrink=0.8, pad=0.075)
+cbar.set_label(r'MUSIC beam power', fontsize=13)
+cbar.ax.tick_params(labelsize=11)
+ax.grid(color='#333333', ls=(10, (6, 5)), lw=0.5)
+ax.tick_params(axis='y', colors='k', labelsize=13)
+ax.set_theta_zero_location('N')
+ax.set_theta_direction(-1)
+ax.set_xlabel('Slowness (s/km)', fontsize=14)
+ax.tick_params(labelsize=13)
+ax.scatter(bb0, s0*1e3, marker='o', s=100, facecolor='none', edgecolor='c', lw=2)
+plt.show()
+</code></pre>
+
+<p>参考文献：
+Schmidt, R.O, “Multiple Emitter Location and Signal Parameter Estimation,” IEEE Trans. Antennas Propagation, Vol. AP-34 (March 1986), pp. 276–280.</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

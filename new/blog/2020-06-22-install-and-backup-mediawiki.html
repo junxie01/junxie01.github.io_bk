@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to install and backup mediawiki | Jun Xie</title>
+  <meta name="description" content="How to install and backup mediawiki">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>How to install and backup mediawiki</h1>
+    <div class="post-meta">
+      <time>2020-06-22</time>
+       &middot; 3 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">wiki</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>Meidawiki is a good tool to organise the information and knowledge. I even use it to keep some notes. My first mediawiki was established like in 2012. There are some important informations in my database. Therefore I hope to keep it and run it in every Laptop. This blog keeps the steps on how to install and backup it.</p>
+<!-- more -->
+
+<h2 id="intall-mediawiki">intall mediawiki</h2>
+<p>I installed the mediawiki in Elementary OS (Ubuntu), so steps of installing mediawiki are like:</p>
+<h3 id="install-dependents">install dependents:</h3>
+<pre class="highlight"><code>sudo apt-get install apache2 mysql-server php5 php5-mysql libapache2-mod-php5
+</code></pre>
+
+<h3 id="install-mediawiki">install mediawiki:</h3>
+<p>There are two ways to do that:</p>
+<h4 id="the-systematic-way">The systematic way:</h4>
+<pre class="highlight"><code> sudo apt-get install mediawiki (this will install a low version)
+</code></pre>
+
+<h4 id="manual">Manual:</h4>
+<p>step1: download an upgraded version:</p>
+<pre class="highlight"><code>wget https://releases.wikimedia.org/mediawiki/1.33/mediawiki-1.33.0.tar.gz
+</code></pre>
+
+<p>extract them and put them into /var/lib/mediawiki</p>
+<p>step 2: Create a database ( in mysql )</p>
+<ol>
+<li>Check and see if the database server is running; for example, run </li>
+</ol>
+<pre class="highlight"><code>/usr/local/mysql/bin/mysqladmin status
+</code></pre>
+
+<p>If it is not, run mysqld_safe to start it: </p>
+<pre class="highlight"><code>sudo /usr/local/mysql/bin/mysqld_safe &amp;
+</code></pre>
+
+<ol>
+<li>Set a password for the &ldquo;root&rdquo; account on your database server. </li>
+</ol>
+<pre class="highlight"><code>/usr/local/mysql/bin/mysqladmin -u root password yourpassword
+</code></pre>
+
+<ol>
+<li>Run the MySQL command-line client: </li>
+</ol>
+<pre class="highlight"><code>/usr/local/mysql/bin/mysql -u root -p
+</code></pre>
+
+<ol>
+<li>Run command in the mysql command-line:</li>
+</ol>
+<pre class="highlight"><code>create database wikidb;
+GRANT ALL ON my_wiki.* TO 'new_mysql_user'@'localhost';
+grant index, create, select, insert, update, delete, alter, lock tables on wikidb.* to 'wikiuser'@'localhost' identified by 'password’;
+</code></pre>
+
+<p>problem? sometimes this message may show up: </p>
+<pre class="highlight"><code>connection error: Access denied for user 'root'@'localhost' (localhost)
+</code></pre>
+
+<p>In my case, I found a solvation:</p>
+<pre class="highlight"><code>sudo mysql -u root
+use mysql;
+update user set plugin='mysql_native_password' where User='root';
+flush privileges;
+quit
+reboot
+</code></pre>
+
+<p>step3: go to 127.0.0.1/mediawiki in your browser, follow the steps.</p>
+<h2 id="back-up-wikidb">Back up wikidb:</h2>
+<p>All information are restored in mySQL database, so backup it with command:</p>
+<pre class="highlight"><code>mysqldump -u[user] -p[password] [databasename] &gt; [dump_name]
+</code></pre>
+
+<p>In my case, it goes like:</p>
+<pre class="highlight"><code>mysqldump -u root -p wikidb &gt;wikidb.mysql
+</code></pre>
+
+<p>My database is in wikidb.mysql. And I do not want to do this by typing them in the terminal. In replacement, I use crontab, edit crontab:</p>
+<pre class="highlight"><code>crontab -e
+</code></pre>
+
+<p>with a new task:</p>
+<pre class="highlight"><code>0 12 * * 1 mysqldump -u root -p wikidb &gt;/home/junxie/work/wikidb.mysql
+</code></pre>
+
+<p>This means to run backup command in the noon every Monday.</p>
+<h2 id="restore-a-wikidb-in-a-new-computer">Restore a wikidb in a new computer:</h2>
+<p>If you move in to another computer, after installing the mediawiki, run the following commend to restore the backup one.</p>
+<pre class="highlight"><code>mysql -u[user] -p[password] [database_name] &lt; [dump_name]
+</code></pre>
+
+<p>In my case, it is:</p>
+<pre class="highlight"><code>mysql -u root -p wikidb &lt;wikidb.mysql
+</code></pre>
+
+<p>Have fun ^_^</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

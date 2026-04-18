@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用AI做APP | Jun Xie</title>
+  <meta name="description" content="用AI做APP">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>用AI做APP</h1>
+    <div class="post-meta">
+      <time>2026-03-05</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">app</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;一直都想做app来着，但恐于学习成本，一直没有做。现在AI太厉害了，终于可以低成本做app了。</p>
+<!--less-->
+<p>&emsp;&emsp;这是我的第一个app，命名为<a href="https://github.com/junxie01/seismic-app">seisamuse</a>，也就是和我的网站同名的app。
+&emsp;&emsp;我用的是字节跳动发布的AI原生编程工具<a href="https://trae.zhike.in/">TRAE</a>。下载安装好后，如下图：
+<img alt="trae" src="/images/trae_gui.png" />
+界面左边可以看到文件目录内容，右下角是AI对话框，你可以在这里和AI对话，请他构建你想要的程序。
+我的app有三个界面:
+<img alt="地震分布" src="/images/app1.png" />
+<img alt="期刊论文" src="/images/app2.png" />
+<img alt="学者信息" src="/images/app2.png" />
+图中的地震分布是用npx expo start, 在expo go中展示的。
+用命令</p>
+<pre class="highlight"><code>npx expo run:android --variant release
+</code></pre>
+
+<p>就可以生成apk文件，位置在seismic-app/andriod/app/build/outputs/apk/app-release.apk 
+下载到安卓手机就可以安装了。你可以试试我生成的<a href="https://pan.baidu.com/s/1qQWzx6n36xqXkLMVWLmolg?pwd=tyxn">apk</a>，欢迎提意见。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

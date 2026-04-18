@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何在自己电脑中部署deepseek | Jun Xie</title>
+  <meta name="description" content="如何在自己电脑中部署deepseek">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>如何在自己电脑中部署deepseek</h1>
+    <div class="post-meta">
+      <time>2025-02-05</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;deepseek很火，我也来凑热闹。之前发布的一些LLM都没关注本地部署，因为似乎要钱，而deepseek是免费的（贫穷限制了我的想象）。</p>
+<!--less-->
+<h1 id="windowsdeepseek">Windows下deepseek部署</h1>
+<p>&emsp;&emsp;首先是在windows下下载<a href="https://ollama.com/download">ollama</a>并安装。然后在cmd下运行:</p>
+<pre class="highlight"><code class="language-bash">ollama run deepseek-r1:7b
+</code></pre>
+
+<p>其实安装时输入deepseek-r1默认就是7b，大小有4.7G。当然还有其他的版本，自己去搜索并根据自己的GPU大小进行安装。
+安装完之后出现了</p>
+<p>&rdquo;&gt;&gt;&gt;&rdquo;</p>
+<p>就可以对话了。下次要调用就在cmd中重新运行命令:</p>
+<pre class="highlight"><code>ollama run deepseek-r1
+</code></pre>
+
+<h1 id="linuxdeepseek">Linux下deepseek部署</h1>
+<p>&emsp;&emsp;在Linux下面则这样安装ollama，命令:</p>
+<pre class="highlight"><code>curl -fsSL https://ollama.com/install.sh | sh
+</code></pre>
+
+<p>这个命令是从github下载ollama进行安装。得保证你能连接到github。接下来安装deepseek:</p>
+<pre class="highlight"><code>ollama run deepseek-r1:7b
+</code></pre>
+
+<h1 id="deepseekzotero">deepseek与zotero结合</h1>
+<p>deepseek可以和zotero结合进行本地的文献阅读。
+这个时候就要安装awsome GPT，位置在<a href="https://zotero-chinese.com/plugins/">zotero中文社区</a>。配置可以参考<a href="https://zhuanlan.zhihu.com/p/20850142386">这里</a>。我尝试了一下，没有搞定。有机会再整。</p>
+<h1 id="janus-pro-7b">图像生成大模型Janus-Pro-7B本地部署</h1>
+<p>&emsp;&emsp;另外DeepSeek发布的多模态大模型Janus-Pro-7B支持图像生成，也可以<a href="https://www.upx8.com/4681">本地部署</a>，超厉害。</p>
+<h2 id="gitconda">安装Git和conda</h2>
+<h2 id="_1">创建环境：</h2>
+<pre class="highlight"><code>conda create -n mp python=3.10 -y
+conda activate mp
+</code></pre>
+
+<h2 id="janus">克隆Janus</h2>
+<pre class="highlight"><code>git clone https://github.com/deepseek-ai/Janus.git
+cd Janus
+</code></pre>
+
+<h2 id="_2">安装依赖</h2>
+<pre class="highlight"><code>pip install -e .
+</code></pre>
+
+<h2 id="graioui">安装Graio(UI)</h2>
+<pre class="highlight"><code>pip install gradio
+pip uninstall torch torchvision torchaudio -y
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+</code></pre>
+
+<h2 id="_3">运行</h2>
+<pre class="highlight"><code>python demo/app_januspro.py
+</code></pre>
+
+<p>调用gpu运行</p>
+<pre class="highlight"><code>python demo/app_januspro.py --device cuda
+</code></pre>
+
+<p>打开本地链接<a href="http://127.0.0.1:7860">http://127.0.0.1:7860</a>就可以使用。</p>
+<p>理想很丰满，现实很骨感，还是没搞定，有时间再整。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

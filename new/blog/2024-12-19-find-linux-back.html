@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>记一次找回Linux启动项的经历 | Jun Xie</title>
+  <meta name="description" content="记一次找回Linux启动项的经历">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>记一次找回Linux启动项的经历</h1>
+    <div class="post-meta">
+      <time>2024-12-19</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;记一次找回Linux启动项的经历</p>
+<!--less-->
+<p>&emsp;&emsp;我的笔记本是Windows10和Fedora40的双系统。平时都在Fedora下面干活，因此给windows的C盘分配了120G。然而Linux下面对于word的支持不太行，因此也需要在windows下面处理文档。谁知最近空间告急，磁盘标志频频翻红。眼看window就没办法再用了。</p>
+<p>&emsp;&emsp;于是在网上搜索怎么清理C盘，结果尝试了大量的网上和Kimi的方法，发现：C盘里除了回收站和浏览器的缓存几乎不可能再干净了。估计是之前也尝试过了。</p>
+<p>&emsp;&emsp;然后我想到好像可以压缩一下D盘，然后分一些给C。于是准备开始压缩。D盘近700G，只用了300G左右，里面除了重要数据和文件还有我当时为了减小C盘将默认安装到C盘的程序安装到D盘的文件。我打开了磁盘管理工具，尝试压缩，结果D盘只能压1.7G。震惊了。那是有多乱啊，让系统优化整理吧。一套连招下来，D盘还是只能压缩1.7G。</p>
+<p>&emsp;&emsp;Kimi也来帮忙解决问题，按照它给的方法，还是没啥用。不过Kimi会搜索啊，他建议用外部软件啊。我找到了傲梅分区助手。下载下来安装好。压缩空间、合并、清理等按钮很清晰。那就压缩、合并。</p>
+<p>&emsp;&emsp;来回捣腾，C盘成了320G，D盘500G。然后重启，欸！我的Linux呢？直接当看不见了啊。这我熟啊，以前也就重装呗。这次问问Kimi吧，kimi告诉说要这样这样。问问豆包，豆包说要这样这样。</p>
+<p>&emsp;&emsp;有点麻烦啊。不过kimi说实在不行就整第三方软件呗，推荐easyuefi。</p>
+<p>&emsp;&emsp;这个也不得了，就两个按钮。一点就出来了。把Fedora放到第一位。重启。搞定。</p>
+<p>&emsp;&emsp;AI真的好方便。以前要解决这些问题得在网上使劲搜，关键字不准还搜不出来。现在kimi啥的帮你搜索，整理，效率有三层楼那么高啊。另外现在的程序都好用到爆。按钮字大到恨不得占满屏幕，功能简单到你一点击啥都解决了。</p>
+<p>&emsp;&emsp;这些工具真的提高了完成一个工作的效率，重点还是要清楚你自己要干什么，然而在提高效率的同时也可能让人懈怠。总是依赖工具，那就麻烦了。</p>
+<p>&emsp;&emsp;咋突然让我想到了钢铁侠，脱去那个战衣，你还是啥？</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

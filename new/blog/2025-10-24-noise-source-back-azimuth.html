@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>计算背景噪声中噪声源背方位角 | Jun Xie</title>
+  <meta name="description" content="计算背景噪声中噪声源背方位角">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>计算背景噪声中噪声源背方位角</h1>
+    <div class="post-meta">
+      <time>2025-10-24</time>
+       &middot; 7 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">seismology</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;单台三分量背景噪声数据如何分析极化与信号源背方位角？  </p>
+<!--less-->
+<p>当然是DOP-E啦(基于论文 Schimmel et al., 2011; Berbellini et al., 2019)。  </p>
+<h2 id="_1">总体流程概述</h2>
+<ol>
+<li><strong>数据预处理</strong>（去趋势、去仪器、对齐）  </li>
+<li><strong>S-transform 时频分解</strong></li>
+<li><strong>构造谱矩阵与时域平滑</strong>  </li>
+<li><strong>本征分解求极化参数（DOP、planarity、semimajor axis）</strong>  </li>
+<li><strong>筛选高质量段</strong>（DOP &gt; 阈值 &amp; planarity 接近水平）  </li>
+<li><strong>计算背方位角（BAZ）并消除 180° 二义性</strong>  </li>
+<li><strong>输出可视化与统计</strong>（时频图、直方图、极坐标图）  </li>
+<li><strong>验证与质量控制（QA）</strong>  </li>
+<li><strong>批量与性能优化</strong></li>
+</ol>
+<hr />
+<h2 id="_2">数据预处理</h2>
+<h3 id="_3">目标</h3>
+<p>确保三分量（Z/N/E）记录在同一时间基线，且仅保留稳定的噪声段。</p>
+<h3 id="_4">步骤</h3>
+<ol>
+<li><strong>去仪器响应</strong>  </li>
+<li>
+<p>去仪器响应，转换到速度记录。  </p>
+</li>
+<li>
+<p><strong>去趋势 / 去均值</strong>  </p>
+</li>
+<li>
+<p><code>trace.detrend("linear"); trace.detrend("demean")</code>  </p>
+</li>
+<li>
+<p><strong>剔除事件或脉冲干扰</strong>  </p>
+</li>
+<li>
+<p>可通过短时能量（STA/LTA）检测排除瞬变信号（例如地震）。</p>
+</li>
+<li>
+<p><strong>时间对齐与补零</strong>  </p>
+</li>
+<li>三分量必须同起止时刻；短 gap 可补零，长 gap 建议跳过。</li>
+</ol>
+<hr />
+<h2 id="s-transform">S-transform</h2>
+<h3 id="_5">定义</h3>
+<p>$$
+S(t,f)=\int x(\tau)\frac{|f|}{\sqrt{2\pi}}e^{-(t-\tau)^2f^2/2}e^{-i2\pi f\tau}d\tau
+$$</p>
+<h3 id="_6">参数与理由</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>推荐值</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>频率点数 <code>n_freqs</code></td>
+<td>60</td>
+<td>覆盖 0.01–0.06 Hz 区间，低频对数分辨率更合理</td>
+</tr>
+<tr>
+<td>窗宽 σ</td>
+<td>1/(2πf)</td>
+<td>论文定义，时间-频率能量守恒</td>
+</tr>
+<tr>
+<td>调整系数 k</td>
+<td>1.0–1.5</td>
+<td>增大可提高时域平滑性</td>
+</tr>
+<tr>
+<td>降采样步长 step</td>
+<td>5 s</td>
+<td>提高计算效率，仍能解析低频信号</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>说明</strong>：<br />
+σ = 1/(2πf) 表示随频率增加窗宽减小，确保多分辨率特性。<br />
+|f|/√(2π) 为归一化系数，维持 Parseval 能量一致性。  </p>
+</blockquote>
+<hr />
+<h2 id="_7">谱矩阵构造与平滑</h2>
+<h3 id="_8">谱矩阵定义</h3>
+<p>$$
+S_{ij}(t,f) = \widetilde{X_i}(t,f)\widetilde{X_j}^*(t,f)
+$$
+其中 $ \widetilde{X_i}(t,f) $ 为分量 i 的 S-transform 复系数。</p>
+<h3 id="_9">平滑</h3>
+<p>对时间方向做高斯平滑：
+$$
+\sigma_{\text{tf}} = \text{tf_window_periods} \times T \times f_s
+$$</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>推荐值</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tf_window_periods</code></td>
+<td>3.0</td>
+<td>论文示例值（2s ≈ 3T），平滑噪声但保留相干波</td>
+</tr>
+<tr>
+<td>DOP 窗长度</td>
+<td><code>4 × T</code></td>
+<td>保证至少 4 周期稳定极化，论文建议值</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_10">本征分解与极化属性</h2>
+<p>对每个 (t,f) 做 3×3 复矩阵本征分解：
+$$
+S = V \Lambda V^H,\quad \Lambda = \operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)
+$$</p>
+<h3 id="dopdegree-of-polarization">DOP（Degree of Polarization）</h3>
+<p>$$
+\mathrm{DOP} = \frac{\lambda_1 - \lambda_2}{\lambda_1 + \lambda_2 + \lambda_3}
+$$</p>
+<h3 id="planarity">Planarity</h3>
+<p>通过主、次特征向量叉积求平面法线，与竖直方向夹角 α：
+- 若 α ≈ 90° → 水平 planarity（Rayleigh 波特征）<br />
+- 若 α ≈ 0° → 垂直平面（Love 波或噪声）</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>推荐值</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dop_thresh</code></td>
+<td>0.8</td>
+<td>论文常用 0.75–0.85；取 0.8 折中稳健</td>
+</tr>
+<tr>
+<td><code>alpha_min</code></td>
+<td>60°</td>
+<td>仅保留水平 planarity</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="baz">背方位角（BAZ）计算</h2>
+<h3 id="_11">公式</h3>
+<p>$$
+\mathrm{BAZ} = \operatorname{atan2}(E, N)
+$$
+以度为单位，0° = 北，顺时针增加。</p>
+<h3 id="_12">处理细节</h3>
+<ul>
+<li>使用主特征向量的水平分量 (N,E)。  </li>
+<li>实部幅值过小则跳过或使用相位差法。  </li>
+<li>输出角度范围 [0, 360°)。</li>
+</ul>
+<h3 id="_13">二义性处理</h3>
+<ul>
+<li>单台存在 ±180° 二义性。  </li>
+<li><strong>假设 retrograde（瑞利波基模）</strong>，可选反向修正：若竖直与水平分量相位差 ~180°，翻转 BAZ。</li>
+</ul>
+<hr />
+<h2 id="_14">筛选与聚合输出</h2>
+<h3 id="_15">筛选规则</h3>
+<pre class="highlight"><code class="language-text">DOP &gt;= 0.8
+planarity_angle &gt; 60°
+</code></pre>
+
+<h2 id="_16">脚本</h2>
+<pre class="highlight"><code>#!/usr/bin/env python3
+&quot;&quot;&quot;
+DOP-E style polarization + BAZ extraction using paper-consistent S-transform
+Implements Schimmel et al. (2011) S-transform definition with speed optimizations (Numba).
+
+Usage:
+    python dop_e_st_paper.py /path/to/sac_dir --target-freq 0.03 --outs out
+
+References:
+- Schimmel, Stutzmann, Ardhuin &amp; Gallart (2011), Polarized Earth's ambient microseismic noise, G³
+&quot;&quot;&quot;
+import os
+import glob
+import argparse
+from collections import defaultdict
+import numpy as np
+import matplotlib.pyplot as plt
+from obspy import read
+from scipy.signal import get_window
+from numba import njit, prange
+import math
+import warnings
+
+warnings.filterwarnings(&quot;ignore&quot;)
+
+# ======================================================
+# S-transform implementation per Schimmel et al. (2011)
+# ======================================================
+
+def s_transform(x, fs, freqs, pad=True):
+    &quot;&quot;&quot;
+    Paper-consistent S-transform:
+    S(t,f) = ∫ x(τ) * |f|/√(2π) * exp[-(t-τ)^2 f^2 / 2] * exp[-i2π f τ] dτ
+    Implemented via FFT multiplication.
+    &quot;&quot;&quot;
+    n = len(x)
+    dt = 1.0 / fs
+    if pad:
+        Nfft = 1 &lt;&lt; ((2 * n - 1).bit_length())
+    else:
+        Nfft = n
+    t = np.arange(n) * dt
+    X = np.fft.fft(x, n=Nfft)
+    freqs_fft = np.fft.fftfreq(Nfft, d=dt)
+
+    S = np.zeros((len(freqs), n), dtype=np.complex128)
+    # time index array
+    for i, f in enumerate(freqs):
+        if f &lt;= 0:
+            continue
+        # build Gaussian window in frequency domain for convolution
+        # Using exact analytical equivalence:
+        # G(f') = exp[-2π^2 (f'-f)^2 / f^2]
+        g_f = np.exp(-2.0 * (np.pi ** 2) * ((freqs_fft - f) ** 2) / (f ** 2))
+        # convolution via inverse FFT
+        s_ifft = np.fft.ifft(X * g_f, n=Nfft)
+        s_ifft = s_ifft[:n]
+        # normalization factor |f|/sqrt(2π)
+        S[i, :] = (abs(f) / np.sqrt(2.0 * np.pi)) * s_ifft * np.exp(1j * 2 * np.pi * f * t)
+    return S
+
+
+# ======================================================
+# Polarization &amp; BAZ analysis (Numba optimized)
+# ======================================================
+
+@njit(parallel=True, fastmath=True)
+def compute_dop_baz(cz, cn, ce, periods, fs, dop_thresh):
+    nfr, nt = cz.shape
+    DOP = np.zeros((nfr, nt))
+    BAZ = np.full((nfr, nt), np.nan)
+    QUALITY = np.zeros((nfr, nt))
+
+    for ifr in prange(nfr):
+        for it in range(nt):
+            # spectral matrix (3x3)
+            Z = cz[ifr, it]
+            N = cn[ifr, it]
+            E = ce[ifr, it]
+            S00 = (Z * np.conj(Z)).real
+            S01 = (Z * np.conj(N))
+            S02 = (Z * np.conj(E))
+            S11 = (N * np.conj(N)).real
+            S12 = (N * np.conj(E))
+            S22 = (E * np.conj(E)).real
+
+            # Hermitian matrix
+            S = np.array([[S00, S01.real, S02.real],
+                          [S01.real, S11, S12.real],
+                          [S02.real, S12.real, S22]], dtype=np.float64)
+
+            # eigen decomposition
+            w, v = np.linalg.eigh(S)
+            idx = np.argsort(w)[::-1]
+            w = w[idx]
+            v = v[:, idx]
+            # DOP = (λ1 - λ2)/(λ1+λ2+λ3)
+            denom = w.sum()
+            if denom &lt;= 0:
+                dop_val = 0.0
+            else:
+                dop_val = (w[0] - w[1]) / denom
+                if dop_val &lt; 0:
+                    dop_val = 0.0
+                elif dop_val &gt; 1.0:
+                    dop_val = 1.0
+            DOP[ifr, it] = dop_val
+
+            if dop_val &lt; dop_thresh:
+                continue
+
+            # horizontal azimuth from first eigenvector (v[:,0])
+            a = v[:, 0]
+            rn = a[1]
+            re = a[2]
+            az = math.degrees(math.atan2(re, rn))
+            if az &lt; 0:
+                az += 360.0
+            BAZ[ifr, it] = az
+            QUALITY[ifr, it] = 1
+
+    return DOP, BAZ, QUALITY
+
+
+# ======================================================
+# DOPAnalyzer class
+# ======================================================
+
+class DOPAnalyzer:
+    def __init__(self, fs=1.0, target_freq=None, freq_band=None,
+                 dop_thresh=0.8, n_freqs=80, step=1):
+        &quot;&quot;&quot;
+        Parameters:
+            fs: sampling rate
+            target_freq: center frequency (Hz)
+            freq_band: (fmin,fmax)
+            dop_thresh: threshold
+            n_freqs: number of frequency points
+            step: downsample factor for time (e.g. 5 -&gt; 5 s resolution)
+        &quot;&quot;&quot;
+        self.fs = fs
+        self.dt = 1.0 / fs
+        self.target_freq = target_freq
+        self.freq_band = freq_band
+        self.dop_thresh = dop_thresh
+        self.n_freqs = n_freqs
+        self.step = step
+
+    def _read_triple(self, fz, fn, fe):
+        stz = read(fz)[0]
+        stn = read(fn)[0]
+        ste = read(fe)[0]
+        start = max(stz.stats.starttime, stn.stats.starttime, ste.stats.starttime)
+        end = min(stz.stats.endtime, stn.stats.endtime, ste.stats.endtime)
+        stz.trim(start, end)
+        stn.trim(start, end)
+        ste.trim(start, end)
+        return stz.data.astype(float), stn.data.astype(float), ste.data.astype(float), stz.stats
+
+    def _choose_freqs(self):
+        if self.freq_band:
+            fmin, fmax = self.freq_band
+        elif self.target_freq:
+            fmin = self.target_freq * 0.8
+            fmax = self.target_freq * 1.2
+        else:
+            fmin, fmax = 0.005, 0.25
+        freqs = np.logspace(np.log10(fmin), np.log10(fmax), self.n_freqs)
+        return freqs
+
+    def analyze_triple(self, z, n, e):
+        npts = len(z)
+        tvec = np.arange(0, npts, self.step) / self.fs
+        freqs = self._choose_freqs()
+        periods = 1.0 / freqs
+
+        cz = s_transform(z, self.fs, freqs)
+        cn = s_transform(n, self.fs, freqs)
+        ce = s_transform(e, self.fs, freqs)
+
+        # downsample in time for speed
+        cz = cz[:, ::self.step]
+        cn = cn[:, ::self.step]
+        ce = ce[:, ::self.step]
+
+        DOP, BAZ, QUALITY = compute_dop_baz(cz, cn, ce, periods, self.fs, self.dop_thresh)
+
+        return {&quot;times&quot;: tvec, &quot;freqs&quot;: freqs, &quot;DOP&quot;: DOP, &quot;BAZ&quot;: BAZ, &quot;QUALITY&quot;: QUALITY}
+
+    def plot_results(self, res, out_prefix=&quot;result&quot;, target_freq=None):
+        times = res[&quot;times&quot;]
+        freqs = res[&quot;freqs&quot;]
+        DOP = res[&quot;DOP&quot;]
+        BAZ = res[&quot;BAZ&quot;]
+        Q = res[&quot;QUALITY&quot;]
+
+        t_hr = times / 3600.0
+
+        plt.figure(figsize=(12, 4))
+        plt.pcolormesh(t_hr, freqs, DOP, shading=&quot;auto&quot;)
+        plt.colorbar(label=&quot;DOP&quot;)
+        plt.yscale(&quot;log&quot;)
+        plt.ylabel(&quot;Frequency (Hz)&quot;)
+        plt.xlabel(&quot;Time (hours)&quot;)
+        plt.title(&quot;DOP (S-transform)&quot;)
+        plt.tight_layout()
+        plt.savefig(out_prefix + &quot;_DOP.png&quot;, dpi=200)
+
+        plt.figure(figsize=(12, 4))
+        baz_masked = np.where(Q &gt; 0, BAZ, np.nan)
+        plt.pcolormesh(t_hr, freqs, baz_masked, shading=&quot;auto&quot;, cmap=&quot;hsv&quot;, vmin=0, vmax=360)
+        plt.colorbar(label=&quot;Back Azimuth (°)&quot;)
+        plt.yscale(&quot;log&quot;)
+        plt.ylabel(&quot;Frequency (Hz)&quot;)
+        plt.xlabel(&quot;Time (hours)&quot;)
+        plt.title(f&quot;BAZ (DOP&gt;{self.dop_thresh})&quot;)
+        plt.tight_layout()
+        plt.savefig(out_prefix + &quot;_BAZ_timefreq.png&quot;, dpi=200)
+
+        if target_freq is not None:
+            idx = np.argmin(np.abs(freqs - target_freq))
+            baz_vals = BAZ[idx, Q[idx, :] &gt; 0]
+        else:
+            baz_vals = BAZ[Q &gt; 0]
+
+        plt.figure(figsize=(6, 4))
+        plt.hist(baz_vals[~np.isnan(baz_vals)], bins=np.arange(0, 361, 10))
+        plt.xlabel(&quot;Back Azimuth (°)&quot;)
+        plt.ylabel(&quot;Count&quot;)
+        plt.title(&quot;BAZ Histogram&quot;)
+        plt.tight_layout()
+        plt.savefig(out_prefix + &quot;_BAZ_hist.png&quot;, dpi=200)
+        plt.close(&quot;all&quot;)
+
+
+# ======================================================
+# Utility: find 3-component sets
+# ======================================================
+
+def find_triples_in_dir(sac_dir):
+    files = glob.glob(os.path.join(sac_dir, &quot;*.SAC&quot;)) + glob.glob(os.path.join(sac_dir, &quot;*.sac&quot;))
+    idx = defaultdict(dict)
+    for f in files:
+        b = os.path.basename(f)
+        up = b.upper()
+        if &quot;LHZ&quot; in up or &quot;HZ&quot; in up:
+            base = up.replace(&quot;LHZ&quot;, &quot;&quot;).replace(&quot;HZ&quot;, &quot;&quot;).strip(&quot;_&quot;)
+            idx[base][&quot;Z&quot;] = f
+        elif &quot;LHN&quot; in up or &quot;HN&quot; in up:
+            base = up.replace(&quot;LHN&quot;, &quot;&quot;).replace(&quot;HN&quot;, &quot;&quot;).strip(&quot;_&quot;)
+            idx[base][&quot;N&quot;] = f
+        elif &quot;LHE&quot; in up or &quot;HE&quot; in up:
+            base = up.replace(&quot;LHE&quot;, &quot;&quot;).replace(&quot;HE&quot;, &quot;&quot;).strip(&quot;_&quot;)
+            idx[base][&quot;E&quot;] = f
+    triples = []
+    for base, d in idx.items():
+        if all(k in d for k in (&quot;Z&quot;, &quot;N&quot;, &quot;E&quot;)):
+            triples.append((base, d[&quot;Z&quot;], d[&quot;N&quot;], d[&quot;E&quot;]))
+    return triples
+
+
+# ======================================================
+# Main
+# ======================================================
+
+if __name__ == &quot;__main__&quot;:
+    p = argparse.ArgumentParser(description=&quot;DOP-E S-transform (paper consistent, optimized)&quot;)
+    p.add_argument(&quot;sacdir&quot;, help=&quot;Directory with 3-component SAC files&quot;)
+    p.add_argument(&quot;--target-freq&quot;, type=float, default=0.03, help=&quot;Center frequency (Hz)&quot;)
+    p.add_argument(&quot;--fmin&quot;, type=float, default=None, help=&quot;Min frequency&quot;)
+    p.add_argument(&quot;--fmax&quot;, type=float, default=None, help=&quot;Max frequency&quot;)
+    p.add_argument(&quot;--outs&quot;, default=&quot;out&quot;, help=&quot;Output prefix&quot;)
+    p.add_argument(&quot;--dop-thresh&quot;, type=float, default=0.8, help=&quot;DOP threshold&quot;)
+    p.add_argument(&quot;--n-freqs&quot;, type=int, default=60, help=&quot;Number of frequency points&quot;)
+    p.add_argument(&quot;--step&quot;, type=int, default=5, help=&quot;Downsample step for time (1 = full)&quot;)
+    args = p.parse_args()
+
+    triples = find_triples_in_dir(args.sacdir)
+    if not triples:
+        print(&quot;No 3-component SAC sets found.&quot;)
+        raise SystemExit
+
+    for base, fz, fn, fe in triples:
+        print(&quot;Processing:&quot;, base)
+        z, n, e, stats = DOPAnalyzer()._read_triple(fz, fn, fe)
+        fs = stats.sampling_rate
+        if args.fmin and args.fmax:
+            freq_band = (args.fmin, args.fmax)
+        else:
+            freq_band = None
+        analyzer = DOPAnalyzer(fs=fs,
+                               target_freq=args.target_freq,
+                               freq_band=freq_band,
+                               dop_thresh=args.dop_thresh,
+                               n_freqs=args.n_freqs,
+                               step=args.step)
+        res = analyzer.analyze_triple(z, n, e)
+        outpref = f&quot;{args.outs}_{base}&quot;
+        analyzer.plot_results(res, out_prefix=outpref, target_freq=args.target_freq)
+        print(&quot;Saved:&quot;, outpref)
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

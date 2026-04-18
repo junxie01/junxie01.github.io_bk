@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>为啥要这样安装FileZilla | Jun Xie</title>
+  <meta name="description" content="为啥要这样安装FileZilla">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>为啥要这样安装FileZilla</h1>
+    <div class="post-meta">
+      <time>2020-11-20</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">filezilla</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;本地到服务器的数据传输使用FileZilla程序比较方便和稳定。只是Linux下需要编译安装该程序，那还不易热儿，那就安装呗。然而安装过程让人迷糊，复杂程度让人难忘，特此记录一下。遗憾的是，花了我两天时间，到现在为止，该程序仍然没有安装成功。</p>
+<!-- more -->
+<p>&emsp;&emsp;首先在<a href="https://filezilla-project.org/">https://filezilla-project.org/</a>下载了个可执行程序&mdash;显然是运行不了的。仔细看发现是在debian10.0下编译的。我的系统是Fedora和Elementary OS5，两个都运行不了。然后下载了源程序FileZilla_3.51.0_src.tar.bz2。
+&emsp;&emsp;解压，安装filezilla-3.51.0，编译过程出错，显示没有安装libfilezilla。
+&emsp;&emsp;于是下载libfilezilla-0.25.0.tar.bz2，解压，安装libfilezilla-0.25.0，编译过程出错，显示没有安装有nettle。
+&emsp;&emsp;于是下载nettle-3.6.tar.gz，解压编译安装nettle-3.6一次通过。
+&emsp;&emsp;然后在libfilezilla-0.25.0下预编译，出错，显示：</p>
+<pre class="highlight"><code class="language-bash">configure: error: hogweed 3.3 greater was not found. You can get it from https://www.lysator.liu.se/~nisse/nettle/
+</code></pre>
+
+<p>&emsp;&emsp;于是重装nettle-3.6</p>
+<pre class="highlight"><code class="language-bash">./configure --enable-mini-gmp
+make
+make check
+make install
+</code></pre>
+
+<p>&emsp;&emsp;安装成功，然后在libfilezilla-0.25.0下预编译，出错，显示：</p>
+<pre class="highlight"><code class="language-bash">configure: error: GnuTLS 3.5.8 or greater was not found. You can get it from https://gnutls.org/
+</code></pre>
+
+<p>&emsp;&emsp;然后下载gnutls-3.6.15.tar.xz，解压gnutls-3.6.15编译出错，显示：</p>
+<pre class="highlight"><code class="language-bash">configure: error: 
+***
+*** gmp was not found.
+</code></pre>
+
+<p>&emsp;&emsp;然后下载gmp-6.1.0.tar.bz2，解压gmp-6.1.0，编译安装完成。回到gnutls-3.6.15再次编译出错，显示：</p>
+<pre class="highlight"><code class="language-bash">configure: error: 
+  ***
+  *** Libtasn1 4.9 was not found. To use the included one, use --with-included-libtasn1
+</code></pre>
+
+<p>&emsp;&emsp;然后下载libtasn1-4.9.tar.gz，解压libtasn1-4.9，编译出错，显示：</p>
+<pre class="highlight"><code class="language-bash">ASN1.c: In function '_asn1_yyparse':
+ASN1.y:152:47: error: '__builtin___snprintf_chk' output may be truncated before the last format character [-Werror=format-truncation=]
+ neg_num : '-' NUM     {snprintf($$,sizeof($$),&quot;-%s&quot;,$2);}
+                                               ^~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from ./int.h:31,
+                 from ASN1.y:30:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 2 and 66 bytes into a destination of size 65
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ASN1.y:164:47: error: '__builtin___snprintf_chk' output may be truncated before the last format character [-Werror=format-truncation=]
+                 | '-' NUM        {snprintf($$,sizeof($$),&quot;-%s&quot;,$2);}
+                                               ^~~~~
+In file included from /usr/include/stdio.h:862:0,
+                 from ./int.h:31,
+                 from ASN1.y:30:
+/usr/include/x86_64-linux-gnu/bits/stdio2.h:64:10: note: '__builtin___snprintf_chk' output between 2 and 66 bytes into a destination of size 65
+   return __builtin___snprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        __bos (__s), __fmt, __va_arg_pack ());
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+Makefile:1112: recipe for target 'ASN1.lo' failed
+make[2]: *** [ASN1.lo] Error 1
+make[2]: Leaving directory '/home/junxie/Downloads/libtasn1-4.9/lib'
+Makefile:1176: recipe for target 'check-recursive' failed
+make[1]: *** [check-recursive] Error 1
+make[1]: Leaving directory '/home/junxie/Downloads/libtasn1-4.9/lib'
+Makefile:1009: recipe for target 'check-recursive' failed
+make: *** [check-recursive] Error 1
+</code></pre>
+
+<p>&emsp;&emsp;至此，我已几近崩溃，已经不知道自己在哪儿，是要干啥。网上已经几乎找不到相关问题词条，估计还没有人遇到过这些问题。
+&emsp;&emsp;很想吐槽一下Linux。虽然用户可以随心所欲DIY，但是起点似乎有点太高。所谓的DIY也不过是把好多人写的代码集合在自己电脑上编译，源代码长什么样我虽然比较关心，但哪有时间闲情和精力去看？
+&emsp;&emsp;像我这种需要用到Linux方便处理大量数据和程序编译的便利，又需要用到现成较为成熟程序包编译而不可得的情况，属实尴尬。
+&emsp;&emsp;我又想到了Python。这个脚本语言似乎厉害透顶，几乎所有人都在学，都在用。人们纷纷把以往用fortran，C写的代码转成python或者用python给他们穿身衣服、塑个金身，显得高大上，自诩又为代码社区立功劳。可结果用起来嘛，一言难尽。某些脚本只能用python2运行，另一些又只能用python3。有些程序首次用还总告诉你某某module找不到。安装起来还常常不成功。使用起来十分不友好。真是让人头疼、恼火、焦躁。也不知大家是怎么喜欢上的。只能怪自己太菜，还没对python开窍吧。
+&emsp;&emsp;谁能指条明路？</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文献阅读(31) | Jun Xie</title>
+  <meta name="description" content="文献阅读(31)">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>文献阅读(31)</h1>
+    <div class="post-meta">
+      <time>2025-12-09</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">paper</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;<a href="https://www.mdpi.com/2072-4292/14/1/185">Investigation of Time-Lapse Changes with DAS Borehole Data at the Brady Geothermal Field Using Deconvolution Interferometry</a></p>
+<!--less-->
+<h3 id="_1">摘要</h3>
+<p>分布式声波传感（DAS）在监测自然资源储层和井筒条件方面具有巨大潜力。然而，数据量大且波场复杂，给处理和解释带来挑战。本研究展示了基于反褶积的地震干涉法是分析复杂波场的便捷工具，并指出该方法仍需要良好的耦合以提取目标信号。我们从内华达州Brady地热田一口垂直井的DAS观测中提取了相干波，这些波为在某一深度区间内来回反射的“缆绳/套管振铃”波。这种振铃现象在垂直井DAS数据中十分常见。反褶积方法使我们可以在不同边界条件下分析波场，并分离直达波与多次波。借此，我们可用简单的一维弦模型解释波场，并监测其随时间的变化。该波的速度随深度、观测时间、温度和压力而变化，对井内运行强度增加引起的扰动敏感，且随温度升高而降低。频谱分析可将振铃波分解为不同振动模态，发现波具有频散性，基阶模态传播速度较高。该干涉法可用于利用高密度DAS数据监测井筒条件或储层性质变化。</p>
+<hr />
+<h3 id="_2">相关研究的重要性</h3>
+<ol>
+<li>
+<p><strong>DAS在井中监测中的潜力</strong><br />
+   DAS具备耐高温、耐腐蚀、空间采样密集和成本低等优势，适用于地热、油气等极端环境下的长期井中监测。</p>
+</li>
+<li>
+<p><strong>复杂波场解释瓶颈</strong><br />
+   井中DAS数据常受“振铃”波、光学噪声、流体扰动等影响，波场复杂，传统方法难以有效提取目标信号。</p>
+</li>
+<li>
+<p><strong>时移监测需求</strong><br />
+   储层开发过程中需要<strong>连续、无源、低成本</strong>的手段监测井筒或储层性质变化，DAS具备此潜力但缺乏有效解释框架。</p>
+</li>
+</ol>
+<hr />
+<h3 id="_3">前人研究及不足</h3>
+<table>
+<thead>
+<tr>
+<th>研究</th>
+<th>内容</th>
+<th>不足</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mateeva et al. (2014)</strong></td>
+<td>首次将DAS用于VSP储层成像</td>
+<td>未处理振铃波，仅将其视为噪声</td>
+</tr>
+<tr>
+<td><strong>Miller et al. (2018)</strong></td>
+<td>在Brady地热田识别DAS振铃波与套管缺陷相关</td>
+<td>未建立模型解释振铃机制，未分析其时移特性</td>
+</tr>
+<tr>
+<td><strong>Patterson et al. (2017)</strong></td>
+<td>使用DTS与压力数据研究Brady井筒热响应</td>
+<td>未结合DAS数据，缺乏对结构响应的地震学分析</td>
+</tr>
+<tr>
+<td><strong>Trainor-Guitton et al. (2019)</strong></td>
+<td>使用DASV成像断层结构</td>
+<td>仅使用主动源数据，未利用环境噪声或振铃波</td>
+</tr>
+<tr>
+<td><strong>Nakata &amp; Snieder (2014)</strong></td>
+<td>提出反褶积干涉法用于建筑结构监测</td>
+<td>未应用于井中DAS数据，未考虑井筒复杂边界条件</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_4">本文使用的数据</h3>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>内容</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DASV（井中DAS）</strong></td>
+<td>2016年3月18–26日，Brady地热田56-1井，384通道，1m间距，1000 Hz采样率，深度约380m</td>
+<td>数据量981GB，含振铃波、地震事件、运行扰动等</td>
+</tr>
+<tr>
+<td><strong>DTS（分布式温度）</strong></td>
+<td>同井共址光纤，0.126m间距，62s采样间隔</td>
+<td>用于分析温度梯度与速度关系</td>
+</tr>
+<tr>
+<td><strong>压力数据</strong></td>
+<td>邻近井56A-1，60s采样，深度对应DASV第219道（约219m）</td>
+<td>用于分析井内扰动与波速变化关系</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_5">本文采用的方法</h3>
+<ol>
+<li><strong>反褶积地震干涉法</strong>  </li>
+<li>将某一深度通道作为“虚拟震源”，对其余通道做频域反褶积，提取相干波场。</li>
+<li>
+<p>可修改边界条件，分离直达波与多次波，简化波场解释。</p>
+</li>
+<li>
+<p><strong>一维弦模型（Model 1 &amp; Model 2）</strong>  </p>
+</li>
+<li>Model 1：两端反射器+两端震源，解释主要振铃波。</li>
+<li>
+<p>Model 2：增加中部反射器与局部震源，解释复杂结构响应。</p>
+</li>
+<li>
+<p><strong>时移速度分析</strong>  </p>
+</li>
+<li>每小时叠加反褶积波场，拾取直达波走时，计算速度变化。</li>
+<li>
+<p>分析速度与深度、时间、温度、压力的关系。</p>
+</li>
+<li>
+<p><strong>简正模态分析</strong>  </p>
+</li>
+<li>提取振铃波的频散特性，识别基阶与高阶模态，计算频散曲线。</li>
+</ol>
+<hr />
+<h3 id="_6">本文研究结果</h3>
+<ol>
+<li><strong>振铃波机制明确</strong>  </li>
+<li>振铃波为缆绳或套管中传播的P波，速度约3600–5000m/s，接近钢材Vp（5000–5250m/s）。</li>
+<li>
+<p>波场对称性要求至少两个震源同时存在，震源强度差异决定因果/非因果能量分布。</p>
+</li>
+<li>
+<p><strong>速度对温度敏感</strong>  </p>
+</li>
+<li>
+<p>速度随温度升高而降低，斜率为−17.1 m/s/°C，远高于纯钢材实验室值（−0.5 m/s/°C），提示缆绳或套管在高温下响应异常。</p>
+</li>
+<li>
+<p><strong>速度对井内扰动敏感</strong>  </p>
+</li>
+<li>
+<p>初期压力骤降引发井内沸腾扰动，速度从4100 m/s跃升至4700 m/s，表明振铃波对井筒状态变化敏感。</p>
+</li>
+<li>
+<p><strong>频散特性清晰</strong>  </p>
+</li>
+<li>
+<p>振铃波可分解为间隔约18Hz的多个模态，高阶模态速度低于基阶，呈负频散关系。</p>
+</li>
+<li>
+<p><strong>深层信号提取受限</strong>  </p>
+</li>
+<li>200m以下仅在主动源振动期间提取到地层传播波（Vp≈2100 m/s，Vs≈1100 m/s），但信噪比低，时移分析受限。</li>
+</ol>
+<hr />
+<h3 id="_7">本文创新之处与贡献</h3>
+<table>
+<thead>
+<tr>
+<th>创新点</th>
+<th>具体贡献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>首次将反褶积干涉法用于井中DAS振铃波分析</strong></td>
+<td>提出将“噪声”视为信号，建立一维弦模型解释其机制，填补井中DAS波场建模空白</td>
+</tr>
+<tr>
+<td><strong>提出振铃波时移速度作为井筒/储层监测指标</strong></td>
+<td>发现速度对温度、压力、扰动敏感，提供<strong>无源、连续、低成本</strong>的井筒健康监测新思路</td>
+</tr>
+<tr>
+<td><strong>揭示振铃波频散特性与模态结构</strong></td>
+<td>通过简正模态分析提取频散曲线，为后续反演套管或缆绳力学参数提供基础</td>
+</tr>
+<tr>
+<td><strong>区分不同能量来源对波场对称性的影响</strong></td>
+<td>提出震源强度比与反射系数共同决定波场对称性，为解释复杂DAS波场提供理论依据</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_8">本文不足与未来方向</h3>
+<table>
+<thead>
+<tr>
+<th>不足</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>未建立定量温度-速度关系</strong></td>
+<td>仅给出经验斜率，未建立物理模型解释为何速度温度敏感性远高于纯钢</td>
+</tr>
+<tr>
+<td><strong>模型简化，未反演真实结构</strong></td>
+<td>一维弦模型为定性解释，未反演套管、缆绳、地层真实几何与力学参数</td>
+</tr>
+<tr>
+<td><strong>深层信号信噪比低</strong></td>
+<td>200m以下仅在主动源期间提取到地层波，未能实现无源储层监测</td>
+</tr>
+<tr>
+<td><strong>未验证方法在其他井中的适用性</strong></td>
+<td>数据仅来自Brady一口井，尚未验证模型是否适用于其他地热或油气井</td>
+</tr>
+<tr>
+<td><strong>未结合主动源成像结果对比</strong></td>
+<td>若能与VSP或断层成像结果对比，可进一步验证振铃波对结构变化的敏感度</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>如需我进一步提取图表信息、翻译某一段落或对比其他文献，请继续提问。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
