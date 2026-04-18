@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>下载地震数据更新 | Jun Xie</title>
+  <meta name="description" content="下载地震数据更新">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>下载地震数据更新</h1>
+    <div class="post-meta">
+      <time>2025-05-16</time>
+       &middot; 3 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;要是指定台站列表怎么下载地震数据呢？</p>
+<!--less-->
+<p>&emsp;&emsp;python脚本如下。</p>
+<pre class="highlight"><code>import os
+from obspy import UTCDateTime
+from obspy.clients.fdsn import Client
+from obspy.taup import TauPyModel
+from obspy.geodetics import locations2degrees
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+client = Client(&quot;IRIS&quot;)
+model = TauPyModel(&quot;iasp91&quot;)
+
+output_dir = &quot;processed_sac&quot;
+os.makedirs(output_dir, exist_ok=True)
+
+event_file = &quot;event.lst&quot;
+sta_file = &quot;sta.lst&quot;
+exception_log = &quot;exceptions.txt&quot;
+thread_workers = 4
+
+# 读取台站信息：net, sta, lat, lon, elev
+with open(sta_file, &quot;r&quot;) as sf:
+    sta_lines = [line.strip() for line in sf if line.strip()]
+sta_list = []
+for line in sta_lines:
+    parts = line.split(&quot;|&quot;)
+    if len(parts) &gt;= 5:
+        net = parts[0].strip()
+        sta = parts[1].strip()
+        lat = float(parts[2])
+        lon = float(parts[3])
+        elev = float(parts[4])
+        sta_list.append((net, sta, lat, lon, elev))
+
+# 清空异常日志
+with open(exception_log, &quot;w&quot;) as elog:
+    elog.write(&quot;&quot;)
+
+def process_station(event_id, origin_time, magnitude, ev_lat, ev_lon, ev_dep,
+                    net, sta, sta_lat, sta_lon, sta_elev):
+    try:
+        dist_deg = locations2degrees(ev_lat, ev_lon, sta_lat, sta_lon)
+        arrivals = model.get_travel_times(source_depth_in_km=ev_dep,
+                                          distance_in_degree=dist_deg,
+                                          phase_list=[&quot;P&quot;])
+        if not arrivals:
+            raise Exception(&quot;No P arrival&quot;)
+
+        p_arrival = origin_time + arrivals[0].time
+        start_dl = p_arrival - 50
+        end_dl = p_arrival + 150
+
+        st = client.get_waveforms(network=net, station=sta, location=&quot;*&quot;, channel=&quot;BH?&quot;,
+                                  starttime=start_dl, endtime=end_dl,
+                                  attach_response=True)
+
+        st.remove_response(output=&quot;VEL&quot;, pre_filt=(0.01, 0.02, 8, 10),
+                           taper=True, zero_mean=True, taper_fraction=0.05)
+
+        st.trim(starttime=p_arrival - 10, endtime=p_arrival + 60)
+
+        comps = [tr.stats.channel[-1] for tr in st]
+        if not all(comp in comps for comp in [&quot;N&quot;, &quot;E&quot;, &quot;Z&quot;]):
+            raise Exception(&quot;Incomplete 3-component data&quot;)
+
+        for tr in st:
+            tr.stats.sac = tr.stats.get(&quot;sac&quot;, {})
+            tr.stats.sac.stla = sta_lat
+            tr.stats.sac.stlo = sta_lon
+            tr.stats.sac.stel = sta_elev
+            tr.stats.sac.evla = ev_lat
+            tr.stats.sac.evlo = ev_lon
+            tr.stats.sac.evdp = ev_dep
+            tr.stats.sac.mag = float(magnitude) if magnitude != &quot;NA&quot; else 0.0
+
+            time_tag = origin_time.strftime(&quot;%Y%m%dT%H%M%S&quot;)
+            chan = tr.stats.channel
+            filename = f&quot;{time_tag}_M{magnitude}_{net}.{sta}.{chan}.sac&quot;
+            filepath = os.path.join(output_dir, filename)
+            tr.write(filepath, format=&quot;SAC&quot;)
+
+        return f&quot;{net}.{sta} ✅&quot;
+
+    except Exception as e:
+        with open(exception_log, &quot;a&quot;) as elog:
+            elog.write(f&quot;{event_id} {net}.{sta} ❌ {str(e)}\n&quot;)
+        return f&quot;{net}.{sta} ❌ {str(e)}&quot;
+
+def process_event(line):
+    results = []
+    parts = line.split(&quot;|&quot;)
+    if len(parts) &lt; 10:
+        return [&quot;跳过格式错误行&quot;]
+
+    evid = parts[0].strip()
+    time_str = parts[1].strip()
+    ev_lat = float(parts[2].strip())
+    ev_lon = float(parts[3].strip())
+    ev_dep = float(parts[4].strip())
+    mag_info = parts[8].strip()
+    magnitude = mag_info.split(&quot;,&quot;)[1] if &quot;,&quot; in mag_info else &quot;NA&quot;
+
+    origin_time = UTCDateTime(time_str)
+    print(f&quot;\n🟡 Processing event {evid} M{magnitude} @ {origin_time} ({ev_lat}, {ev_lon}, {ev_dep}km)&quot;)
+
+    try:
+        task_list = []
+        with ThreadPoolExecutor(max_workers=thread_workers) as executor:
+            for net, sta, sta_lat, sta_lon, sta_elev in sta_list:
+                task = executor.submit(process_station, evid, origin_time, magnitude,
+                                       ev_lat, ev_lon, ev_dep, net, sta, sta_lat, sta_lon, sta_elev)
+                task_list.append(task)
+
+            for task in as_completed(task_list):
+                results.append(task.result())
+
+    except Exception as e:
+        with open(exception_log, &quot;a&quot;) as elog:
+            elog.write(f&quot;{evid} XB ERROR: {str(e)}\n&quot;)
+        results.append(f&quot;⚠️ Failed to process event {evid}: {e}&quot;)
+    return results
+
+# 读取事件列表并执行
+with open(event_file, &quot;r&quot;) as f:
+    event_lines = [line.strip() for line in f if line.strip()]
+
+for line in event_lines:
+    results = process_event(line)
+    for r in results:
+        print(r)
+</code></pre>
+
+<p>&emsp;&emsp;与之前的脚本:{% post_link 下载地震数据练习 %}不同的地方是多了文件sta.lst。其格式为：
+TA|140A|32.6408|-93.573997|56.0|
+台网|台站|纬度|经度|高程</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

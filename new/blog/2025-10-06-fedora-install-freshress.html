@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fedora中安装FreshRSS | Jun Xie</title>
+  <meta name="description" content="Fedora中安装FreshRSS">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>Fedora中安装FreshRSS</h1>
+    <div class="post-meta">
+      <time>2025-10-06</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;Fedora中Apache环境下如何安装FreshRSS</p>
+<!--less-->
+<p>&emsp;&emsp;之前总是蹭一个小伙子自己建的<a href="https://rss.othing.xyz/">RSS</a>，白嫖，怕哪天人家不搞了，还是自己建一个吧。详细脚本安装请查看其<a href="https://github.com/FreshRSS/FreshRSS/blob/edge/cli/README.md">github</a>。废话不多说，具体如下：</p>
+<h1 id="_1">一、安装依赖</h1>
+<p>FreshRSS是基于PHP的自建RSS聚合器，需要Apache+PHP环境：</p>
+<pre class="highlight"><code>sudo dnf install httpd php php-cli php-common php-json php-gd php-mbstring php-intl php-xml php-pdo php-mysqlnd unzip git -y
+</code></pre>
+
+<p>启用并启动 Apache：</p>
+<pre class="highlight"><code>sudo systemctl enable --now httpd
+</code></pre>
+
+<p>确认端口 80 正在监听：</p>
+<pre class="highlight"><code>sudo ss -tulnp | grep :80
+</code></pre>
+
+<h1 id="freshrss">二、下载并安装 FreshRSS</h1>
+<p>推荐安装到 /usr/share/FreshRSS：</p>
+<pre class="highlight"><code>cd /usr/share
+sudo git clone https://github.com/FreshRSS/FreshRSS.git
+cd FreshRSS
+sudo git checkout stable   # 或 edge 分支（开发版）
+</code></pre>
+
+<p>设置权限（Fedora 的 Apache 用户是 apache）：</p>
+<pre class="highlight"><code>sudo chown -R apache:apache /usr/share/FreshRSS
+sudo chmod -R 755 /usr/share/FreshRSS
+</code></pre>
+
+<h1 id="apache">三、配置 Apache</h1>
+<p>新建配置文件：</p>
+<pre class="highlight"><code>sudo vim /etc/httpd/conf.d/freshrss.conf
+</code></pre>
+
+<p>写入以下内容：</p>
+<pre class="highlight"><code>Alias /FreshRSS /usr/share/FreshRSS
+
+&lt;Directory /usr/share/FreshRSS&gt;
+    AllowOverride All
+    Options Indexes FollowSymLinks
+    Require all granted
+&lt;/Directory&gt;
+</code></pre>
+
+<p>保存退出后，重启 Apache：</p>
+<pre class="highlight"><code>sudo systemctl restart httpd
+</code></pre>
+
+<h1 id="selinux-fedora">四、处理 SELinux 限制（Fedora 特有）</h1>
+<p>Fedora 默认启用了 SELinux，会阻止 Apache 访问 /usr/share 下的应用。
+执行以下命令放行：</p>
+<pre class="highlight"><code>sudo chcon -R -t httpd_sys_rw_content_t /usr/share/FreshRSS
+sudo setsebool -P httpd_can_network_connect on
+</code></pre>
+
+<p>（若仍被拒绝，可临时关闭测试：sudo setenforce 0）</p>
+<h1 id="web">五、访问 Web 界面</h1>
+<p>打开浏览器访问：</p>
+<pre class="highlight"><code>http://localhost/FreshRSS
+</code></pre>
+
+<p>你应看到 FreshRSS 的安装页面。
+根据提示创建管理员账号、数据库配置（SQLite/MySQL 都可）。</p>
+<p>如果提示 “You don’t have permission to access this resource”，请确认：</p>
+<p>Apache 配置文件中包含 Require all granted</p>
+<p>SELinux 权限已放行（执行了 chcon）</p>
+<h1 id="_2">六、命令行工具（可选）</h1>
+<p>FreshRSS 提供强大的 CLI 管理工具，位于 cli/ 目录。
+例如列出用户：</p>
+<pre class="highlight"><code>cd /usr/share/FreshRSS
+sudo -u apache php cli/list-users.php
+</code></pre>
+
+<p>Fedora 用的是 apache 用户，而不是 Debian/Ubuntu 的 www-data。</p>
+<h1 id="_3">七、日志与排错</h1>
+<p>查看 Apache 错误日志：</p>
+<pre class="highlight"><code>sudo tail -n 30 /var/log/httpd/error_log
+</code></pre>
+
+<p>查看 SELinux 拒绝记录：</p>
+<pre class="highlight"><code>sudo ausearch -m AVC,USER_AVC -ts recent
+</code></pre>
+
+<h1 id="_4">八、（可选）设置自动更新任务</h1>
+<p>添加一个定时任务更新 RSS 源：</p>
+<pre class="highlight"><code>sudo -u apache php /usr/share/FreshRSS/app/actualize_script.php &gt; /dev/null 2&gt;&amp;1
+</code></pre>
+
+<p>在 /etc/cron.d/freshrss 中添加：</p>
+<pre class="highlight"><code>*/20 * * * * apache php /usr/share/FreshRSS/app/actualize_script.php &gt; /dev/null 2&gt;&amp;1
+</code></pre>
+
+<p>表示每20分钟更新一次。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

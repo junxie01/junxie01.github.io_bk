@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PYTHON脚本练习（二） | Jun Xie</title>
+  <meta name="description" content="PYTHON脚本练习（二）">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>PYTHON脚本练习（二）</h1>
+    <div class="post-meta">
+      <time>2025-06-30</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;以下是python脚本练习2，功能为读取选定时间段内的hdf5文件，文件名形如20130512_cross_spec.hdf5。该文件总共有24段，每一段是一个小时某台阵平均互相关谱。然后画出这个互相关谱，保存为png格式图片。</p>
+<!--less-->
+
+<pre class="highlight"><code class="language-python">import os
+import h5py
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from datetime import datetime, timedelta
+from matplotlib.dates import DateFormatter
+
+
+def parse_filename_to_start_time(filename):
+    &quot;&quot;&quot;从文件名推断数据起始时间&quot;&quot;&quot;
+    date_str = filename.split('_')[0]  # 提取&quot;20130512&quot;
+    return datetime.strptime(date_str, &quot;%Y%m%d&quot;)  # 转为 datetime
+
+
+def load_cross_spec_from_files(hdf5_dir, start_date, end_date):
+    &quot;&quot;&quot;读取目录下所有落在给定时间范围的互相关谱&quot;&quot;&quot;
+    files = sorted([f for f in os.listdir(hdf5_dir) if f.endswith(&quot;_cross_spec.hdf5&quot;)])
+    #files = sorted([f for f in os.listdir(hdf5_dir) if f.endswith(&quot;_power_spec.hdf5&quot;)])
+    time_list = []
+    spec_list = []
+    for file in files:
+        try:
+            base_time = parse_filename_to_start_time(file)
+        except Exception as e:
+            print(f&quot;跳过无法解析时间的文件：{file}&quot;)
+            continue
+
+        if not (start_date &lt;= base_time &lt;= end_date):
+            continue
+
+        file_path = os.path.join(hdf5_dir, file)
+        with h5py.File(file_path, 'r') as f:
+            for i in range(1,24):
+                ds_name = f'window_{i}'
+                if ds_name in f:
+                    data = f[ds_name][:]
+                    current_time = base_time + timedelta(hours=i)
+                    time_list.append(current_time)
+                    spec_list.append(data)
+    return time_list, spec_list
+
+
+def plot_spectrogram(time_list, spec_list, freqs=None, title=&quot;Cross Spectrogram&quot;, save_path=None):
+    &quot;&quot;&quot;绘制时间-频率图像&quot;&quot;&quot;
+    if not time_list or not spec_list:
+        print(&quot;没有数据可供绘图。&quot;)
+        return
+
+    spec_array = np.array(spec_list).T  # shape: freq x time
+    #spec_array = spec_array - np.mean(spec_array, axis=1, keepdims=True)
+    n_freq = spec_array.shape[0]
+
+    if freqs is None:
+        freqs = np.linspace(0.005, 0.1, n_freq)
+
+    fig, ax = plt.subplots(figsize=(14, 6))
+    time_nums = mdates.date2num(time_list)
+
+    cax = ax.pcolormesh(time_nums, freqs, spec_array, shading='auto', cmap='inferno')
+    #cax = ax.pcolormesh(time_nums, freqs, spec_array, shading='auto' )
+    fig.colorbar(cax, label='Cross Spectral Amplitude')
+    ax.set_title(title)
+    ax.set_yscale('log')  # 设置纵轴为对数刻度
+    ax.set_xlabel(&quot;Time (UTC)&quot;)
+    ax.set_ylabel(&quot;Frequency (Hz)&quot;)
+    ax.xaxis.set_major_formatter(DateFormatter(&quot;%Y-%m-%d\n%H:%M&quot;))
+    plt.xticks(rotation=30)
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=300)
+        print(f&quot;图像已保存到：{save_path}&quot;)
+
+    plt.show()
+
+# 设置参数
+hdf5_dir = &quot;output_1_0&quot;  # HDF5 文件夹路径
+start_date = datetime(2006, 5, 1)
+end_date = datetime(2006, 5,31)
+# 加载数据
+time_list, spec_list = load_cross_spec_from_files(hdf5_dir, start_date, end_date)
+# 绘图并保存为 PNG（可选）
+plot_spectrogram(time_list, spec_list,
+                 title=f&quot;Cross Spectral Density ({start_date.date()} ~ {end_date.date()})&quot;,
+                 save_path=&quot;cross_spectrogram_2006_1_0.png&quot;)
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>任务管理 | Jun Xie</title>
+  <meta name="description" content="任务管理">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>任务管理</h1>
+    <div class="post-meta">
+      <time>2024-05-27</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">学习</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>转载自<a href="https://sspai.com/post/87071">少数派</a></p>
+<!-- less -->
+
+<h2 id="_1">任务管理很难</h2>
+<p>关键：Keep It Simple and Stupid.
+任务管理是决定什么时候应该做什么事。这么一个看似简单的问题，却难以找到最优解。
+作者运用专业知识，从计算机科学的角度去解决任务管理问题。</p>
+<h2 id="_2">背包问题</h2>
+<p>&ldquo;给定一个物品集合（多个物品），每个物品都有各自的重量和价格。存在一个背包，具有一定容量。我们应该将哪几个物品放进背包，使得物品总重量不超过背包的容量，并且背包中的物品总价格最高。&rdquo;
+   随着物品数量的增加，将所有方案尝试一遍会消耗大量时间，这就是背包问题很「难」的原因。
+   如果将任务看成物品，一天的时间看成背包，那么任务所需时间就对应物品的重量，任务完成收益就对应物品的价格，任务管理其实就是决定将哪些任务放进一天这个背包中，从而使一天内完成的任务价格最高。
+   如何优化任务管理？</p>
+<h2 id="_3">剪枝优化</h2>
+<p>对于每个任务，我需要决策是否将该任务列入「我的一天」。将这个决策过程具像化，就是一棵树（决策树）。每一个选项（是或者否）都像树枝一样，引出不同的结果，剪枝优化就是将决策树的枝桠剪去。
+也就是说不是所有任务都值得被放进 todo list 中简化自己的需求。</p>
+<p>如何保证剪枝的正确性？如何保证简化后的需求能够满足工作需要呢？首先明确任务管理的目的是提高工作效率，所以我将所有生活类的任务从 Todo list中移除。确保一个任务足够重要才会放入todo list中。
+要定期删除 Todo list 中的任务，因为如果一项任务一直存在，意味着它可能不重要，否则早就应该被完成了。</p>
+<p>最终，Todo list 中的所有任务通常不超过五个，我只需要选 2-3 个任务添加到「我的一天」，很快速，也很简单。</p>
+<h2 id="_4">局部性原理</h2>
+<p>在设计程序时，计算机通常倾向于重复利用邻近的数据，这就是系统设计中的「局部性原理」。</p>
+<p>人脑也很健忘，很多事情转头就忘掉，所以应尽量将任务放在触手可及的地方，要具体。局部性原理保证了大脑注意力集中，不会因为频繁地上下文切换，忘记需要做什么，使跨天的工作更加流畅。</p>
+<h2 id="_5">任务完成时间期望</h2>
+<p>背包问题中一个重要约束是背包的容量，对应任务管理：如何保证任务管理时，规划的任务能在当天完成。一天的工作时间很容易确定，但是没有完成任务的情况下，怎么知道任务所需时间呢？</p>
+<p>想要准确地推测任务完成时间比较难，但总会有人帮你确定任务完成时间。因为生活中会有很多deadline。按照小时为粒度进行规划，就可以在一个上午安排好几项任务。要有意识地去评估每个任务的所需时间，利用数学方法去锻炼评估能力。例如期望值，代表了多次实验后，可能出现状态的平均结果。</p>
+<p>记录下每次任务「评估完成时间」和「真实完成时间」，就可以知道每次推测是否准确。相应的差值称为「推测偏差」。如果推测偏差的期望为15%，那么一项需要120分钟完成的任务，实际完成时间很可能是 120+120*0.15=138 分钟。根据偏差值的数学期望，就能够有一个大概印象，每一项任务大概需要多久时间才能完成，便于更高效地规划「我的一天」。</p>
+<h2 id="_6">任务管理的本质和愚蠢的系统</h2>
+<p>任务管理的本质是个人管理。如果人足够自律，就像一个精密的机器，那完全不需要各种花里胡哨的工具或方法论，只需要将任务列出来，一个接一个地完成。但是一般人都没有那么自律，执行力也不够强，时间表不断被打乱，需要不断的优化。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

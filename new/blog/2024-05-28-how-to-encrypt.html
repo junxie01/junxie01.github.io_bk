@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hexo 如何给文章设密码 | Jun Xie</title>
+  <meta name="description" content="hexo 如何给文章设密码">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>hexo 如何给文章设密码</h1>
+    <div class="post-meta">
+      <time>2024-05-28</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">hexo</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>有些文章写了，但不想要给别人看，那就设一个密码。</p>
+<!-- less -->
+<h1 id="_1">安装插件</h1>
+<p>命令：</p>
+<pre class="highlight"><code>npm install hexo-blog-encrypt
+</code></pre>
+
+<h1 id="_2">修改配置</h1>
+<p>在本目录配置文件_config.yml加入：</p>
+<pre class="highlight"><code>encrypt:
+   enable: true
+</code></pre>
+
+<h1 id="_3">博客文章加密</h1>
+<p>写新的文章时加入：</p>
+<pre class="highlight"><code>password: xxxxx
+message: 输入密码的提示。
+</code></pre>
+
+<p>高级设置：</p>
+<pre class="highlight"><code>password: xxxx
+abstract: here is something encrypted
+message: 请输入密码。
+wrong_pass_message: Oh, wrong password, please try again.
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

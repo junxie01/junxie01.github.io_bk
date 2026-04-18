@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hexo免密发布 | Jun Xie</title>
+  <meta name="description" content="hexo免密发布">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>hexo免密发布</h1>
+    <div class="post-meta">
+      <time>2020-05-31</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">hexo</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>每次发布都得输入用户名和密码，挺麻烦费事。网上<a href="https://blog.csdn.net/hhgggggg/article/details/77853665">大神</a>可真多，搜搜就能解决。和ssh登录服务器类似，步骤如下：</p>
+<!-- more -->
+<h2 id="ssh">生成SSH密钥</h2>
+<p>使用ssh-kergen生成密钥：</p>
+<pre class="highlight"><code class="language-bash">$ssh-keygen -t rsa -C &quot;junxie01@gmail.com&quot;
+</code></pre>
+
+<p>一路enter就行了。生成的秘钥在主目录的.ssh/id_rsa.pub中。复制一下。</p>
+<h2 id="githubdeploy-keys">添加Github项目的Deploy keys</h2>
+<p>在项目junxie01.github.io点击settings&ndash;&gt;Deploy keys&ndash;&gt;Add deploy key.把拷贝好的秘钥粘贴在这里。然后勾选可写。</p>
+<p>测试是否配置成功。</p>
+<pre class="highlight"><code class="language-bash">$ssh -T git@github.com
+</code></pre>
+
+<p>如果出现如下内容则表示配置成功。</p>
+<pre class="highlight"><code>Hi junxie01/junxie01.github.io! You've successfully authenticated, but GitHub does not provide shell access.
+</code></pre>
+
+<h2 id="_1">网站设置文件设置</h2>
+<p>在网站设置文件deploy字段设置：</p>
+<pre class="highlight"><code>deploy:
+  type: git
+  repository: git@github.com:junxie01/junxie01.github.io.git
+  branch: master
+</code></pre>
+
+<p>好了，发布网站时hexo d就不用输入用户名和密码了。大功告成。</p>
+<h2 id="git">Git自带配置文件</h2>
+<p>这个方法是针对github的，配置好了推送克隆什么的都万事大吉了。是这位大神<a href="https://www.jianshu.com/p/28efda0555bb">博文</a>里看到的。里面介绍了两种方法，我用的是第一种，因为它看起来更简单。</p>
+<pre class="highlight"><code class="language-bash">$ git config --global credential.helper store  
+</code></pre>
+
+<p>如果有多个账号什么的去掉&ndash;global就好了。为安全性着想还要给store设置一个时限。</p>
+<pre class="highlight"><code class="language-bash">git config --global credential.helper 'cache --timeout=3600'
+</code></pre>
+
+<p>这个我就没有管了。问题不大吧。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

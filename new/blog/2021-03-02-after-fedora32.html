@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安装完fedora32之后 | Jun Xie</title>
+  <meta name="description" content="安装完fedora32之后">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>安装完fedora32之后</h1>
+    <div class="post-meta">
+      <time>2021-03-02</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">日记</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;话说这台工作站已经有点“老了”，于是重新买了一台，美滋滋。5分钟安装了个fedora32，记录一下干了些啥。</p>
+<!-- more -->
+<h2 id="_1">换阿里源并更新</h2>
+<pre class="highlight"><code class="language-bash">sudo mv /etc/yum.repos.d/fedora.repo /etc/yum.repos.d/fedora.repo.backup
+sudo mv /etc/yum.repos.d/fedora-updates.repo /etc/yum.repos.d/fedora-updates.repo.backup
+sudo wget -O /etc/yum.repos.d/fedora.repo http://mirrors.aliyun.com/repo/fedora.repo
+sudo wget -O /etc/yum.repos.d/fedora-updates.repo http://mirrors.aliyun.com/repo/fedora-updates.repo
+sudo yum makecache
+sudo dnf update
+</code></pre>
+
+<h2 id="root">给root设密码</h2>
+<pre class="highlight"><code class="language-bash">sudo passwd root
+</code></pre>
+
+<h2 id="_2">改主机名</h2>
+<pre class="highlight"><code>sudo hostnamectl set-hostname zbook7 --static
+</code></pre>
+
+<h2 id="gmt6">安装gmt6</h2>
+<pre class="highlight"><code>dnf copr enable genericmappingtools/gmt
+dnf install gmt
+</code></pre>
+
+<h2 id="gmt6_1">gmt6中文支持</h2>
+<p>在这篇日志{% post_link how-to-configure-chinese-for-gmt %}里有对gmt中文支持的说明。然而现在安装的是fedora32，ghostscript的cidmap文件不一样，搞不定啊。于是按照<a href="https://docs.gmt-china.org/">GMT中文社区</a>的说明，运行了<a href="http://raw.githubusercontent.com/texjporg/cjk-gs-support/master/cjk-gs-integrate.pl">cjk-gs-integrate.pl</a>脚本之后果然可以用中文了。</p>
+<p>然而，如文档所说，gs果然不能用了。然后运行sudo perl cjk-gs-integrate.pl &ndash;remove，结果gs还是用不了。
+按照以前的经验，那就删掉ghostscript然后重装。于是运行了：</p>
+<pre class="highlight"><code>sudo dnf remove ghostscript
+</code></pre>
+
+<p>结果删除了一大堆东西，包括gmt等等，然后一一重装。
+回想在运行cjk-gs-integrate.pl脚本的时候有看到/usr/share/ghostscript/Resource/Init/cidmap*等文件信息出现。
+于是将这个文件当作以往编辑中文字体配置文件的方法:{% post_link how-to-configure-chinese-for-gmt %}，于是就OK了。</p>
+<h2 id="npm">安装npm</h2>
+<p>在<a href="https://nodejs.org/en/download/">这里</a>下载，然后安装。本来是想安装hexo，所以来安装这个软件。结果hexo一直搞不定。暂时就不理他了。</p>
+<h2 id="sac">安装sac</h2>
+<p>在iris申请了一份sac102。源代码怎么都安装不成功，于是直接解压了可执行的二进制文件。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

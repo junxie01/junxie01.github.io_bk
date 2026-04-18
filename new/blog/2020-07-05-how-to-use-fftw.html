@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何调用fftw进行Fast Fourier Transform | Jun Xie</title>
+  <meta name="description" content="如何调用fftw进行Fast Fourier Transform">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>如何调用fftw进行Fast Fourier Transform</h1>
+    <div class="post-meta">
+      <time>2020-07-05</time>
+       &middot; 1 min read
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;我们常常要看信号的振幅谱来进行分析，那傅里叶变换就必不可少。如果水平不错你可以试着自己写。当然有很多已经写好的包，非常方便，例如这里要讲到的fftw<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
+<!-- more -->
+
+<p>&emsp;&emsp;他的用法其实人家<a href="http://www.fftw.org/">主页</a>说明文档讲的很清楚。我这里就记录一下怎么用之来对sac文件进行读取并计算fft。程序是用fortran写的，C的话可以参考fftw说明文档。
+首先把主程序贴出来：</p>
+<pre class="highlight"><code>program main
+use globe_data  // 全局变量
+use sacio       // sac 头变量
+implicit none
+integer i,nerr,itest
+character (180) :: sacfile,tmp
+type(sac_head) :: sachead
+complex(8),allocatable,dimension(:) :: s1,s2
+if (iargc().ne.2)stop 'Usage: fft sacfile '
+call getarg(1,sacfile)    // 读参数到sacfile，即sac 文件
+call read_sachead(trim(sacfile),sachead,nerr) //读sac文件头变量
+npts=sachead%npts
+dt=sachead%delta
+nn=2
+npow=1
+do while(nn.le.npts)
+   nn=nn*2
+   npow=npow+1
+enddo
+nk=nn/2+1
+halfn=20
+dom=dble(1.0/nn/dt)
+allocate(sig(nn,3))
+call read_sac(trim(sacfile), sig(:,1),sachead,nerr) //读sac文件数据到sig(:,1)
+allocate(s1(nn),s2(nn))
+s1=czero
+s1(1:npts)=dcmplx(dble(sig(1:npts,1)),0.0d0)
+call dfftw_plan_dft_1d(plan,nn,s1,s2,FFTW_FORWARD, FFTW_ESTIMATE)
+call dfftw_execute(plan)
+call dfftw_destroy_plan(plan)
+sachead%npts=nk
+sig(:,1)=real(dreal(s2))
+call write_sac(trim(sacfile)//'_fft',sig(:,1),sachead,nerr) ! problem with nerr=-1
+deallocate(sig,s1,s2)
+end program
+</code></pre>
+
+<p>这里sig(:,:)是个二维数组，其实用一维的就够了哈。
+sacio.f90 是一个module，定义了sac文件的头，并含有sac读写程序。需要的话给我发信息，或者邮件^_^。
+globe_data.f90也是一个module，定义了全局变量：</p>
+<pre class="highlight"><code>module globe_data
+integer,parameter :: nmax=2000000,nstmax=1000
+real(4),dimension(4,2):: fre
+real(4),allocatable,dimension(:,:):: sig,sigo
+real(4),allocatable,dimension(:) :: sigt
+real :: dt
+real(8) :: dom
+integer :: halfn
+integer :: ncom,comb,npts
+integer :: nn,npow,nk,nf
+complex(8),allocatable,dimension(:,:):: seisout
+complex(8),parameter:: czero=(0.0d0,0.0d0)
+integer,parameter :: FFTW_ESTIMATE=64,FFTW_MEASURE=1
+integer,parameter :: FFTW_FORWARD=-1,FFTW_BACKWARD=1
+integer(8) :: plan,plan1,plan2,plan3
+end module
+</code></pre>
+
+<p>编译需要一个makefile：</p>
+<pre class="highlight"><code>FC=gfortran
+FFLAG=-lfftw3 -I /usr/include -L /usr/lib64 -fbounds-check
+objects=call_fft.o sacio.o globe_data.o
+all:sacio.mod globe_data.mod call_fft
+.f.o:
+    $(FC) $(FFLAG) $&lt; -c
+%.o:%.f90
+    $(FC) $(FFLAG) $&lt; -c 
+sacio.mod:sacio.f90
+    $(FC) $&lt; -c
+globe_data.mod:globe_data.f90
+    $(FC) $&lt; -c
+call_fft:$(objects)
+    $(FC) $^ -o $@ $(FFLAG) -lm
+clean:
+    -rm *.o *.mod 
+</code></pre>
+
+<p>注意这里要加上-lfftw3表示调用fftw，-I给定fftw头的路径，-L给定fftw的lib。如果是按照默认路径安装的fftw，那一般都不用指定-I和-L，因为默认路径一般已经包含在编译环境里了。
+好了大功告成了，但不保证拷贝下来就能运行通过哦。有问题发邮件吧，我们再交流^_^</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>http://www.fftw.org/&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

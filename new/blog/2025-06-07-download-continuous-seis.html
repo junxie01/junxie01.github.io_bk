@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>python脚本下载连续波形数据 | Jun Xie</title>
+  <meta name="description" content="python脚本下载连续波形数据">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>python脚本下载连续波形数据</h1>
+    <div class="post-meta">
+      <time>2025-06-07</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;这是连续波形数据下载python脚本更新。</p>
+<!--less-->
+
+<pre class="highlight"><code class="language-python">import os
+import time
+import socket
+import numpy as np
+from obspy import UTCDateTime, Stream
+from obspy.clients.fdsn import Client
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from requests.exceptions import ConnectionError, Timeout
+
+# 参数设置
+client = Client(&quot;IRIS&quot;)
+output_dir = &quot;global_data&quot;
+os.makedirs(output_dir, exist_ok=True)
+sta_file = &quot;station.lst&quot;
+start_date = UTCDateTime(&quot;2013-01-01&quot;)
+end_date = UTCDateTime(&quot;2024-01-01&quot;)  # 包括该天
+thread_workers = 20
+exception_log = &quot;exceptions.txt&quot;
+timing_log = &quot;download_time.txt&quot;
+max_retries = 5  # 最大重试次数
+print(f&quot;📁 当前工作目录: {os.getcwd()}&quot;)
+print(f&quot;📁 波形保存路径: {os.path.abspath(output_dir)}&quot;)
+
+# 读取台站列表
+sta_list = []
+with open(sta_file, &quot;r&quot;) as sf:
+    for line in sf:
+        if line.strip() and not line.strip().startswith(&quot;#&quot;):
+            parts = line.strip().split()
+            if len(parts) &gt;= 2:
+                net, sta = parts[0], parts[1]
+                sta_list.append((net, sta))
+
+def download_station(net, sta, day):
+    &quot;&quot;&quot;
+    下载单个台站某天波形数据，去仪器响应，返回Stream
+    &quot;&quot;&quot;
+    start = UTCDateTime(day)
+    end = start + 86400
+    st = client.get_waveforms(net, sta, &quot;*&quot;, &quot;LH?&quot;, start, end, attach_response=True)
+
+    st.remove_response(output=&quot;VEL&quot;, pre_filt=(0.008, 0.01, 0.3, 0.4),
+                       taper=True, zero_mean=True, taper_fraction=0.05)
+    return st
+def download_day(day):
+    &quot;&quot;&quot;
+    下载某天所有台站数据，返回合并Stream和日志信息
+    &quot;&quot;&quot;
+    stream_day = Stream()
+    daily_log = []
+    log_lines = []
+
+    with ThreadPoolExecutor(max_workers=thread_workers) as executor:
+        futures = {executor.submit(download_station, net, sta, day): (net, sta) for net, sta in sta_list}
+
+        for future in as_completed(futures):
+            net, sta = futures[future]
+            try:
+                st = future.result()
+                stream_day += st
+                print(f&quot;✅ {net}.{sta} 下载成功（{len(st)} traces）&quot;)
+                daily_log.append((net, sta, 1))
+            except Exception as e:
+                print(f&quot;❌ {net}.{sta} 下载失败: {e}&quot;)
+                daily_log.append((net, sta, 0))
+                log_lines.append(f&quot;{day.date} {net}.{sta} ❌ {e}&quot;)
+
+    return stream_day, daily_log, log_lines
+
+def is_network_error(e):
+    &quot;&quot;&quot;
+    判断异常是否为网络相关异常
+    &quot;&quot;&quot;
+    network_error_types = (ConnectionError, Timeout, socket.timeout, socket.error)
+    return isinstance(e, network_error_types) or &quot;timed out&quot; in str(e).lower() or &quot;connection&quot; in str(e).lower()
+
+# 主循环
+current_day = start_date
+while current_day &lt;= end_date:
+    filename = f&quot;{current_day.strftime('%Y%m%d')}.mseed&quot;
+    filepath = os.path.join(output_dir, filename)
+
+    # 先判断文件是否存在且非空
+    if os.path.exists(filepath) and os.path.getsize(filepath) &gt; 0:
+        print(f&quot;\n📆 {current_day.date} 文件已存在且非空，跳过下载。&quot;)
+        current_day += 86400
+        continue
+
+    print(f&quot;\n📆 正在处理日期: {current_day.date}&quot;)
+
+    attempt = 0
+    success = False
+    day_start_time = time.time()
+
+    while attempt &lt; max_retries and not success:
+        attempt += 1
+        print(f&quot;🔄 尝试第 {attempt} 次下载 {current_day.date} ...&quot;)
+
+        try:
+            stream_day, daily_log, log_lines = download_day(current_day)
+
+            if len(stream_day) == 0:
+                print(f&quot;⚠️ {current_day.date} 没有下载到数据，准备重试...&quot;)
+                raise ValueError(&quot;下载数据为空&quot;)
+
+            # 保存合并后的波形
+            stream_day.write(filepath, format=&quot;MSEED&quot;)
+            print(f&quot;💾 {filename} 保存成功（共 {len(stream_day)} traces）&quot;)
+            success = True
+
+            # 写入异常日志
+            if log_lines:
+                with open(exception_log, &quot;a&quot;) as elog:
+                    elog.write(&quot;\n&quot;.join(log_lines) + &quot;\n&quot;)
+
+        except Exception as e:
+            print(f&quot;❌ 下载异常: {e}&quot;)
+
+            # 判断是否为网络错误
+            if is_network_error(e):
+                print(&quot;🌐 网络异常，等待5秒后重试...&quot;)
+                time.sleep(5)
+            else:
+                print(&quot;⚠️ 非网络异常，仍将重试...&quot;)
+                time.sleep(3)
+
+    # 下载耗时记录
+    day_duration = time.time() - day_start_time
+    with open(timing_log, &quot;a&quot;) as tlog:
+        tlog.write(f&quot;{current_day.date}: {day_duration:.2f} seconds\n&quot;)
+
+    if not success:
+        print(f&quot;❌ {current_day.date} 下载失败，超过最大重试次数。请检查网络或日志。&quot;)
+
+    current_day += 86400
+</code></pre>
+
+<p>&emsp;&emsp;这个脚本实现的功能包括：
+   * 下载台站列表station.lst的2013-01-01到2024-01-01，LH?数据。
+   * 每天的数据存储为global_data/YYYYMMDD.mseed。
+   * 去仪器响应，保留VEL，滤波频率为0.008, 0.01, 0.3, 0.4。
+   * 记录每天数据下载的耗时，保存在“download_time.txt”中。
+   * 判断是否是网络中断错误，如果是则做5次尝试重新下载，每次间隔5秒。
+   * 判断当天数据是否已经被下载，如果没有或者大小是0则开始下载。
+   * 将错误输出到exceptions.txt中。
+   * 每天数据下载时，启用20个进程进行下载。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

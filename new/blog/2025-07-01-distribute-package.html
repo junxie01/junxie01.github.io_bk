@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何发布你自己的脚本 | Jun Xie</title>
+  <meta name="description" content="如何发布你自己的脚本">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>如何发布你自己的脚本</h1>
+    <div class="post-meta">
+      <time>2025-07-01</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;你是不是也想让自己的程序像obspy一样，叫全世界的人pip install就可以用？</p>
+<!--less-->
+<p>&emsp;&emsp;这里以一个简单的例子来说明如何创建自己的程序、打包并发布到PyPI。</p>
+<h1 id="_1">创建自己的项目</h1>
+<p>首先创建一个目录mypkg_project，结构如下：</p>
+<pre class="highlight"><code>mypkg_project/
+├── mypkg/
+│   ├── __init__.py
+│   └── utils.py
+├── README.md
+├── setup.py
+├── pyproject.toml
+</code></pre>
+
+<h1 id="_2">编写包的内容</h1>
+<p>在mypkg/utils.py内写入：</p>
+<pre class="highlight"><code>def add(a, b):
+    return a + b
+</code></pre>
+
+<p>在mypkg/<strong>init</strong>.py内写入：</p>
+<pre class="highlight"><code>from .utils import add
+</code></pre>
+
+<h1 id="readmemd">添加元数据文件README.md</h1>
+<p>在README.md中写入：</p>
+<pre class="highlight"><code># mypkg
+A simple Python package with an add function.
+</code></pre>
+
+<p>在setup.py中写入：</p>
+<pre class="highlight"><code>from setuptools import setup, find_packages
+setup(
+    name='mypkg',
+    version='0.1',
+    author='Your Name',
+    description='A simple example package',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    packages=find_packages(),
+    classifiers=[
+        'Programming Language :: Python :: 3',
+    ],
+    python_requires='&gt;=3.6',
+)
+</code></pre>
+
+<p>在pyproject.toml中写入：</p>
+<pre class="highlight"><code>[build-system]
+requires = [&quot;setuptools&quot;, &quot;wheel&quot;]
+build-backend = &quot;setuptools.build_meta&quot;
+</code></pre>
+
+<h1 id="_3">项目打包</h1>
+<p>在根目录mypkg_project/中运行：</p>
+<pre class="highlight"><code>python3 -m pip install --upgrade build
+python3 -m build
+</code></pre>
+
+<p>会生成：</p>
+<pre class="highlight"><code>dist/
+├── mypkg-0.1-py3-none-any.whl
+└── mypkg-0.1.tar.gz
+</code></pre>
+
+<h1 id="_4">本地安装</h1>
+<p>用pip就可以本地安装：</p>
+<pre class="highlight"><code>pip install dist/mypkg-0.1-py3-none-any.whl
+</code></pre>
+
+<p>利用python就可以调用：</p>
+<pre class="highlight"><code>from mypkg import add
+add(2, 3)
+</code></pre>
+
+<h1 id="pypi">上传到PyPI（公开发布）</h1>
+<p>首先安装twine：</p>
+<pre class="highlight"><code>pip install twine
+</code></pre>
+
+<p>发布：</p>
+<pre class="highlight"><code>twine upload dist/*
+</code></pre>
+
+<p>这里会提示你输入PyPI的用户名和密码。这一步需要首先到<a href="https://pypi.org/account/register/">PyPI</a>注册账号，发布的时候需要用token</p>
+<pre class="highlight"><code>twine upload --repository pypi dist/* -u __token__ -p pypi-&lt;your_token&gt;
+</code></pre>
+
+<p>上传成功之后可以在https://pypi.org/project/mypkg/访问。
+然后任何人都可以安装你的脚本了：</p>
+<pre class="highlight"><code>pip install mypkg
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

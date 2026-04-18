@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动监控地震数据下载脚本 | Jun Xie</title>
+  <meta name="description" content="自动监控地震数据下载脚本">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>自动监控地震数据下载脚本</h1>
+    <div class="post-meta">
+      <time>2026-03-21</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;又是一个python下载地震数据的脚本，不过这次更好玩一些。设置一下就可以定期到USGS官网看看有没有大于某个震级的地震，然后到IRIS下载。</p>
+<!--less-->
+<p>&emsp;&emsp;老早就想这么搞了，在AI的帮助下终于搞定了啊。我把readme放下面了。</p>
+<h1 id="earthquake-auto-monitor-downloader">Earthquake Auto-Monitor &amp; Downloader (地震自动监测与补全下载工具)</h1>
+<p>这是一个基于 Python 和 ObsPy 的自动化地震数据处理工具。它能够定期监测 USGS 的地震发布信息，自动下载符合条件的地震波形数据，进行仪器响应去除、格式转换、头段读写以及波形可视化。</p>
+<h2 id="_1">✨ 主要功能</h2>
+<ol>
+<li><strong>自动化监测</strong>：<ul>
+<li>定期检索 USGS 目录中过去 12 小时内发生的 $M \ge 6.0$ 地震事件。</li>
+</ul>
+</li>
+<li><strong>智能时长管理</strong>：<ul>
+<li>目标下载时长为 <strong>2 小时</strong>。</li>
+<li><strong>动态下载</strong>：如果地震刚刚发生，程序会先下载发震至今的所有可用数据。</li>
+<li><strong>自动补全</strong>：程序会检查 <code>download_status.txt</code>。如果已下载时长不足 2 小时，且现在有更多新数据可用，程序会自动删除旧数据并重新下载补全至最新时刻（最高 2 小时）。</li>
+</ul>
+</li>
+<li><strong>标准化存储与命名</strong>：<ul>
+<li><strong>文件夹命名</strong>：<code>YYYYMMDDHHMMSSM[震级]</code> (例如：<code>20231101123045M6.5</code>)。</li>
+<li><strong>SAC 文件命名</strong>：<code>台网_台站_通道.SAC</code> (例如：<code>IU_ANMO_BHZ.SAC</code>)。</li>
+<li><strong>状态文件</strong>：每个目录包含 <code>download_status.txt</code>，记录下载台站数、时长及下载时间。</li>
+</ul>
+</li>
+<li><strong>科学级预处理</strong>：<ul>
+<li>去趋势 (Demean/Linear)、分段平滑 (Taper)。</li>
+<li><strong>去仪器响应</strong>：将 Counts 转换为<strong>速度分量 (m/s)</strong>。</li>
+<li><strong>SAC 头段写入</strong>：在 SAC 文件中自动写入：<ul>
+<li>震源信息：<code>evla</code>, <code>evlo</code>, <code>evdp</code>, <code>mag</code>, <code>o</code> (发震时刻)。</li>
+<li>台站信息：<code>stla</code>, <code>stlo</code>, <code>stel</code>。</li>
+<li>距离信息：<code>garc</code> (大圆路径度数)。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>多频带可视化</strong>：<ul>
+<li>自动生成两个频带的 Record Section 记录图：<ul>
+<li><strong>长周期</strong>：0.01 - 0.1 Hz</li>
+<li><strong>短周期</strong>：0.1 - 2.0 Hz</li>
+</ul>
+</li>
+<li>每张图包含左（Z）、中（N/1）、右（E/2）三个分量，按震中距排列。</li>
+</ul>
+</li>
+</ol>
+<h2 id="_2">🛠️ 安装要求</h2>
+<h3 id="1-python">1. Python 环境</h3>
+<p>推荐使用 Python 3.8 或更高版本。</p>
+<h3 id="2">2. 依赖库</h3>
+<p>安装 ObsPy 及其绘图依赖：</p>
+<pre class="highlight"><code class="language-bash">pip install obspy matplotlib numpy
+</code></pre>
+
+<h2 id="_3">🚀 快速开始</h2>
+<h3 id="1">1. 运行程序</h3>
+<p>直接运行脚本即可开始检索：</p>
+<pre class="highlight"><code class="language-bash">python auto_seismo_monitor.py
+</code></pre>
+
+<h3 id="2_1">2. 设置定时任务 (推荐)</h3>
+<p>为了实现每 12 小时自动运行一次，建议设置定时任务。</p>
+<h4 id="macos-linux-crontab"><strong>macOS / Linux (crontab)</strong></h4>
+<ol>
+<li>输入 <code>crontab -e</code>。</li>
+<li>添加以下内容（注意修改路径）：</li>
+</ol>
+<pre class="highlight"><code class="language-cron"># 每 12 小时执行一次（0点和12点）
+0 */12 * * * /usr/bin/python3 /Users/junxie/Work/auto_download/auto_seismo_monitor.py &gt;&gt; /Users/junxie/Work/auto_download/log.txt 2&gt;&amp;1
+</code></pre>
+
+<h4 id="windows"><strong>Windows (任务计划程序)</strong></h4>
+<ol>
+<li>创建基本任务，设置触发器为“每天”。</li>
+<li>在高级设置中选择“重复任务间隔”为“12 小时”。</li>
+<li>启动程序选择 <code>python.exe</code>，参数为脚本的完整路径。</li>
+</ol>
+<h2 id="_4">📂 项目结构</h2>
+<pre class="highlight"><code class="language-text">auto_download/
+├── auto_seismo_monitor.py    # 主程序脚本
+├── README.md                 # 说明文档
+├── earthquake_data/          # 数据输出根目录
+│   └── 20231101123045M6.5/   # 单个地震事件目录
+│       ├── SAC_files/        # SAC 格式波形文件
+│       ├── download_status.txt # 下载状态及时长说明
+│       ├── plot_0.01_0.1Hz.png # 长周期波形图
+│       └── plot_0.1_2Hz.png    # 短周期波形图
+└── log.txt                   # 运行日志（设置crontab后生成）
+</code></pre>
+
+<h2 id="_5">⚙️ 配置说明</h2>
+<p>您可以在 <code>auto_seismo_monitor.py</code> 开头的“配置参数”部分调整：
+*   <code>MIN_MAGNITUDE</code>: 触发下载的最小震级。
+*   <code>TARGET_DURATION</code>: 目标下载时长（秒）。
+*   <code>NETWORKS</code>: 下载的全球台网范围（默认为 IU, II, CU, IC, GE 等骨干台网）。
+*   <code>OUTPUT_ROOT</code>: 数据保存的绝对路径。</p>
+<h2 id="_6">⚠️ 注意事项</h2>
+<ul>
+<li>下载全球地震数据需要稳定的国际网络环境（访问 IRIS FDSN 服务）。</li>
+<li>全球 BH? 数据量较大，请确保运行环境有充足的内存和磁盘空间。</li>
+</ul>
+<p>有兴趣可以下载<a href="/scripts/auto_seismo_monitor.py">Python脚本</a>试试，修改一下目录就可以了。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

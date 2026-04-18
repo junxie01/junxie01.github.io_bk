@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>高效bash脚本 | Jun Xie</title>
+  <meta name="description" content="高效bash脚本">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>高效bash脚本</h1>
+    <div class="post-meta">
+      <time>2024-10-12</time>
+       &middot; 2 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;转学习到的高效bash脚本。</p>
+<!--less-->
+<h1 id="build-in-commands">build-in commands</h1>
+<pre class="highlight"><code class="language-bash">if [[ &quot;$var&quot; -eq 3 ]];then
+   echo &quot;hello&quot;
+fi
+</code></pre>
+
+<h1 id="minimize-subshells">minimize subshells</h1>
+<pre class="highlight"><code class="language-bash">output=$(&lt;input.txt)
+</code></pre>
+
+<h1 id="array">array</h1>
+<pre class="highlight"><code class="language-bash">color=(&quot;red&quot; &quot;yellow&quot; &quot;blue&quot;)
+for col in &quot;${color[@]}&quot;;
+do
+   echo $col
+done
+</code></pre>
+
+<h1 id="enable-noclobber">enable noclobber</h1>
+<p>可以防止overwrite。</p>
+<pre class="highlight"><code>set -o noclobber
+</code></pre>
+
+<h1 id="file-operation">file operation</h1>
+<pre class="highlight"><code>while IFS= read -f line
+do
+echo $line
+done &lt;input.txt
+</code></pre>
+
+<h1 id="parallel-processing">parallel processing</h1>
+<pre class="highlight"><code>cat urls.txt | xargs -n 1 -P 4 curl -O
+</code></pre>
+
+<h1 id="error-handling">error handling</h1>
+<p>脚本一出错就退出来。</p>
+<pre class="highlight"><code>set -e
+</code></pre>
+
+<p>个性化出错信息。</p>
+<pre class="highlight"><code>command || { echo &quot;command failded&quot;; exit 1; }
+</code></pre>
+
+<p>trap signals </p>
+<pre class="highlight"><code>trap 'echo &quot;error occurred&quot;; cleanup; exit1' ERR
+function cleanup(){
+   #clean up command
+}
+</code></pre>
+
+<p>validate inputs</p>
+<pre class="highlight"><code>if [[ -z &quot;$1&quot; ]];then
+   echo &quot;Usage: $0 &lt;argument&gt;&quot;
+   exit 1
+fi
+</code></pre>
+
+<p>logging</p>
+<pre class="highlight"><code>logfile=&quot;script.log&quot;
+exec &gt; &gt;(tee -i $logfile)
+exec 2&gt;&amp;1
+
+echo &quot;script started&quot;
+</code></pre>
+
+<h1 id="_1">系统任务</h1>
+<p>系统备份</p>
+<pre class="highlight"><code>set -e
+trap ' echo &quot;Backup failed&quot;; exit 1' ERR
+bk_up=&quot;/bak_dir&quot;
+ts=$(date +%Y%m%d%H%M%S)
+bkup_file=&quot;${bk_up}/backup_${ts}.tar.gz&quot;
+tar czf &quot;$bkup_file&quot; backup_files
+</code></pre>
+
+<p>系统监测</p>
+<pre class="highlight"><code>threshold=80
+partition=&quot;/dev/sda1&quot;
+usage=$(df -h | grep &quot;$partition&quot; | awk '{print $5}' | sed 's/%//')
+if [[ &quot;$usage&quot; -gt &quot;$threshold&quot; ]];then
+   echo &quot;disk usage of $partition is above $threshold%&quot;
+fi
+</code></pre>
+
+<p>用户管理</p>
+<pre class="highlight"><code>function add_user() {
+    local username=$1
+    useradd &quot;$username&quot; &amp;&amp; echo &quot;User $username added successfully.&quot;
+}
+
+function remove_user() {
+}
+case $1 in 
+    add)
+       add_user &quot;$2&quot;
+       ;;
+    remove)
+       remove_user &quot;$2&quot;
+       ;;
+    *)
+       echo &quot;Usage : $0 {add|remove} &lt;username&gt;&quot;
+       exit 1
+       ;;
+esac
+</code></pre>
+
+<p>自动更新</p>
+<pre class="highlight"><code>set -e
+trap 'echo &quot;update failed&quot;; exit 1 ' ERR
+
+apt-get update &amp;&amp; apt-get upgrade -y
+</code></pre>
+
+<p>网络配置</p>
+<pre class="highlight"><code>function configure_network(){
+     local interface=$1
+     local ip_address=$$2
+     local gateway=$3
+
+     cat &lt;&lt;EOF &gt;/etc/network/interfaces
+auto $interface
+iface $interface inet static
+     address $ip_address
+     gateway $gateway
+EOF
+     systemctl restart networking
+     echo &quot;network configured on $interface&quot;
+}
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

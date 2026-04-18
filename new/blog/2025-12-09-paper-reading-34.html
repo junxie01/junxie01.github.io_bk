@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文献阅读(34) | Jun Xie</title>
+  <meta name="description" content="文献阅读(34)">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>文献阅读(34)</h1>
+    <div class="post-meta">
+      <time>2025-12-09</time>
+       &middot; 3 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">paper</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;<a href="https://pubs.geoscienceworld.org/seg/tle/article-abstract/42/11/763/628902/Detection-of-a-CO2-plume-by-time-lapse-analysis-of">Detection of a CO2 plume by time-lapse analysis of Rayleigh-wave amplitudes extracted from downhole DAS recordings of ocean microseisms</a></p>
+<!--less-->
+
+<h3 id="_1">摘要</h3>
+<p>瑞利波振幅随深度呈指数衰减；若地下固体介质在波长尺度内呈层状变化，则某一深度的瑞利波振幅亦受该深度处地层弹性性质影响——介质越软，振幅越大。随着井中光纤电缆部署日益广泛，利用分布式声波传感（DAS）记录瑞利波应变振幅随深度的变化及其时间演化成为可能。本文通过分析 CO₂ 注入薄孔隙含水层期间井中 DAS 记录的海洋微震瑞利波振幅时移变化，发现振幅与注入过程明显相关。结合理论推导与数值模拟，我们解释了观测现象，并指出：垂直光纤记录的瑞利波振幅可用于探测地下薄层及其刚度时移变化（如饱和度或孔隙压力变化）。此外，薄层对振幅的影响具有显著频率依赖性，不同频率振幅受不同弹性参数组合控制，从而为利用多频振幅变化分别反演体积模量与剪切模量变化提供了可能。</p>
+<hr />
+<h3 id="_2">相关研究的重要性</h3>
+<ol>
+<li>
+<p><strong>CCS 需要高频、低扰动、低成本监测</strong><br />
+   CO₂ 注入后需及时捕捉羽流到达井筒的信号，传统 4D 地震成本高、周期长，难以实现“周-月”级快速预警。</p>
+</li>
+<li>
+<p><strong>井中永久 DAS 为“连续监测”提供可能</strong><br />
+   光纤耐高温高压、可水泥固井，一次部署即可终身记录，但被动源（微震、海洋微震）如何利用仍缺系统研究。</p>
+</li>
+<li>
+<p><strong>海洋微震是全球 0.1–1 Hz 最强被动源</strong><br />
+   相比地震事件，海洋微震 24 h 连续、强度稳定，若能用其振幅探测地层变化，将填补“无源-连续”监测空白。</p>
+</li>
+</ol>
+<hr />
+<h3 id="_3">前人研究及不足</h3>
+<table>
+<thead>
+<tr>
+<th>研究</th>
+<th>内容</th>
+<th>不足</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lumley (2010)</strong></td>
+<td>4D 地震监测 CO₂ 封存综述</td>
+<td>仅讨论主动源，未涉及被动瑞利波</td>
+</tr>
+<tr>
+<td><strong>Chang &amp; Nakata (2022)</strong></td>
+<td>井中 DAS 环境噪声干涉时移</td>
+<td>聚焦 S 波速度层析，未利用振幅直接探测流体变化</td>
+</tr>
+<tr>
+<td><strong>Pevzner et al. (2020)</strong></td>
+<td>用地震直达 P 波振幅监测井旁变化</td>
+<td>需等待地震事件，时间分辨率低；未研究瑞利波</td>
+</tr>
+<tr>
+<td><strong>Mateeva &amp; Zwartjes (2017)</strong></td>
+<td>提出 DAS 振幅对井旁刚度敏感</td>
+<td>仅概念性讨论，无理论模型、无现场验证</td>
+</tr>
+<tr>
+<td><strong>Shashkin et al. (2022)</strong></td>
+<td>用地震 P 波振幅追踪 CO₂ 羽流</td>
+<td>依赖远震事件，无法捕捉注入初期快速变化</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_4">本文数据</h3>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>井中 DAS 连续记录</strong></td>
+<td>澳大利亚 CO2CRC Otway 场地 CRC-3 注入井，2020-08 至 2021-03，15 kt 超临界 CO₂ 注入 10 m 厚砂岩含水层（~1.5 km）。Silixa iDAS v3， engineered 单模光纤，10 m gauge，1 kHz 采样，下采样 1 kHz</td>
+</tr>
+<tr>
+<td><strong>海洋微震被动数据</strong></td>
+<td>0.1–1 Hz 频段，连续 6 个月（注入前后各 2 个月），距离海岸 4 km，海洋微震能量稳定</td>
+</tr>
+<tr>
+<td><strong>辅助数据</strong></td>
+<td>注入速率/压力记录、4D VSP 解释羽流范围、井中声波测井速度模型</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_5">本文方法</h3>
+<ol>
+<li><strong>振幅提取</strong>  </li>
+<li>20 min 滑动窗 Welch 周期图 → 频率-深度-时间三维振幅体  </li>
+<li>
+<p>0.1–0.7 Hz 每 0.01 Hz 分频，提取垂直应变振幅</p>
+</li>
+<li>
+<p><strong>归一化去气候</strong>  </p>
+</li>
+<li>
+<p>以 1100–1345 m 段（未受注入影响）均值为参考，逐时归一化，消除海洋波高变化导致的整体能量漂移</p>
+</li>
+<li>
+<p><strong>时移异常量化</strong>  </p>
+</li>
+<li>注入前两个月平均作为基线，计算相对振幅变化 ΔA/A  </li>
+<li>
+<p>分频展示异常随频率演化（图 5-6）</p>
+</li>
+<li>
+<p><strong>理论建模</strong>  </p>
+</li>
+<li>薄层嵌入半空间解析解：推导垂直应变 εzz 与 λ、μ、深度 H、频率 f 关系  </li>
+<li>OASES 全局矩阵法数值模拟 20 m 薄层 @1500 m，验证解析公式，量化振幅跳变与模量变化关系（图 8-9）</li>
+</ol>
+<hr />
+<h3 id="_6">本文结果</h3>
+<ol>
+<li><strong>观测到注入即刻振幅异常</strong>  </li>
+<li>
+<p>0.17 Hz 与 0.3 Hz 在注后 1–2 天即出现 +10 % 振幅异常，持续整个监测期；0.1 Hz 与 0.5 Hz 几乎无异常（图 5-6）</p>
+</li>
+<li>
+<p><strong>异常深度与注入层吻合</strong>  </p>
+</li>
+<li>
+<p>最大异常位于 1500–1520 m，与 4D VSP 解释 CO₂ 饱和层一致，上下 20 m 外异常迅速衰减</p>
+</li>
+<li>
+<p><strong>理论-数值一致</strong>  </p>
+</li>
+<li>
+<p>解析解与 OASES 模拟均显示：当 f ≤ 0.4 Hz 且 H/Λ ≤ 0.6 时，振幅对剪切模量 μ 变化最敏感，对体积模量 M 几乎无感（图 8-9），与观测频率窗吻合</p>
+</li>
+<li>
+<p><strong>大地震验证低频可行性</strong>  </p>
+</li>
+<li>三次远震（Mw6.6–7.9）0.05–0.15 Hz 记录同样显示 1500 m 处振幅增强，证明方法在更低频率仍有效（图 10）</li>
+</ol>
+<hr />
+<h3 id="_7">创新点与贡献</h3>
+<table>
+<thead>
+<tr>
+<th>创新</th>
+<th>贡献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>首次提出并验证“海洋微震瑞利波振幅时移”监测 CO₂ 羽流</strong></td>
+<td>实现真正意义上的无源-连续-低成本井中监测，填补 4D 地震周-月尺度空白</td>
+</tr>
+<tr>
+<td><strong>建立薄层解析模型量化振幅-模量-频率关系</strong></td>
+<td>给出可操作的频率选择准则：≤0.4 Hz 对 μ 敏感，&gt;0.4 Hz 对 M 敏感，为多参数反演奠定理论基础</td>
+</tr>
+<tr>
+<td><strong>利用永久 DAS 垂直光纤直接测量垂直应变</strong></td>
+<td>相比水平光纤或地震仪，垂直光纤对瑞利波垂直应变响应更直接，信噪比高</td>
+</tr>
+<tr>
+<td><strong>现场验证 10 m 薄层可检测性</strong></td>
+<td>证明波长&gt;1 km 的瑞利波仍能分辨 10 m 薄层，突破“波长分辨率”传统认知</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_8">不足与未来方向</h3>
+<table>
+<thead>
+<tr>
+<th>不足</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>尚未定量反演模量变化</strong></td>
+<td>仅给出相对振幅变化，下一步需联合多频反演 μ 与 M 的绝对变化量</td>
+</tr>
+<tr>
+<td><strong>横向分辨率未知</strong></td>
+<td>理论模型为水平层状，尚未回答“多窄的羽流仍能影响振幅”——需 3D 有限差分测试</td>
+</tr>
+<tr>
+<td><strong>频率窗受海洋气候限制</strong></td>
+<td>0.1–0.4 Hz 能量随海况变化，需建立“海况-振幅”校正模型以推广到内陆场地</td>
+</tr>
+<tr>
+<td><strong>未考虑各向异性与衰减</strong></td>
+<td>实际地层含裂隙、衰减，后续需在理论模型中引入各向异性与品质因子 Q</td>
+</tr>
+<tr>
+<td><strong>未与 4D 地震联合反演</strong></td>
+<td>目前仅对比定性一致，未来应联合瑞利波振幅+4D 地震走形/振幅共同反演饱和度与压力</td>
+</tr>
+</tbody>
+</table>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

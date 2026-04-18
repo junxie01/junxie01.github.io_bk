@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hexo插入图片 | Jun Xie</title>
+  <meta name="description" content="hexo插入图片">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>hexo插入图片</h1>
+    <div class="post-meta">
+      <time>2025-11-23</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">hexo</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;hexo显示图片显示有问题，怎么整？</p>
+<!--less-->
+<p>之前讲过怎么引用图片见{% post_link show-picture-in-hexo hexo图片显示 %}。但今天发现了奇怪的问题。那就是当我用gmt画图的时候，如果画出来的是球形图片时，这一句</p>
+<pre class="highlight"><code>{% asset_img picture_name %}
+</code></pre>
+
+<p>就不行了，显示不出来。然后就发现了这句：</p>
+<pre class="highlight"><code>&lt;img src=&quot;/post_name/picture_name&quot; &gt;
+</code></pre>
+
+<p>这就可以了。不过这也不是办法，因为如果所有图片都存放在post_name目录下，那个人网站就太臃肿了。之前有个<a href="https://sm.ms/">网站</a>，可以免费上传图片，然后分配一个网址给你，然后用这一句</p>
+<pre class="highlight"><code>![](picture_address)
+</code></pre>
+
+<p>然而这个网站在国内登陆出现问题了。于是问了Kimi，它列出了8个：
+| 名称 | 网址 | 单张上限 | 有效期 | 外链速度 | 备注 |
+|&mdash;|&mdash;|&mdash;|&mdash;|&mdash;|&mdash;|
+| <strong>Imgur</strong> | https://imgur.com | 200 MB | 永久 | 全球 CDN | 免注册即可上传，直链秒开，Hexo 最常用 |
+| <strong>PostImage</strong> | https://postimages.org | 10 MB | 永久 | 全球 CDN | 支持一键论坛/Markdown格式，复制即用 |
+| <strong>ImgBB</strong> | https://imgbb.com | 32 MB | 永久 | 全球 CDN | 可匿名上传，提供HTML/Markdown直链 |
+| <strong>路过图床</strong> | https://imgchr.com | 10 MB | 永久 | 国内 CDN | 中文界面，免登录，支持批量，国内访问飞快 |
+| <strong>Voooe图床</strong> | https://voooe.cn | 25 MB | 永久 | 全球加速 | 拖放上传，自动生成Markdown代码 |
+| <strong>魔法师图床</strong> | https://bgm.tv/img | 20 MB | 永久 | 国内节点 | 直连不跳转，适合博客插图 |
+| <strong>Telegraph-Image</strong> | https://telegra.ph | 5 MB | 永久 | Cloudflare | 免注册，纯静态，上传即得直链 |
+| <strong>Imgbox</strong> | https://imgbox.com | 10 MB | 永久 | 欧美节点 | 界面极简，可原图保存 |</p>
+<p>看起来很不错。有空试试。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>这个网站是怎么来的 | Jun Xie</title>
+  <meta name="description" content="这个网站是怎么来的">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>这个网站是怎么来的</h1>
+    <div class="post-meta">
+      <time>2020-05-26</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">next</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>目的：心血来潮，漫无目的。
+方法：利用Hexo+Github构建。
+花费：1块钱用于腾讯云买域名+6块用于阿里云买域名+宝宝睡了之后的晚上。
+用途：好记性不如烂笔头。用手敲敲还可锻炼一下。
+时间：2020年5月26日晚。
+步骤：参见<a href="https://cloud.tencent.com/developer/article/1423783">这里</a>，具体如下：</p>
+<!-- more -->
+<h2 id="repo">一、建立repo</h2>
+<p>建一个和自己的github用户名一样的repo。</p>
+<h2 id="_1">二、安装必要的程序</h2>
+<p>需要安装的程序有Git，node.js，hexo</p>
+<h3 id="1git">1，安装Git</h3>
+<pre class="highlight"><code class="language-bash">$ sudo apt install git
+</code></pre>
+
+<h3 id="2nodejs">2，安装node.js</h3>
+<pre class="highlight"><code class="language-bash">$ sudo apt install nodejs 
+</code></pre>
+
+<h3 id="3hexo">3，安装hexo&amp;&amp;初始化</h3>
+<pre class="highlight"><code class="language-bash">$ npm install -g hexo
+$ hexo init [dir] #当前目录或新建[dir]
+</code></pre>
+
+<h2 id="_2">三、设置</h2>
+<h3 id="1_configyml">1，设置文件为_config.yml，自行修改例如</h3>
+<p>title 博客名字
+subtitle 副标题
+author 作者
+等等。遇到问题多看看<a href="https://hexo.io/zh-cn/docs">hexo的官方文档</a>。</p>
+<h3 id="2">2，主题配置</h3>
+<p>想要自己的博客好看那就需要配置主题theme,我用的是Next。
+具体设置可以到google搜索关键字hexo+next。</p>
+<h2 id="github">四、部署网站到github</h2>
+<h3 id="1_configyml_1">1，在_config.yml中添加</h3>
+<p>deploy:
+  type: git
+  repository: https://github.com/你的名字/你的名字.github.io.git
+  branch: master </p>
+<h3 id="2_1">2，安装部署工具</h3>
+<pre class="highlight"><code class="language-bash">$ npm install hexo-deployer-git  --save
+</code></pre>
+
+<h3 id="3">3，发布</h3>
+<pre class="highlight"><code class="language-bash">$ hexo cl &amp;&amp; hexo g &amp;&amp; hexo d
+</code></pre>
+
+<p>现在可以打开网址：你的名字.github.io访问。</p>
+<h2 id="_3">五、绑定域名</h2>
+<h3 id="1">1，购买域名</h3>
+<h3 id="2_2">2，域名解析</h3>
+<p>找到域名解析选项添加两条记录:
+CNAME www 你的名字.github.io
+CNAME @ 你的名字.github.io</p>
+<h3 id="3cname">3，添加CNAME文件</h3>
+<p>在hexo文件夹的source目录中新建CNAME文件，将你的域名写入。然后就大功告成。
+完结撒花。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

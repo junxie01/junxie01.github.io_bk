@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hexo下如何画流程图 | Jun Xie</title>
+  <meta name="description" content="Hexo下如何画流程图">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>Hexo下如何画流程图</h1>
+    <div class="post-meta">
+      <time>2025-06-17</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">Linux</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;那么Hexo下如何画流程图呢？</p>
+<!--less-->
+<p>&emsp;&emsp;因为Hexo是用的Markdown的语法，所以是指Markdown的语法。这里我用的是mermaid。用之前需要安装啊。</p>
+<pre class="highlight"><code>npm install hexo-filter-mermaid-diagrams --save
+</code></pre>
+
+<p>然后
+在三个反引号+mermaid和三个反引号之间输入:</p>
+<p>graph TD
+A[开始] &ndash;&gt; B{条件判断}
+B &ndash;&gt;|是| C[操作1]
+B &ndash;&gt;|否| D[操作2]
+C &ndash;&gt; E[结束]
+D &ndash;&gt; E</p>
+<p>就会生成:</p>
+<pre class="highlight"><code class="language-mermaid">graph TD
+A[开始] --&gt; B{条件判断}
+B --&gt;|是| C[操作1]
+B --&gt;|否| D[操作2]
+C --&gt; E[结束]
+D --&gt; E
+</code></pre>
+
+<p>大功告成。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

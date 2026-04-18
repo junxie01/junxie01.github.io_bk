@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hexo图片显示 | Jun Xie</title>
+  <meta name="description" content="hexo图片显示">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>hexo图片显示</h1>
+    <div class="post-meta">
+      <time>2020-05-31</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">hexo</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>网站上没有图片是不行的，无图无真相。解决办法在<a href="https://blog.csdn.net/qq_38148394/article/details/79997971">这里</a>，主要是利用了插件hexo-assrt-image。所以先安装这个插件：</p>
+<pre class="highlight"><code class="language-bash">npm install hexo-asset-image --save
+</code></pre>
+
+<p>安装完以后将网站配置文件的post_assrt_folder字段的值改为true。每次在利用hexo new name 建新文章时，在source/_posts目录下会生成一个name的文件夹。把要调用的图放在该文件夹里，写文章的时候直接用该图的名字进行调用就行了。像这样：</p>
+<pre class="highlight"><code>![插图](a.png)
+</code></pre>
+
+<p>大功告成。</p>
+<p>后来听来的说要让google搜到自己，博客的层级就不能太多。于是将</p>
+<pre class="highlight"><code>permalink: :year/:month/:day/:title/
+</code></pre>
+
+<p>改为了：</p>
+<pre class="highlight"><code>permalink: :title.html
+</code></pre>
+
+<p>结果图片怎么都显示不了。果然permalink和post_assrt_folder是相互影响的。最后还得改回来。结果又不行了。将node_modules/hexo-asset-image/index.js替换一下<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>然后才行。</p>
+<p>当然我还是喜欢简洁一点的地址。我又将permalink改为了：</p>
+<pre class="highlight"><code>permalink: :title.html
+</code></pre>
+
+<p>如此，在运行</p>
+<pre class="highlight"><code>hexo g
+</code></pre>
+
+<p>的时候程序会将图片拷贝到public/name 下面。然而，引用的时候图片的地址会变为blogip/image.png自然就无法显示。
+在node_modules/hexo-asset-image/index.js里可以看到这句话</p>
+<pre class="highlight"><code>  console.info&amp;&amp;console.info(&quot;update link as:--&gt;&quot;+config.root + link + src);
+</code></pre>
+
+<p>表明图片的地址是blogip+link+图片名称。所以这里是link出错了。
+在link赋值的部分找到：</p>
+<pre class="highlight"><code>var beginPos = getPosition(link, '/', 3) + 1;
+var endPos = link.lastIndexOf('/') + 1;
+link = link.substring(beginPos, endPos);
+</code></pre>
+
+<p>之前的link是博客的位置。begionPos是&rsquo;/&rsquo;在link中第三次出现的位置下一位。这个定义是我需要的。endPos就不需要了。
+所以改为：</p>
+<pre class="highlight"><code>link = link.substring(beginPos);
+</code></pre>
+
+<p>然后link后面没有&rsquo;/&rsquo;，就加一个：</p>
+<pre class="highlight"><code>link = link.concat(&quot;/&quot;);
+</code></pre>
+
+<p>然后图片位置就准备了。然后就大功告成。</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>https://blog.csdn.net/xjm850552586/article/details/84101345&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

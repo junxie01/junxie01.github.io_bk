@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sed插入和删除匹配行 | Jun Xie</title>
+  <meta name="description" content="sed插入和删除匹配行">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>sed插入和删除匹配行</h1>
+    <div class="post-meta">
+      <time>2020-06-12</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">sed</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">hexo</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">next</span>
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">web</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>&emsp;&emsp;sed功能非常强大，利用来处理文本文件不要太爽。要是能熟练掌握，在文本江湖简直随心所欲，无往而不利。我自然也想学学，不过入坑awk有点久。通常习惯了一种方式以后就难以醉心到另一种。这也大约是少林72绝技一般和尚难同时融汇多种的原因吧。一般人也很难精通多个领域。这两天在配置这个博客时遇到一些要对所有post处理的步骤。于是就尝试了sed的用法。倒是很方便。例如：</p>
+<!-- more -->
+
+<ol>
+<li>匹配包含date行，在该行后添加copyright: true。</li>
+</ol>
+<pre class="highlight"><code class="language-bash">sed -i '/date/a\copyright: true' a.md 
+</code></pre>
+
+<p>在行前添加就把a换做i。</p>
+<ol>
+<li>删除包含copyright的行。</li>
+</ol>
+<pre class="highlight"><code class="language-bash">sed -i '/copyright/d' a.md
+</code></pre>
+
+<ol>
+<li>批量处理就这样。</li>
+</ol>
+<pre class="highlight"><code class="language-bash">for md in *md
+do
+   sed -i '/copyright/d' $md
+done
+</code></pre>
+
+<p>&emsp;&emsp;题外话，是不是觉得我找抽啊，插入了copyright之后又删掉。说来话长。我怕有人copy了我的东西不打声招呼，于是就想申明一下许可权益啊版权信息啊什么的（申明之后别人爱拿还得拿）。于是搜索到<a href="https://juejin.im/post/5c7dd8675188251b6406e7b5">上仙</a>那里，根据教程开始弄。过程中就得来个批量处理，用sed添加copyright。结果出来还不错。可谁知那个“署名”前面的cc图标老是乱码（一个叉）。哎呀，我这个暴脾气（洁癖），如何受得了。于是就搜啊搜，怎么才能显示出来呢？结果，啥办法没有。最后只能根据另一位<a href="https://wylu.me/posts/e0424f3f/">上神</a>的教程重新弄了一个简单的主题默认的版权信息。然后就得批处理copyright。啊，世界安静了。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

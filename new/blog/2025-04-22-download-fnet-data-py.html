@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何下载Fnet数据 | Jun Xie</title>
+  <meta name="description" content="如何下载Fnet数据">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>如何下载Fnet数据</h1>
+    <div class="post-meta">
+      <time>2025-04-22</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>感谢Seisman写了<a href="https://github.com/seisman/FnetPy">FnetPy</a>,可以很方便地下载数据。
+安装：</p>
+<pre class="highlight"><code>pip install https://github.com/seisman/FnetPy/archive/master.zip
+</code></pre>
+
+<p>例子：</p>
+<pre class="highlight"><code>import os
+from obspy.io.xseed import Parser
+from FnetPy import Client
+from datetime import datetime,timedelta
+from obspy import read_inventory,read,Trace
+from datetime import datetime
+client = Client('用户名', '密码')
+
+current_date=datetime(2013,1,1,0,0)
+#current_date=datetime(2004,12,30,0,0)
+end_date=datetime(2025,1,1,0,0)
+output_dir='./seed'
+raw_dir='./raw'
+resp_dir='./resp'
+os.makedirs(output_dir, exist_ok=True)
+os.makedirs(raw_dir, exist_ok=True)
+os.makedirs(resp_dir, exist_ok=True)
+while (current_date&lt;end_date):
+    start_time = current_data
+    start_str = current_date.strftime(&quot;%Y_%m_%d_%H_%M_%S&quot;)
+    name=start_str+&quot;.seed&quot;
+    fname=os.path.join(raw_dir,name)
+    output_file=os.path.join(output_dir, name)
+    if os.path.exists(output_file):
+        print(f&quot;[跳过] 文件已存在: {output_file}&quot;)
+        current_date+=timedelta(days=1)
+        continue
+    open(output_file, 'wb').close()  # 创建空文件
+    if not os.path.exists(fname):
+        print('download data from '+str(start_time)+' to '+str(end_time))
+        client.get_waveform(start_time, duration_in_seconds=86400+3600,component=&quot;LHZ&quot;,filename=fname) # download
+        print('download '+fname+' down!')
+    current_date+=timedelta(days=1)
+    st = read(fname) # read
+    parser = Parser(fname) #parse
+    parser.write_resp(resp_dir, zipped=False)
+    for tr in st:
+        resp_file = f&quot;RESP.{tr.get_id()}&quot;
+        inv = read_inventory(os.path.join(resp_dir, resp_file))
+        tr.remove_response(inventory=inv, output=&quot;VEL&quot;)
+        #print(tr.stats)
+    st.write(output_file, format=&quot;MSEED&quot;)
+print('Finished')
+</code></pre>
+
+<p>这个脚本可以下载2013到2025年Fnet所有台站的LHZ连续波形数据，数据长度为25小时，overlap 1小时。去除仪器响应后的速度记录存放在seed文件夹中。每天的数据名称为%Y_%m_%d_%H_%M_%S.seed。账户需要去NIED去申请，当然用我的也可以。</p>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>

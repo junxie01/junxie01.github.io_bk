@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>去仪器响应练习 | Jun Xie</title>
+  <meta name="description" content="去仪器响应练习">
+  <link rel="stylesheet" href="/new/css/style.css">
+  <!-- Favicon (placeholder) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+
+  <!-- Transition Banner -->
+  <div class="transition-banner">
+    <div class="container">
+      这是新版网站测试版，<a href="/">点击返回旧版</a>
+    </div>
+  </div>
+
+  <nav>
+    <div class="container">
+      <a href="/new/" class="site-title">SEISAMUSE</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/new/">Home</a></li>
+        <li><a href="/new/blog/" class="active">Blog</a></li>
+        <li><a href="/new/about/">About</a></li>
+        <li><a href="/new/links/">Links</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="container">
+      
+<article>
+  <div class="post-header">
+    <h1>去仪器响应练习</h1>
+    <div class="post-meta">
+      <time>2025-04-23</time>
+       &middot; 1 min read
+      
+       &middot;
+      
+        <span style="background:var(--code-bg);padding:0.1em 0.4em;border-radius:3px;font-size:0.85em;">python</span>
+      
+      
+    </div>
+  </div>
+
+  <div class="post-content">
+    <p>用我的脚本下载了一堆的miniseed放在seed下，仪器响应文件放在resp文件夹下，利用obspy去除仪器响应，还保存为miniseed。</p>
+<pre class="highlight"><code>import os
+from glob import glob
+from obspy import read, read_inventory
+# 设置路径
+seed_folder = &quot;seed&quot;
+resp_folder = &quot;resp&quot;
+output_folder = &quot;seed_corrected&quot;
+os.makedirs(output_folder, exist_ok=True)
+seed_files = glob(os.path.join(seed_folder, &quot;*.seed&quot;))   # 遍历所有 seed 文件
+for seed_file in seed_files:
+    print(f&quot;Processing {os.path.basename(seed_file)}&quot;)
+    try:
+        st = read(seed_file)   # 读取 MiniSEED 数据
+        for tr in st:
+            net = tr.stats.network
+            sta = tr.stats.station
+            loc = tr.stats.location
+            cha = tr.stats.channel
+            resp_file = os.path.join(resp_folder, f&quot;RESP.{net}.{sta}.{loc}.{cha}&quot;) # 构造 RESP 文件路径
+            if not os.path.exists(resp_file):
+                print(f&quot;RESP file not found: {resp_file}, skipping trace.&quot;)
+                continue
+            inventory = read_inventory(resp_file)   # 读取 RESP 文件作为 inventory
+            # 去除仪器响应
+            tr.remove_response(inventory=inventory, output=&quot;VEL&quot;, pre_filt=[0.001, 0.002, 0.3, 0.45 ], zero_mean=True, taper=True)
+        output_file = os.path.join(output_folder, os.path.basename(seed_file)) # 输出文件名
+        st.write(output_file, format=&quot;MSEED&quot;)
+        print(f&quot;Saved corrected data to {output_file}\n&quot;)
+    except Exception as e:
+        print(f&quot;Error processing {seed_file}: {e}&quot;)
+</code></pre>
+  </div>
+
+  <div class="post-nav">
+    <a href="/new/blog/">&larr; Back to Blog</a>
+  </div>
+</article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Jun Xie &middot; Built with Python &amp; Markdown &middot;
+        <a href="https://github.com/" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
